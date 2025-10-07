@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#0b0c10" id="metaThemeColor" />
+  <title>StoreZ — Seller Console</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./styles.css" />
+
+  <!-- Security/compat -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+  <a class="sr-only" href="#view">Skip to content</a>
+
+  <header aria-label="Seller console header">
+    <div class="logo" role="img" aria-label="StoreZ Seller">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--brand)" />
+            <stop offset="1" stop-color="var(--brand-2)" />
+          </linearGradient>
+        </defs>
+        <rect x="8" y="12" width="48" height="40" rx="12" fill="url(#g)"></rect>
+        <path d="M18 26h28M18 34h18M18 42h10" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"></path>
+      </svg>
+      <span class="brand">StoreZ Seller</span>
+      <span class="chip" id="chipTier">Starter</span>
+    </div>
+
+    <div class="actions">
+      <button class="small ghost" id="btnQuickAdd" type="button">+ Product</button>
+      <button class="small secondary" id="btnQuickLive" type="button">Go live</button>
+
+      <label for="langSelect" class="sr-only">Language</label>
+      <select id="langSelect" name="language" title="Language">
+        <option value="en" selected>English</option>
+        <option value="ar">العربية (السعودية)</option>
+      </select>
+
+      <label for="themeSelect" class="sr-only">Theme</label>
+      <select id="themeSelect" name="theme" title="Theme">
+        <option value="auto">Auto</option>
+        <option value="light">Light</option>
+        <option value="dark" selected>Dark</option>
+        <option value="emerald">Emerald</option>
+        <option value="purple">Purple</option>
+        <option value="contrast">High Contrast</option>
+      </select>
+
+      <button class="small ghost" id="btnReset" type="button" title="Reset demo data">Reset</button>
+    </div>
+  </header>
+
+  <main id="view" tabindex="-1" aria-live="polite"></main>
+
+  <!-- Bottom navigation -->
+  <nav class="bottom" aria-label="Primary">
+    <a href="#/dashboard" data-tab="dashboard"><span>🏠</span><span data-i18n="nav_dashboard">Dashboard</span></a>
+    <a href="#/catalog" data-tab="catalog"><span>📦</span><span data-i18n="nav_catalog">Catalog</span></a>
+    <a href="#/orders" data-tab="orders"><span>📮</span><span data-i18n="nav_orders">Orders</span><span class="badge" id="ordersBadge" aria-hidden="true">0</span></a>
+    <a href="#/live" data-tab="live"><span>📺</span><span data-i18n="nav_live">Live</span></a>
+    <a href="#/inbox" data-tab="inbox"><span>💬</span><span data-i18n="nav_inbox">Inbox</span><span class="badge" id="inboxBadge" aria-hidden="true">0</span></a>
+  </nav>
+
+  <!-- Bottom sheet -->
+  <section id="sheet" class="sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="sheetTitle">
+    <div class="row between">
+      <strong id="sheetTitle">Sheet</strong>
+      <button class="small ghost" type="button" aria-label="Close" onclick="window.__closeSheet?.()">✕</button>
+    </div>
+    <div id="sheetBody" style="margin-top:12px"></div>
+  </section>
+
+  <noscript>
+    <p style="padding:12px">This demo requires JavaScript.</p>
+  </noscript>
+
+  <!-- App (ES modules). I’ll send each file next. -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

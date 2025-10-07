@@ -1,0 +1,125 @@
+/* StoreZ — Seller Console styles (mobile-first) */
+
+/* ---------- Theme tokens ---------- */
+:root { color-scheme: light dark; }
+
+html[data-theme="dark"] {
+  --bg:#0b0c10; --panel:#121319; --muted:#9aa0a6; --text:#f1f3f4;
+  --brand:#0ea5e9; --brand-2:#22c55e; --ok:#10b981; --warn:#f59e0b; --bad:#ef4444;
+  --card:#161823; --border:#2a2d3a; --chip:#1d2133;
+}
+html[data-theme="light"]{
+  --bg:#ffffff; --panel:#f7f8fa; --muted:#5f6368; --text:#0f172a;
+  --brand:#0284c7; --brand-2:#16a34a; --ok:#0f766e; --warn:#b45309; --bad:#b91c1c;
+  --card:#ffffff; --border:#e3e7ee; --chip:#eef2f7;
+}
+html[data-theme="contrast"]{
+  --bg:#000; --panel:#000; --muted:#cfcfcf; --text:#fff;
+  --brand:#ffd700; --brand-2:#00ffff; --ok:#00ff99; --warn:#ffdd00; --bad:#ff3b30;
+  --card:#000; --border:#fff; --chip:#111;
+}
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+html { background: var(--bg); color: var(--text); }
+body { margin: 0; font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+a { color: inherit; text-decoration: none; }
+img { display:block; width:100%; height:auto; }
+hr { border:0; border-top:1px solid var(--border); margin:16px 0; }
+
+input, select, textarea {
+  width: 100%; min-height: 44px; padding: .65rem .75rem;
+  background:#0f1016; color:var(--text); border:1px solid var(--border); border-radius:12px;
+}
+html[data-theme="light"] input,
+html[data-theme="light"] select,
+html[data-theme="light"] textarea { background:#fff; color:var(--text); }
+
+button { font: inherit; color: var(--text); background: var(--brand); border:0; border-radius:12px; padding:.7rem 1rem; cursor:pointer; min-height:44px; }
+button.ghost { background: transparent; border:1px solid var(--border); }
+button.secondary { background: var(--brand-2); color:#06110a; }
+button.small { padding:.5rem .75rem; border-radius:10px; min-height:36px; }
+.icon-btn { background:transparent; border:1px solid var(--border); width:36px; height:36px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:18px; line-height:1; padding:0; }
+.icon-btn.active { color: var(--brand-2); border-color: var(--brand-2); }
+
+.sr-only { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+.muted { color: var(--muted); }
+.success { color: var(--ok); }
+.warning { color: var(--warn); }
+.danger { color: var(--bad); }
+
+/* ---------- Header ---------- */
+header {
+  height:56px; display:flex; align-items:center; gap:8px; padding:0 12px;
+  position: sticky; top:0; z-index: 10;
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--bg) 95%, transparent),
+    color-mix(in oklab, var(--bg) 50%, transparent) 70%,
+    transparent);
+  backdrop-filter: blur(8px);
+}
+header .logo { display:flex; align-items:center; gap:8px; font-weight:700; }
+header .logo svg { width:24px; height:24px; }
+header .actions { margin-inline-start:auto; display:flex; gap:8px; align-items:center; }
+
+/* ---------- Layout ---------- */
+#view { padding:12px; padding-bottom:calc(64px + 12px); min-height:calc(100vh - 56px); }
+.panel { background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:12px; box-shadow:0 8px 30px rgba(0,0,0,.35); }
+.grid { display:grid; gap:12px; }
+.grid.cols-2 { grid-template-columns:repeat(2, minmax(0,1fr)); }
+.grid.cols-3 { grid-template-columns:repeat(3, minmax(0,1fr)); }
+@media (min-width:640px){ .grid.cols-3{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
+
+.row { display:flex; align-items:center; gap:8px; }
+.row.between { justify-content:space-between; }
+.kpis { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+@media (min-width:720px){ .kpis{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
+.kpi { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px; }
+.kpi .head { font-size:12px; color:var(--muted); }
+.kpi .val { font-weight:800; font-size:20px; }
+
+/* ---------- Cards & media ---------- */
+.card { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+.card .media { aspect-ratio:1/1; background:#0e0f15; display:flex; align-items:center; justify-content:center; }
+.card .media > img { width:100%; height:100%; object-fit:cover; }
+.card .body { padding:10px; }
+
+/* ---------- Table ---------- */
+.tbl { width:100%; border-collapse: collapse; }
+.tbl th, .tbl td { padding:10px; border-bottom:1px solid var(--border); text-align:left; }
+.tbl th { color:var(--muted); font-weight:600; font-size:12px; text-transform:uppercase; }
+.tbl tr:hover { background: color-mix(in oklab, var(--panel) 85%, black 15%); }
+
+/* ---------- Bottom nav ---------- */
+nav.bottom {
+  position: sticky; bottom:0; inset-inline:0; height:64px; z-index:10;
+  background: rgba(18,19,25,.86); backdrop-filter: blur(8px);
+  display:grid; grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--border);
+}
+html[data-theme="light"] nav.bottom { background: rgba(248,250,252,.92); }
+nav.bottom a { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; font-size:12px; padding:6px 0; }
+nav.bottom a.active { color:#fff; }
+html[data-theme="light"] nav.bottom a.active { color:#000; }
+
+.badge{ min-width:18px; height:18px; border-radius:999px; background:var(--brand-2); color:#06110a; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; padding:0 6px; }
+.chip {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:.25rem .5rem; border-radius:999px; background:var(--chip);
+  color:color-mix(in oklab, var(--text) 78%, var(--muted));
+  font-size:12px; border:1px solid var(--border);
+}
+
+/* ---------- Sheet ---------- */
+.sheet {
+  position:fixed; left:0; right:0; bottom:0; z-index:20;
+  background:var(--panel); border-top:1px solid var(--border); border-radius:16px 16px 0 0; padding:16px;
+  transform:translateY(100%); transition:transform .25s ease;
+}
+.sheet.show { transform:translateY(0); }
+
+/* ---------- Utilities ---------- */
+.skeleton { background:linear-gradient(90deg, transparent, color-mix(in oklab, var(--text) 6%, transparent), transparent); background-size:200% 100%; animation:sk 1.1s linear infinite; border-radius:10px; }
+@keyframes sk { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+[dir="rtl"] .row .price { direction:ltr; } /* keep currency readable */

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>StoreZ — Choose Role</title>
+  <style>
+    :root { color-scheme: light dark; }
+    html[data-theme="dark"]{
+      --bg:#0b0c10; --panel:#121319; --muted:#9aa0a6; --text:#f1f3f4;
+      --brand:#16a085; --brand-2:#00d4ff; --border:#2a2d3a; --card:#161823;
+    }
+    html[data-theme="light"]{
+      --bg:#ffffff; --panel:#f7f8fa; --muted:#5f6368; --text:#101114;
+      --brand:#16a085; --brand-2:#00bcd4; --border:#e3e7ee; --card:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html{background:var(--bg); color:var(--text)}
+    body{margin:0; font:15px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1000px; margin:0 auto; padding:16px}
+    header{display:flex; align-items:center; gap:10px; padding:8px 0}
+    header .brand{font-weight:800; font-size:18px}
+    .panel{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:16px}
+    .grid{display:grid; gap:12px}
+    @media (min-width:720px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr))} }
+    .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:10px}
+    .muted{color:var(--muted)}
+    .row{display:flex; align-items:center; gap:8px}
+    .row.between{justify-content:space-between}
+    .actions{display:flex; gap:8px; margin-top:8px}
+    .btn{min-height:42px; padding:.6rem .9rem; border-radius:12px; border:1px solid transparent; cursor:pointer; background:var(--brand); color:#fff; font:inherit}
+    .btn.ghost{background:transparent; border:1px solid var(--border); color:inherit}
+    .chip{display:inline-flex; align-items:center; gap:6px; padding:.25rem .5rem; border-radius:999px; border:1px solid var(--border)}
+    select{min-height:42px; padding:.55rem .7rem; border-radius:12px; border:1px solid var(--border); background:transparent; color:inherit}
+    footer{margin-top:16px; color:var(--muted); font-size:12px}
+    .warn{border-color:#b96b00}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--brand)" />
+            <stop offset="1" stop-color="var(--brand-2)" />
+          </linearGradient>
+        </defs>
+        <rect x="8" y="12" width="48" height="40" rx="12" fill="url(#g)"></rect>
+      </svg>
+      <span class="brand">StoreZ — Roles</span>
+      <span class="chip" id="protoChip" title="Best run over http://">Local</span>
+      <div class="row" style="margin-inline-start:auto">
+        <label class="sr-only" for="lang">Language</label>
+        <select id="lang" title="Language">
+          <option value="en" selected>English</option>
+          <option value="ar">العربية (السعودية)</option>
+        </select>
+        <label class="sr-only" for="theme">Theme</label>
+        <select id="theme" title="Theme">
+          <option value="auto">Auto</option>
+          <option value="light">Light</option>
+          <option value="dark" selected>Dark</option>
+        </select>
+      </div>
+    </header>
+
+    <main class="panel">
+      <div class="row between">
+        <strong>Pick a role</strong>
+        <span class="muted">Each app lives in its own folder</span>
+      </div>
+
+      <div class="grid" style="margin-top:12px">
+        <!-- Buyer -->
+        <section class="card">
+          <div class="row between">
+            <strong>Buyer App</strong>
+            <span class="chip">/frontend/buyer</span>
+          </div>
+          <p class="muted">Mobile-first, social commerce browsing, cart, checkout, orders, messages, Arabic/English.</p>
+          <div class="actions">
+            <button class="btn" onclick="openApp('buyer')">Open Buyer</button>
+            <a class="btn ghost" href="./frontend/buyer/index.html" target="_blank" rel="noopener">Direct link</a>
+          </div>
+        </section>
+
+        <!-- Seller -->
+        <section class="card">
+          <div class="row between">
+            <strong>Seller Console</strong>
+            <span class="chip">/frontend/Seller</span>
+          </div>
+          <p class="muted">Catalog, orders, live shopping, returns, analytics, AI add-ons, Arabic/English.</p>
+          <div class="actions">
+            <button class="btn" onclick="openApp('seller')">Open Seller</button>
+            <a class="btn ghost" href="./frontend/Seller/index.html" target="_blank" rel="noopener">Direct link</a>
+          </div>
+        </section>
+
+        <!-- Admin -->
+        <section class="card">
+          <div class="row between">
+            <strong>Admin Console</strong>
+            <span class="chip">/frontend/admin</span>
+          </div>
+          <p class="muted">Overview, moderation, platform orders, support, settings, feature flags, Arabic/English.</p>
+          <div class="actions">
+            <button class="btn" onclick="openApp('admin')">Open Admin</button>
+            <a class="btn ghost" href="./frontend/admin/index.html" target="_blank" rel="noopener">Direct link</a>
+          </div>
+        </section>
+      </div>
+
+      <hr/>
+
+      <details class="warn">
+        <summary><strong>Having issues opening modules?</strong></summary>
+        <p class="muted">Run a local server so ES modules load correctly:</p>
+        <pre class="muted" aria-label="commands" style="white-space:pre-wrap">
+python -m http.server 5500   # then open http://localhost:5500/</pre>
+      </details>
+    </main>
+
+    <footer>
+      <span>&copy; StoreZ demo</span>
+    </footer>
+  </div>
+
+  <script>
+    // Detect protocol for the chip
+    (function(){
+      const chip = document.getElementById('protoChip');
+      const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
+      chip.textContent = isHttp ? 'HTTP' : 'file://';
+      if (!isHttp) chip.classList.add('warn');
+    })();
+
+    // Apply theme on the landing page only
+    document.getElementById('theme').addEventListener('change', (e) => {
+      const v = e.target.value;
+      const applied = v === 'auto'
+        ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : v;
+      document.documentElement.setAttribute('data-theme', applied);
+      localStorage.setItem('storez_root_theme', v);
+    });
+    // Restore saved root theme
+    (function(){
+      const v = localStorage.getItem('storez_root_theme') || 'dark';
+      document.getElementById('theme').value = v;
+      const applied = v === 'auto'
+        ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : v;
+      document.documentElement.setAttribute('data-theme', applied);
+    })();
+
+    // Open role with language pre-set in its app storage
+    function openApp(role){
+      const lang = document.getElementById('lang').value || 'en';
+      try {
+        if (role === 'buyer') {
+          localStorage.setItem('storez_lang', lang); // buyer i18n key
+          window.open('./frontend/buyer/index.html', '_blank', 'noopener');
+        } else if (role === 'seller') {
+          localStorage.setItem('storez_seller_lang', lang); // seller i18n key
+          window.open('./frontend/Seller/index.html', '_blank', 'noopener');
+        } else if (role === 'admin') {
+          localStorage.setItem('storez_admin_lang', lang); // admin i18n key
+          window.open('./frontend/admin/index.html', '_blank', 'noopener');
+        }
+      } catch (e) {
+        alert('Could not open window. Please allow popups for this site.');
+      }
+    }
+  </script>
+</body>
+</html>

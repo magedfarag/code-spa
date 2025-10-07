@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#0b0c10" id="metaThemeColor" />
+  <title>StoreZ — Buyer SPA</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./styles.css" />
+
+  <!-- Security/compatibility basics -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+  <a class="sr-only" href="#view">Skip to content</a>
+
+  <header id="app-header" aria-label="App header">
+    <div class="logo" role="img" aria-label="StoreZ">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--brand)" />
+            <stop offset="1" stop-color="var(--brand-2)" />
+          </linearGradient>
+        </defs>
+        <circle cx="32" cy="32" r="28" fill="url(#g)"></circle>
+        <path d="M18 34h28M22 26h20" stroke="var(--bg)" stroke-width="6" stroke-linecap="round"></path>
+      </svg>
+      <span class="brand">StoreZ</span>
+      <span class="chip" id="chipDemo">Demo</span>
+    </div>
+
+    <div class="actions">
+      <!-- Language -->
+      <label for="langSelect" class="sr-only">Language</label>
+      <select id="langSelect" name="language" title="Language">
+        <option value="en" selected>English</option>
+        <option value="ar">العربية (السعودية)</option>
+      </select>
+
+      <!-- Theme -->
+      <label for="themeSelect" class="sr-only">Theme</label>
+      <select id="themeSelect" name="theme" title="Theme">
+        <option value="auto">Auto</option>
+        <option value="light">Light</option>
+        <option value="dark" selected>Dark</option>
+        <option value="emerald">Emerald</option>
+        <option value="purple">Purple</option>
+        <option value="sunset">Sunset</option>
+        <option value="ocean">Ocean</option>
+        <option value="contrast">High Contrast</option>
+      </select>
+
+      <!-- Quick actions -->
+      <button id="btnWishlist" class="icon-btn" type="button" aria-pressed="false" title="Wishlist">
+        <span aria-hidden="true">♡</span>
+        <span class="sr-only">Wishlist</span>
+        <span id="wishlistBadge" class="badge badge-inline" aria-hidden="true">0</span>
+      </button>
+
+      <button id="btnRtl" class="small ghost" type="button" aria-pressed="false" title="Toggle RTL">RTL</button>
+      <button id="btnSponsor" class="small ghost" type="button" aria-pressed="false" title="Toggle Sponsor Panel">Sponsor</button>
+      <button id="btnReset" class="small ghost" type="button" title="Reset demo data">Reset</button>
+    </div>
+  </header>
+
+  <main id="view" tabindex="-1" aria-live="polite"></main>
+
+  <!-- Primary navigation (mobile) -->
+  <nav class="bottom" aria-label="Primary">
+    <a href="#/home" data-tab="home" aria-label="Home"><span>🏠</span><span data-i18n="nav_home">Home</span></a>
+    <a href="#/discover" data-tab="discover" aria-label="Discover"><span>🔎</span><span data-i18n="nav_discover">Discover</span></a>
+    <a href="#/cart" data-tab="cart" aria-label="Cart">
+      <span>🛒</span>
+      <span>
+        <span data-i18n="nav_cart">Cart</span>
+        <span id="cartBadge" class="badge" aria-live="polite" aria-atomic="true">0</span>
+      </span>
+    </a>
+    <a href="#/messages" data-tab="messages" aria-label="Messages"><span>💬</span><span data-i18n="nav_messages">Messages</span></a>
+    <a href="#/profile" data-tab="profile" aria-label="Profile"><span>👤</span><span data-i18n="nav_profile">Profile</span></a>
+  </nav>
+
+  <!-- Sponsor KPI panel -->
+  <aside class="kpi" id="kpi" hidden>
+    <div><span class="dot"></span><strong data-i18n="kpi_live">Live KPIs</strong></div>
+    <div class="row between"><span data-i18n="kpi_impr">Impressions</span><span id="k_impr">0</span></div>
+    <div class="row between"><span data-i18n="kpi_ctr">Add-to-Cart (CTR)</span><span id="k_ctr">0%</span></div>
+    <div class="row between"><span data-i18n="kpi_cvr">Purchases (CVR)</span><span id="k_cvr">0%</span></div>
+    <div class="row between"><span data-i18n="kpi_aov">AOV</span><span id="k_aov">SAR 0</span></div>
+  </aside>
+
+  <!-- Add-to-cart sheet -->
+  <section id="sheet" class="sheet" aria-modal="true" role="dialog" aria-labelledby="sheetTitle" aria-hidden="true">
+    <div class="row between">
+      <strong id="sheetTitle">Added to cart</strong>
+      <button class="small ghost" type="button" aria-label="Close" onclick="window.__hideSheet?.()">✕</button>
+    </div>
+    <p class="muted" id="sheetMsg">Nice pick! You can continue shopping or go to checkout.</p>
+    <div class="row" style="gap:8px">
+      <button class="secondary" id="sheetCheckoutBtn" type="button" onclick="location.hash='#/checkout'">Checkout</button>
+      <button class="ghost" id="sheetKeepBtn" type="button" onclick="window.__hideSheet?.()">Keep browsing</button>
+    </div>
+  </section>
+
+  <noscript>
+    <p style="padding:12px">This demo requires JavaScript.</p>
+  </noscript>
+
+  <!-- App (ES modules). I will send each file next. -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

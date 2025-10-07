@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#0b0c10" id="metaThemeColor" />
+  <title>StoreZ — Admin Console</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./styles.css" />
+
+  <!-- Security/compat -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+  <a class="sr-only" href="#view">Skip to content</a>
+
+  <!-- Header -->
+  <header aria-label="Admin console header">
+    <div class="logo" role="img" aria-label="StoreZ Admin">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--brand)" />
+            <stop offset="1" stop-color="var(--brand-2)" />
+          </linearGradient>
+        </defs>
+        <circle cx="32" cy="32" r="24" fill="url(#g)"></circle>
+        <path d="M22 38l8-8 12 12" stroke="var(--bg)" stroke-width="6" stroke-linecap="round" fill="none"></path>
+      </svg>
+      <span class="brand">StoreZ Admin</span>
+      <span class="chip" id="envChip">Demo</span>
+    </div>
+
+    <div class="actions">
+      <label class="sr-only" for="langSelect">Language</label>
+      <select id="langSelect" name="language" title="Language">
+        <option value="en" selected>English</option>
+        <option value="ar">العربية (السعودية)</option>
+      </select>
+
+      <label class="sr-only" for="themeSelect">Theme</label>
+      <select id="themeSelect" name="theme" title="Theme">
+        <option value="auto">Auto</option>
+        <option value="light">Light</option>
+        <option value="dark" selected>Dark</option>
+        <option value="emerald">Emerald</option>
+        <option value="purple">Purple</option>
+        <option value="contrast">High Contrast</option>
+      </select>
+
+      <button class="small ghost" id="btnImpersonate" type="button" title="Impersonate user">Impersonate</button>
+      <button class="small secondary" id="btnCreateNotice" type="button" title="Create global notice">+ Notice</button>
+      <button class="small ghost" id="btnReset" type="button" title="Reset demo data">Reset</button>
+    </div>
+  </header>
+
+  <!-- Main view -->
+  <main id="view" tabindex="-1" aria-live="polite"></main>
+
+  <!-- Bottom navigation (5 primary destinations per spec) -->
+  <nav class="bottom" aria-label="Primary">
+    <a href="#/overview" data-tab="overview"><span>📊</span><span data-i18n="nav_overview">Overview</span></a>
+    <a href="#/moderation" data-tab="moderation"><span>🛡️</span><span data-i18n="nav_moderation">Moderation</span></a>
+    <a href="#/orders" data-tab="orders"><span>📦</span><span data-i18n="nav_orders">Orders</span><span class="badge" id="ordersBadge" aria-hidden="true">0</span></a>
+    <a href="#/support" data-tab="support"><span>💬</span><span data-i18n="nav_support">Support</span><span class="badge" id="ticketsBadge" aria-hidden="true">0</span></a>
+    <a href="#/settings" data-tab="settings"><span>⚙️</span><span data-i18n="nav_settings">Settings</span></a>
+  </nav>
+
+  <!-- Bottom sheet -->
+  <section id="sheet" class="sheet" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="sheetTitle">
+    <div class="row between">
+      <strong id="sheetTitle">Sheet</strong>
+      <button class="small ghost" type="button" aria-label="Close" onclick="window.__closeSheet?.()">✕</button>
+    </div>
+    <div id="sheetBody" style="margin-top:12px"></div>
+  </section>
+
+  <noscript>
+    <p style="padding:12px">This demo requires JavaScript.</p>
+  </noscript>
+
+  <!-- App (ES module). I will send admin.styles.css and admin.app.js next if you want. -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

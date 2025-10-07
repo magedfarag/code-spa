@@ -1,0 +1,139 @@
+/* admin.styles.css — StoreZ Admin Console (mobile-first) */
+
+/* ---------- Theme tokens ---------- */
+:root { color-scheme: light dark; }
+
+html[data-theme="dark"]{
+  --bg:#0b0c10; --panel:#121319; --muted:#9aa0a6; --text:#f1f3f4;
+  --brand:#16a085; --brand-2:#00d4ff; --ok:#00d386; --warn:#ffb300; --bad:#ff3b30;
+  --card:#161823; --border:#2a2d3a; --chip:#222538; --ink:#0f1016;
+}
+
+html[data-theme="light"]{
+  --bg:#ffffff; --panel:#f7f8fa; --muted:#5f6368; --text:#101114;
+  --brand:#16a085; --brand-2:#00bcd4; --ok:#017a52; --warn:#b96b00; --bad:#c62828;
+  --card:#ffffff; --border:#e3e7ee; --chip:#eef2f7; --ink:#ffffff;
+}
+
+html[data-theme="emerald"]{
+  --bg:#071914; --panel:#0c211b; --muted:#8fb3a6; --text:#e9fff7;
+  --brand:#10b981; --brand-2:#34d399; --ok:#10b981; --warn:#f59e0b; --bad:#ef4444;
+  --card:#0f2a21; --border:#1a3a2e; --chip:#133228; --ink:#0b1713;
+}
+
+html[data-theme="purple"]{
+  --bg:#0b0714; --panel:#140f24; --muted:#b6aee0; --text:#f5f3ff;
+  --brand:#7c5cff; --brand-2:#a78bfa; --ok:#22c55e; --warn:#fbbf24; --bad:#f87171;
+  --card:#1a1530; --border:#2a2050; --chip:#201a40; --ink:#140f24;
+}
+
+html[data-theme="contrast"]{
+  --bg:#000; --panel:#000; --muted:#bdbdbd; --text:#fff;
+  --brand:#ffd700; --brand-2:#00ffff; --ok:#00ff99; --warn:#ffdd00; --bad:#ff3b30;
+  --card:#000; --border:#fff; --chip:#111; --ink:#000;
+}
+
+/* ---------- Base ---------- */
+*{box-sizing:border-box}
+html{background:var(--bg); color:var(--text)}
+body{margin:0; font:15px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+a{color:inherit; text-decoration:none}
+img{display:block; width:100%; height:auto; border:0}
+hr{border:0; border-top:1px solid var(--border); margin:16px 0}
+
+input,select,textarea{
+  width:100%; min-height:44px; padding:.65rem .75rem; border-radius:12px;
+  background:var(--ink); color:var(--text); border:1px solid var(--border);
+}
+button{font:inherit; min-height:40px; padding:.6rem .9rem; border-radius:10px; border:1px solid transparent; cursor:pointer; color:var(--text); background:var(--brand)}
+button.ghost{background:transparent; border-color:var(--border)}
+button.secondary{background:var(--brand-2); color:#091016}
+button.small{min-height:32px; padding:.4rem .6rem; border-radius:8px}
+.icon-btn{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:transparent}
+.icon-btn.active{border-color:var(--brand-2); color:var(--brand-2)}
+
+.sr-only{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
+
+/* ---------- Header ---------- */
+header{
+  position:sticky; top:0; z-index:10; height:56px; display:flex; align-items:center; gap:8px; padding:0 12px;
+  background:linear-gradient(180deg, color-mix(in oklab, var(--bg) 95%, transparent), color-mix(in oklab, var(--bg) 50%, transparent) 70%, transparent);
+  backdrop-filter: blur(8px);
+}
+header .logo{display:flex; align-items:center; gap:8px; font-weight:700}
+header .logo svg{width:24px; height:24px}
+header .actions{margin-inline-start:auto; display:flex; gap:8px; align-items:center}
+
+/* ---------- Layout ---------- */
+#view{padding:12px; padding-bottom:calc(64px + 12px); min-height:calc(100vh - 56px)}
+.panel{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:12px; box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.grid{display:grid; gap:12px}
+.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (min-width:640px){ .grid.cols-3{grid-template-columns:repeat(4,minmax(0,1fr))} }
+
+.card{background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden}
+.card .body{padding:10px}
+.row{display:flex; align-items:center; gap:8px}
+.row.between{justify-content:space-between}
+.muted{color:var(--muted)}
+.chip{display:inline-flex; align-items:center; gap:6px; padding:.25rem .5rem; border-radius:999px; background:var(--chip); color:color-mix(in oklab, var(--text) 78%, var(--muted)); font-size:12px; border:1px solid var(--border)}
+.badge{min-width:18px; height:18px; border-radius:999px; background:var(--brand-2); color:#091016; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; padding:0 6px}
+.price{font-weight:700}
+.center{text-align:center}
+.success{color:var(--ok)}
+.warning{color:var(--warn)}
+.danger{color:var(--bad)}
+
+/* ---------- Bottom nav ---------- */
+nav.bottom{
+  position:sticky; bottom:0; inset-inline:0; height:64px; z-index:10;
+  background:rgba(18,19,25,.86); backdrop-filter:blur(8px);
+  display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid var(--border)
+}
+html[data-theme="light"] nav.bottom{background:rgba(248,250,252,.92)}
+nav.bottom a{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; font-size:12px; padding:6px 0}
+nav.bottom a.active{color:#fff}
+html[data-theme="light"] nav.bottom a.active{color:#000}
+
+/* ---------- Table (responsive) ---------- */
+.table{width:100%; border-collapse:collapse; border:1px solid var(--border); border-radius:12px; overflow:hidden}
+.table th,.table td{padding:10px; border-top:1px solid var(--border)}
+.table thead th{background:color-mix(in oklab, var(--panel) 94%, black 6%); text-align:left; font-weight:700}
+.table tr:hover{background:color-mix(in oklab, var(--panel) 90%, black 10%)}
+@media (max-width:640px){
+  .table thead{display:none}
+  .table, .table tbody, .table tr, .table td{display:block; width:100%}
+  .table tr{margin-bottom:10px; border:1px solid var(--border); border-radius:12px; overflow:hidden}
+  .table td{border-top:0; display:flex; justify-content:space-between; gap:12px}
+  .table td::before{content:attr(data-label); color:var(--muted)}
+}
+
+/* ---------- Progress ---------- */
+.progress{height:8px; background:var(--chip); border-radius:999px; overflow:hidden}
+.progress > span{display:block; height:100%; background:linear-gradient(90deg,var(--brand),var(--brand-2))}
+
+/* ---------- Tabs ---------- */
+.tabs{display:flex; gap:8px; border-bottom:1px solid var(--border); margin-bottom:8px}
+.tabs a{padding:.5rem .75rem; border-radius:10px 10px 0 0}
+.tabs a.active{background:var(--card); border:1px solid var(--border); border-bottom-color:transparent}
+
+/* ---------- Sheet & Toast ---------- */
+.sheet{
+  position:fixed; left:0; right:0; bottom:0; z-index:20;
+  background:var(--panel); border-top:1px solid var(--border);
+  border-radius:16px 16px 0 0; padding:16px; transform:translateY(100%); transition:transform .25s ease;
+}
+.sheet.show{transform:translateY(0)}
+
+.toast{
+  position:fixed; left:50%; transform:translateX(-50%); bottom:80px; z-index:30;
+  background:var(--card); border:1px solid var(--border); padding:.6rem .9rem; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.35)
+}
+
+/* ---------- Utilities ---------- */
+.stack{display:flex; flex-direction:column; gap:10px}
+.right{margin-inline-start:auto}
+.nowrap{white-space:nowrap}
+.center{justify-content:center; text-align:center}
+.hidden{display:none}
