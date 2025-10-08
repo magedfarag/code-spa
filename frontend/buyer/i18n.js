@@ -275,6 +275,92 @@ const DICTS = {
     amount_exceeded: "Amount exceeds limit",
     payment_timeout: "Payment timed out",
 
+    // AI Personalization
+    for_you_feed: "For You",
+    personalized_recommendations: "Personalized Recommendations",
+    trending_now: "Trending Now",
+    recently_viewed: "Recently Viewed",
+    similar_products: "Similar Products",
+    recommended_creators: "Recommended Creators",
+    because_you_liked: "Because you liked",
+    based_on_interests: "Based on your interests",
+    popular_in_saudi: "Popular in Saudi Arabia",
+    trending_in_category: "Trending in",
+    price_dropped: "Price Dropped!",
+    back_in_stock: "Back in Stock",
+    limited_time_offer: "Limited Time Offer",
+    ai_curated: "AI Curated",
+    discover_more: "Discover More",
+    show_less: "Show Less",
+    refresh_recommendations: "Refresh Recommendations",
+    why_recommended: "Why is this recommended?",
+    personalization_settings: "Personalization Settings",
+    recommendation_feedback: "Rate this recommendation",
+    not_interested: "Not Interested",
+    more_like_this: "More Like This",
+
+    // Enhanced Product Detail Page
+    product_details: "Product Details",
+    specifications: "Specifications",
+    size_guide: "Size Guide",
+    shipping_info: "Shipping Information",
+    return_policy: "Return Policy",
+    customer_reviews: "Customer Reviews",
+    similar_products: "Similar Products",
+    product_variants: "Available Options",
+    select_size: "Select Size",
+    select_color: "Select Color",
+    add_to_wishlist: "Add to Wishlist",
+    share_product: "Share Product",
+    compare_products: "Compare Products",
+    
+    // AR Features
+    try_with_ar: "Try with AR",
+    virtual_try_on: "Virtual Try-On",
+    see_in_your_space: "See in Your Space",
+    ar_not_supported: "AR not supported on this device",
+    enable_camera: "Enable Camera for AR",
+    ar_size_comparison: "AR Size Comparison",
+    
+    // Product Features
+    free_shipping: "Free Shipping",
+    same_day_delivery: "Same Day Delivery",
+    easy_returns: "Easy Returns",
+    warranty_included: "Warranty Included",
+    eco_friendly: "Eco-Friendly",
+    cruelty_free: "Cruelty-Free",
+    organic_materials: "Organic Materials",
+    
+    // Size & Fit
+    size_chart: "Size Chart",
+    fit_guide: "Fit Guide",
+    true_to_size: "True to Size",
+    runs_small: "Runs Small",
+    runs_large: "Runs Large",
+    size_unavailable: "Size Unavailable",
+    notify_when_available: "Notify When Available",
+    
+    // Shipping
+    estimated_delivery: "Estimated Delivery",
+    shipping_cost: "Shipping Cost",
+    free_shipping_over: "Free shipping on orders over",
+    delivery_options: "Delivery Options",
+    express_shipping: "Express Shipping",
+    
+    // Social Proof
+    total_reviews: "Total Reviews",
+    recommendation_rate: "Recommendation Rate",
+    would_buy_again: "Would Buy Again",
+    verified_purchase: "Verified Purchase",
+    helpful_review: "Helpful Review",
+    
+    // Product Comparison
+    compare_up_to: "Compare up to 3 products",
+    comparison_table: "Comparison Table",
+    product_winner: "Best Choice",
+    pros_and_cons: "Pros & Cons",
+    key_differences: "Key Differences",
+
     // discover
     discover_ph: "Search products, creators, tags…",
     browse_categories: "Browse categories",
@@ -1299,6 +1385,92 @@ const DICTS = {
     invalid_card: "تفاصيل بطاقة غير صحيحة",
     amount_exceeded: "المبلغ يتجاوز الحد المسموح",
     payment_timeout: "انتهت مهلة الدفع",
+
+    // AI Personalization - Arabic
+    for_you_feed: "لك",
+    personalized_recommendations: "توصيات شخصية",
+    trending_now: "الرائج الآن",
+    recently_viewed: "المنتجات المُشاهدة مؤخراً",
+    similar_products: "منتجات مشابهة",
+    recommended_creators: "مبدعون مُوصى بهم",
+    because_you_liked: "لأنك أعجبت بـ",
+    based_on_interests: "بناءً على اهتماماتك",
+    popular_in_saudi: "الأكثر شعبية في السعودية",
+    trending_in_category: "الرائج في",
+    price_dropped: "انخفض السعر!",
+    back_in_stock: "عاد للمخزون",
+    limited_time_offer: "عرض لفترة محدودة",
+    ai_curated: "مُنتقى بالذكاء الاصطناعي",
+    discover_more: "اكتشف المزيد",
+    show_less: "إظهار أقل",
+    refresh_recommendations: "تحديث التوصيات",
+    why_recommended: "لماذا يُوصى بهذا؟",
+    personalization_settings: "إعدادات التخصيص",
+    recommendation_feedback: "قيّم هذه التوصية",
+    not_interested: "غير مهتم",
+    more_like_this: "المزيد مثل هذا",
+
+    // Enhanced Product Detail Page - Arabic
+    product_details: "تفاصيل المنتج",
+    specifications: "المواصفات",
+    size_guide: "دليل المقاسات",
+    shipping_info: "معلومات الشحن",
+    return_policy: "سياسة الإرجاع",
+    customer_reviews: "تقييمات العملاء",
+    similar_products: "منتجات مشابهة",
+    product_variants: "الخيارات المتاحة",
+    select_size: "اختر المقاس",
+    select_color: "اختر اللون",
+    add_to_wishlist: "إضافة للمفضلة",
+    share_product: "مشاركة المنتج",
+    compare_products: "مقارنة المنتجات",
+    
+    // AR Features - Arabic
+    try_with_ar: "جرب بالواقع المعزز",
+    virtual_try_on: "تجربة افتراضية",
+    see_in_your_space: "اعرض في مساحتك",
+    ar_not_supported: "الواقع المعزز غير مدعوم على هذا الجهاز",
+    enable_camera: "تفعيل الكاميرا للواقع المعزز",
+    ar_size_comparison: "مقارنة الحجم بالواقع المعزز",
+    
+    // Product Features - Arabic
+    free_shipping: "شحن مجاني",
+    same_day_delivery: "توصيل في نفس اليوم",
+    easy_returns: "إرجاع سهل",
+    warranty_included: "ضمان مشمول",
+    eco_friendly: "صديق للبيئة",
+    cruelty_free: "خالي من القسوة",
+    organic_materials: "مواد عضوية",
+    
+    // Size & Fit - Arabic
+    size_chart: "جدول المقاسات",
+    fit_guide: "دليل المقاس",
+    true_to_size: "مقاس طبيعي",
+    runs_small: "يميل للصغر",
+    runs_large: "يميل للكبر",
+    size_unavailable: "المقاس غير متوفر",
+    notify_when_available: "أخبرني عند التوفر",
+    
+    // Shipping - Arabic
+    estimated_delivery: "التوصيل المتوقع",
+    shipping_cost: "تكلفة الشحن",
+    free_shipping_over: "شحن مجاني للطلبات فوق",
+    delivery_options: "خيارات التوصيل",
+    express_shipping: "شحن سريع",
+    
+    // Social Proof - Arabic
+    total_reviews: "إجمالي التقييمات",
+    recommendation_rate: "معدل التوصية",
+    would_buy_again: "سأشتري مرة أخرى",
+    verified_purchase: "شراء موثق",
+    helpful_review: "تقييم مفيد",
+    
+    // Product Comparison - Arabic
+    compare_up_to: "قارن حتى 3 منتجات",
+    comparison_table: "جدول المقارنة",
+    product_winner: "الخيار الأفضل",
+    pros_and_cons: "الإيجابيات والسلبيات",
+    key_differences: "الاختلافات الرئيسية",
 
     discover_ph: "ابحث عن منتجات، مبدعين، أو وسوم…",
     browse_categories: "تصفح الفئات",

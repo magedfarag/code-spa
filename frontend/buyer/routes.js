@@ -3,9 +3,9 @@
      ctx = { el, state, actions, t, tn, currency, fmtDate, navigate, showSheet, refresh }
    and optional id from the hash (e.g., #/pdp/p1 => id = "p1")
 */
-import { uns, state, actions, productById, creatorById, cartTotal, getProductField, getProductTitle, getProductImage } from "./data.js";
-import { t, tn, getLang, formatTimeAgo, fmtSAR } from "./i18n.js";
-import { aiEngine } from "./ai.js";
+import { uns, state, actions, productById, creatorById, cartTotal, getProductField, getProductTitle, getProductImage, loc } from "./data.js?v=20251008";
+import { t, tn, getLang, formatTimeAgo, fmtSAR } from "./i18n.js?v=20251008";
+import { aiEngine } from "./ai.js?v=20251008";
 
 /* ---------- tiny DOM helpers ---------- */
 const h = (html) => html.trim();
@@ -15,6 +15,10 @@ const stars = (n) => "⭐".repeat(Math.round(Number(n || 4)));
 const fmt = (n) => new Intl.NumberFormat(
   getLang() === "ar" ? "ar-SA" : "en-US", 
   { minimumFractionDigits: 0, maximumFractionDigits: 0 }
+).format(Number(n) || 0);
+const formatNumber = (n) => new Intl.NumberFormat(
+  getLang() === "ar" ? "ar-SA" : "en-US", 
+  { notation: "compact", compactDisplay: "short" }
 ).format(Number(n) || 0);
 const creatorName = (cid) => (creatorById(cid)?.name || "Creator");
 
@@ -46,9 +50,28 @@ const landing = ({ el }) => {
 const home = ({ el, state, actions }) => {
   const featuredProducts = state.products?.slice(0, 8) || [];
   const categories = state.search.categories || [];
-  const recentlyViewed = state.wishlist?.recentlyViewed?.slice(0, 4).map(id => productById(id)).filter(Boolean) || [];
   const wishlistCount = state.wishlist?.items?.length || 0;
   
+  // AI Personalized Content
+  const personalizedProducts = actions.getPersonalizedRecommendations(state.user.id, 6);
+  const trendingProducts = actions.getTrendingProducts(null, "saudi", 6);
+  const recentlyViewed = actions.getRecentlyViewedProducts(state.user.id, 4);
+  const priceDrops = actions.getPriceDropAlerts(state.user.id);
+  const recommendedCreators = actions.getCreatorRecommendations(state.user.id, 3);
+  const personalizedFeed = actions.getPersonalizedFeed(state.user.id, 3);
+  
+  // Track page view
+  actions.trackUserInteraction('page_view', { page: 'home' });
+
+  // Make functions globally available
+  window.trackRecommendationClick = (productId, reason) => {
+    actions.trackUserInteraction('recommendation_click', { productId, reason });
+  };
+  
+  window.refreshRecommendations = () => {
+    location.reload();
+  };
+
   el.innerHTML = h(`
     <div style="padding: 20px;">
       <!-- Welcome Header -->
@@ -77,6 +100,204 @@ const home = ({ el, state, actions }) => {
         </div>
       </div>
 
+      <!-- Price Drop Alerts -->
+      ${priceDrops.length > 0 ? `
+        <div style="background: linear-gradient(135deg, #ffd700, #ffed4e); border-radius: 12px; padding: 20px; margin-bottom: 32px;">
+          <h3 style="margin: 0 0 16px; display: flex; align-items: center; gap: 8px;">
+            ⚡ ${t("price_dropped")} 
+            <span style="font-size: 14px; background: rgba(255,255,255,0.3); padding: 4px 8px; border-radius: 12px;">
+              ${priceDrops.length} ${t("items")}
+            </span>
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+            ${priceDrops.slice(0, 3).map(product => `
+              <div onclick="location.hash='#/pdp/${product.id}'; trackRecommendationClick('${product.id}', 'price_drop')" 
+                   style="background: rgba(255,255,255,0.9); border-radius: 8px; padding: 12px; cursor: pointer;">
+                <div style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">${getProductTitle(product)}</div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-weight: bold; color: #ff4757;">${fmtSAR(product.price)}</span>
+                  <span style="text-decoration: line-through; font-size: 12px; color: #666;">${fmtSAR(product.originalPrice)}</span>
+                  <span style="background: #ff4757; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px;">
+                    -${product.discount}%
+                  </span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Personalized For You -->
+      ${personalizedProducts.length > 0 ? `
+        <div style="margin-bottom: 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h2 style="font-size: 20px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px;">
+              🤖 ${t("for_you_feed")}
+              <span style="background: var(--primary); color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px;">
+                ${t("ai_curated")}
+              </span>
+            </h2>
+            <button onclick="refreshRecommendations()" style="color: var(--brand); background: none; border: none; cursor: pointer; font-size: 14px;">
+              🔄 ${t("refresh_recommendations")}
+            </button>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+            ${personalizedProducts.map(product => `
+              <div onclick="location.hash='#/pdp/${product.id}'; trackRecommendationClick('${product.id}', 'personalized')" 
+                   style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.3s ease; position: relative;">
+                <div style="position: absolute; top: 8px; left: 8px; background: var(--primary); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; z-index: 1;">
+                  ${Math.round(product.personalizedScore)}% ${t("match") || "مطابقة"}
+                </div>
+                <img src="${uns(product.imageId, 300)}" alt="${getProductTitle(product)}" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
+                <div style="padding: 12px;">
+                  <h4 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; line-height: 1.3;">${getProductTitle(product)}</h4>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: bold; color: var(--primary);">${fmtSAR(product.price)}</span>
+                    <span style="font-size: 12px; color: var(--text-muted);">${t("by_creator")} @${creatorById(product.creatorId)?.name}</span>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Trending Now -->
+      ${trendingProducts.length > 0 ? `
+        <div style="margin-bottom: 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h2 style="font-size: 20px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px;">
+              📈 ${t("trending_now")}
+              <span style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px;">
+                ${t("popular_in_saudi")}
+              </span>
+            </h2>
+            <button onclick="location.hash='#/discover'" style="color: var(--brand); background: none; border: none; cursor: pointer; font-size: 14px;">
+              ${t("view_all") || "عرض الكل"} →
+            </button>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+            ${trendingProducts.map((product, index) => `
+              <div onclick="location.hash='#/pdp/${product.id}'; trackRecommendationClick('${product.id}', 'trending')" 
+                   style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.3s ease; position: relative;">
+                <div style="position: absolute; top: 8px; left: 8px; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; z-index: 1;">
+                  #${index + 1} ${t("trending")}
+                </div>
+                <img src="${uns(product.imageId, 300)}" alt="${getProductTitle(product)}" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
+                <div style="padding: 12px;">
+                  <h4 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; line-height: 1.3;">${getProductTitle(product)}</h4>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: bold; color: var(--primary);">${fmtSAR(product.price)}</span>
+                    <span style="font-size: 12px; color: var(--text-muted);">${t("by_creator")} @${creatorById(product.creatorId)?.name}</span>
+                  </div>
+                  <div style="font-size: 11px; color: var(--success);">
+                    🔥 ${Math.round(product.trendingScore)} ${t("engagement_points") || "نقاط التفاعل"}
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Recently Viewed -->
+      ${recentlyViewed.length > 0 ? `
+        <div style="margin-bottom: 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h2 style="font-size: 20px; font-weight: 600; margin: 0;">${t("recently_viewed")}</h2>
+            <button onclick="location.hash='#/profile'" style="color: var(--brand); background: none; border: none; cursor: pointer; font-size: 14px;">
+              ${t("view_all") || "عرض الكل"} →
+            </button>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+            ${recentlyViewed.map(product => `
+              <div onclick="location.hash='#/pdp/${product.id}'; trackRecommendationClick('${product.id}', 'recently_viewed')" 
+                   style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.3s ease;">
+                <img src="${uns(product.imageId, 300)}" alt="${getProductTitle(product)}" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
+                <div style="padding: 12px;">
+                  <h4 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; line-height: 1.3;">${getProductTitle(product)}</h4>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: bold; color: var(--primary);">${fmtSAR(product.price)}</span>
+                    <span style="font-size: 12px; color: var(--text-muted);">${formatTimeAgo(product.viewedAt)}</span>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Recommended Creators -->
+      ${recommendedCreators.length > 0 ? `
+        <div style="margin-bottom: 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h2 style="font-size: 20px; font-weight: 600; margin: 0;">${t("recommended_creators")}</h2>
+            <button onclick="location.hash='#/discover'" style="color: var(--brand); background: none; border: none; cursor: pointer; font-size: 14px;">
+              ${t("discover_more")} →
+            </button>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+            ${recommendedCreators.map(creator => `
+              <div onclick="location.hash='#/creator/${creator.id}'" 
+                   style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                  <img src="${creator.avatar}" alt="${creator.name}" style="width: 48px; height: 48px; border-radius: 50%; margin-right: 12px;" loading="lazy">
+                  <div style="flex: 1;">
+                    <div style="font-weight: 600; margin-bottom: 2px;">${creator.name}</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">${creator.handle}</div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 10px; background: var(--primary); color: white; padding: 2px 6px; border-radius: 4px;">
+                      ${Math.round(creator.recommendationScore)}% ${t("match")}
+                    </div>
+                  </div>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 8px; line-height: 1.4;">${creator.bio}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--text-muted);">
+                  <span>${formatNumber(creator.followers)} ${t("followers")}</span>
+                  <span>${creator.engagement}% ${t("engagement")}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Personalized Social Feed -->
+      ${personalizedFeed.length > 0 ? `
+        <div style="margin-bottom: 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h2 style="font-size: 20px; font-weight: 600; margin: 0;">${t("for_you_feed")} 📱</h2>
+            <button onclick="location.hash='#/social'" style="color: var(--brand); background: none; border: none; cursor: pointer; font-size: 14px;">
+              ${t("view_all")} →
+            </button>
+          </div>
+          <div style="display: grid; gap: 16px;">
+            ${personalizedFeed.map(post => `
+              <div onclick="location.hash='#/social'" class="social-preview" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.3s ease; position: relative;">
+                <div style="position: absolute; top: 8px; right: 8px; background: var(--primary); color: white; padding: 2px 6px; border-radius: 4px; font-size: 9px;">
+                  ${Math.round(post.personalizedScore)}% ${t("relevance") || "صلة"}
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                  <img src="${post.avatar}" alt="${post.username}" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 8px;" loading="lazy">
+                  <div>
+                    <div style="font-weight: 600; font-size: 14px;">${post.username}</div>
+                    <div style="color: var(--text-muted); font-size: 12px;">${formatTimeAgo(post.timestamp)}</div>
+                  </div>
+                  ${post.isCreator ? '<span style="color: var(--brand); margin-left: auto;">✓</span>' : ''}
+                </div>
+                <p style="margin: 0 0 8px; font-size: 14px; line-height: 1.4; color: var(--text);">${post.content.length > 100 ? post.content.substring(0, 100) + '...' : post.content}</p>
+                <div style="display: flex; align-items: center; gap: 16px; color: var(--text-muted); font-size: 12px;">
+                  <span>❤️ ${post.likes}</span>
+                  <span>💬 ${post.comments}</span>
+                  <span>📤 ${post.shares}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
       <!-- Quick Actions -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
         <button onclick="location.hash='#/discover'" style="padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; text-align: center; transition: all 0.3s ease;">
@@ -95,83 +316,8 @@ const home = ({ el, state, actions }) => {
           <div style="font-size: 12px; color: var(--text-muted);">${state.cart?.length || 0} ${t("items") || "عنصر"}</div>
         </button>
       </div>
-
-      <!-- Recently Viewed -->
-      ${recentlyViewed.length > 0 ? `
-        <div style="margin-bottom: 32px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h2 style="font-size: 20px; font-weight: 600; margin: 0;">${t("recently_viewed") || "تم عرضها مؤخراً"}</h2>
-            <button onclick="location.hash='#/wishlist'" style="color: var(--brand); background: none; border: none; cursor: pointer; font-size: 14px;">
-              ${t("view_all") || "عرض الكل"} →
-            </button>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-            ${recentlyViewed.map(product => renderDiscoverProductCard(product)).join('')}
-          </div>
-        </div>
-      ` : ''}
-
-      <!-- Categories -->
-      <div style="margin-bottom: 32px;">
-        <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">${t("shop_by_category") || "تسوق حسب الفئة"}</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px;">
-          ${categories.slice(0, 6).map(category => `
-            <button onclick="searchByCategoryFromHome('${category.id}')" style="padding: 16px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; text-align: center; transition: all 0.3s ease;">
-              <div style="font-size: 24px; margin-bottom: 8px;">${getCategoryIcon(category.id)}</div>
-              <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">${getProductField(category, "name")}</div>
-              <div style="font-size: 11px; color: var(--text-muted);">${category.count} ${t("products") || "منتج"}</div>
-            </button>
-          `).join('')}
-        </div>
-      </div>
-
-      <!-- Social Highlights -->
-      <div style="margin-bottom: 32px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h2 style="font-size: 20px; font-weight: 600; margin: 0;">${t("social_feed") || "التغذية الاجتماعية"}</h2>
-          <button onclick="location.hash='#/social'" style="color: var(--brand); background: none; border: none; cursor: pointer; font-size: 14px;">
-            ${t("view_all") || "عرض الكل"} →
-          </button>
-        </div>
-        <div style="display: grid; gap: 16px;">
-          ${state.social.posts.slice(0, 2).map(post => `
-            <div onclick="location.hash='#/social'" class="social-preview" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.3s ease;">
-              <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                <img src="${post.avatar}" alt="${post.username}" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 8px;" loading="lazy">
-                <div>
-                  <div style="font-weight: 600; font-size: 14px;">${post.username}</div>
-                  <div style="color: var(--text-muted); font-size: 12px;">${formatTimeAgo(post.timestamp)}</div>
-                </div>
-                ${post.isCreator ? '<span style="color: var(--brand); margin-left: auto;">✓</span>' : ''}
-              </div>
-              <p style="margin: 0 0 8px; font-size: 14px; line-height: 1.4; color: var(--text);">${post.content.length > 80 ? post.content.substring(0, 80) + '...' : post.content}</p>
-              <div style="display: flex; align-items: center; gap: 16px; color: var(--text-muted); font-size: 12px;">
-                <span>❤️ ${post.likes}</span>
-                <span>💬 ${post.comments}</span>
-                <span>📤 ${post.shares}</span>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-
-      <!-- Featured Products -->
-      <div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h2 style="font-size: 20px; font-weight: 600; margin: 0;">${t("featured_products") || "المنتجات المميزة"}</h2>
-          <button onclick="location.hash='#/discover'" style="color: var(--brand); background: none; border: none; cursor: pointer; font-size: 14px;">
-            ${t("view_all") || "عرض الكل"} →
-          </button>
-        </div>
-        <div class="products-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
-          ${featuredProducts.map(product => renderDiscoverProductCard(product)).join('')}
-        </div>
-      </div>
     </div>
   `);
-
-  // Setup home page functionality
-  setupHomeFunctionality();
 };
 
 function setupHomeFunctionality() {
@@ -392,11 +538,74 @@ const pdp = ({ el, state, actions }, id) => {
     return;
   }
 
-  // Get review data
+  // Track product view
+  actions.trackUserInteraction('product_view', { productId: id });
+  actions.addToRecentlyViewed(id);
+
+  // Get enhanced product data
   const reviewStats = actions.getReviewStats(id);
   const filteredReviews = actions.getFilteredReviews(id);
-  const reviewFilters = state.reviews.filters;
+  const variants = actions.getProductVariants(id);
+  const sizeGuide = actions.getProductSizeGuide(id);
+  const shippingInfo = actions.getShippingInfo(id);
+  const similarProducts = actions.getSimilarProducts(id, 4);
+  const recommendationReason = actions.getProductRecommendationReason(id);
   
+  // State for variant selection
+  let selectedVariant = variants.length > 0 ? variants[0] : null;
+  let selectedColor = null;
+  let selectedSize = null;
+  
+  // Available options
+  const availableColors = actions.getAvailableColors(id);
+  const availableSizes = actions.getAvailableSizes(id);
+
+  // Make functions globally available
+  window.selectVariant = (variantId) => {
+    selectedVariant = actions.selectProductVariant(id, variantId);
+    updateProductDisplay();
+  };
+  
+  window.selectColor = (color) => {
+    selectedColor = color;
+    updateAvailableSizes();
+  };
+  
+  window.selectSize = (size) => {
+    selectedSize = size;
+    updateAvailableColors();
+  };
+  
+  window.startAR = (feature) => {
+    const result = actions.startARSession(id, feature);
+    if (result.success) {
+      showARInterface(result.sessionId, result.capabilities);
+    } else {
+      alert(result.message || t("ar_not_supported"));
+    }
+  };
+  
+  window.showSizeGuide = () => {
+    if (sizeGuide) {
+      showSheet({
+        title: t("size_guide"),
+        content: renderSizeGuide(sizeGuide)
+      });
+    }
+  };
+  
+  window.showShippingInfo = () => {
+    showSheet({
+      title: t("shipping_info"),
+      content: renderShippingDetails(shippingInfo)
+    });
+  };
+  
+  window.compareProduct = (productId) => {
+    // Add to comparison (implement comparison logic)
+    alert(t("added_to_comparison") || "Added to comparison!");
+  };
+
   el.innerHTML = h(`
     <div style="padding: 20px; max-width: 1200px; margin: 0 auto;">
       <!-- Back Button -->
@@ -405,15 +614,54 @@ const pdp = ({ el, state, actions }, id) => {
         <span>${t("back") || "Back"}</span>
       </button>
 
+      <!-- Recommendation Reason -->
+      ${recommendationReason ? `
+        <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 12px 20px; border-radius: 8px; margin-bottom: 20px; font-size: 14px;">
+          🎯 ${recommendationReason.text}
+        </div>
+      ` : ''}
+
       <!-- Product Details Section -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;" class="product-detail-grid">
+        
         <!-- Product Images -->
         <div>
           <div class="product-images">
             <img src="${getProductImage(product, 600)}" alt="${getProductTitle(product)}" 
-                 style="width: 100%; border-radius: 12px; margin-bottom: 16px;" class="main-image">
-            <!-- Image thumbnails would go here in a real implementation -->
+                 style="width: 100%; border-radius: 12px; margin-bottom: 16px;" class="main-image" id="mainProductImage">
+            
+            <!-- Image Gallery -->
+            ${selectedVariant?.images ? `
+              <div style="display: flex; gap: 8px; margin-top: 16px;">
+                ${selectedVariant.images.map(imgId => `
+                  <img src="${uns(imgId, 150)}" alt="Product variant" 
+                       style="width: 80px; height: 80px; border-radius: 8px; cursor: pointer; border: 2px solid transparent;" 
+                       onclick="document.getElementById('mainProductImage').src='${uns(imgId, 600)}'">
+                `).join('')}
+              </div>
+            ` : ''}
           </div>
+
+          <!-- AR Features -->
+          ${product.arSupported ? `
+            <div style="margin-top: 20px; padding: 16px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; color: white;">
+              <h4 style="margin: 0 0 12px; display: flex; align-items: center; gap: 8px;">
+                📱 ${t("try_with_ar")}
+              </h4>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                ${product.arFeatures.includes('virtual_try_on') ? `
+                  <button onclick="startAR('virtual_try_on')" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                    ${t("virtual_try_on")}
+                  </button>
+                ` : ''}
+                ${product.arFeatures.includes('placement_preview') ? `
+                  <button onclick="startAR('placement_preview')" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                    ${t("see_in_your_space")}
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          ` : ''}
         </div>
 
         <!-- Product Info -->
@@ -434,8 +682,8 @@ const pdp = ({ el, state, actions }, id) => {
 
           <!-- Price -->
           <div style="margin: 20px 0;">
-            <span style="font-size: 32px; font-weight: 700; color: var(--primary);">
-              ${fmtSAR(product.price)}
+            <span style="font-size: 32px; font-weight: 700; color: var(--primary);" id="currentPrice">
+              ${fmtSAR(selectedVariant?.price || product.price)}
             </span>
             ${product.listPrice ? `
               <span style="font-size: 18px; color: var(--text-muted); text-decoration: line-through; margin-left: 12px;">
@@ -447,17 +695,66 @@ const pdp = ({ el, state, actions }, id) => {
           <!-- Product Description -->
           <div style="margin: 24px 0;">
             <p style="color: var(--text-muted); line-height: 1.6; font-size: 16px;">
-              ${product.description || t("no_description")}
+              ${loc(product, "description") || t("no_description")}
             </p>
           </div>
+
+          <!-- Color Selection -->
+          ${availableColors.length > 0 ? `
+            <div style="margin: 24px 0;">
+              <h4 style="margin-bottom: 12px; font-weight: 600;">${t("select_color")}</h4>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                ${availableColors.map(colorOption => `
+                  <button onclick="selectColor('${colorOption.color}')" 
+                          style="padding: 8px 16px; border: 2px solid ${selectedColor === colorOption.color ? 'var(--primary)' : 'var(--border)'}; 
+                                 border-radius: 8px; background: var(--card); cursor: pointer; font-size: 14px;
+                                 ${!colorOption.available ? 'opacity: 0.5; cursor: not-allowed;' : ''}"
+                          ${!colorOption.available ? 'disabled' : ''}>
+                    ${colorOption.color}
+                    ${!colorOption.available ? ` (${t("unavailable")})` : ''}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- Size Selection -->
+          ${availableSizes.length > 0 ? `
+            <div style="margin: 24px 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h4 style="margin: 0; font-weight: 600;">${t("select_size")}</h4>
+                ${sizeGuide ? `
+                  <button onclick="showSizeGuide()" style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 14px; text-decoration: underline;">
+                    ${t("size_guide")}
+                  </button>
+                ` : ''}
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                ${availableSizes.map(sizeOption => `
+                  <button onclick="selectSize('${sizeOption.size}')" 
+                          style="padding: 12px 16px; border: 2px solid ${selectedSize === sizeOption.size ? 'var(--primary)' : 'var(--border)'}; 
+                                 border-radius: 8px; background: var(--card); cursor: pointer; font-weight: 600;
+                                 ${!sizeOption.available ? 'opacity: 0.5; cursor: not-allowed;' : ''}"
+                          ${!sizeOption.available ? 'disabled' : ''}>
+                    ${sizeOption.size}
+                    ${!sizeOption.available ? `<br><span style="font-size: 10px;">${t("unavailable")}</span>` : ''}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
 
           <!-- Action Buttons -->
           <div style="display: flex; gap: 12px; margin: 32px 0;">
             <button onclick="window.addToCart?.('${product.id}')" class="primary large" style="flex: 1;">
+              <span style="margin-right: 8px;">🛒</span>
               ${t("add_to_cart") || "Add to Cart"}
             </button>
             <button onclick="toggleWishlist('${product.id}')" class="secondary" style="padding: 16px; aspect-ratio: 1;">
               ❤️
+            </button>
+            <button onclick="compareProduct('${product.id}')" class="secondary" style="padding: 16px; aspect-ratio: 1;">
+              ⚖️
             </button>
           </div>
 
@@ -465,26 +762,81 @@ const pdp = ({ el, state, actions }, id) => {
           <div style="margin: 24px 0; padding: 20px; background: var(--card); border-radius: 12px;">
             <h4 style="margin-bottom: 12px; font-weight: 600;">${t("product_features") || "Product Features"}</h4>
             <ul style="list-style: none; padding: 0; margin: 0;">
+              ${shippingInfo.freeShipping ? `
+                <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <span style="color: var(--success);">✓</span>
+                  <span style="font-size: 14px;">${t("free_shipping")}</span>
+                </li>
+              ` : ''}
+              ${shippingInfo.sameDayAvailable ? `
+                <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <span style="color: var(--success);">⚡</span>
+                  <span style="font-size: 14px;">${t("same_day_delivery")}</span>
+                </li>
+              ` : ''}
               <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
                 <span style="color: var(--success);">✓</span>
-                <span style="font-size: 14px;">${t("free_shipping") || "Free shipping on orders over SAR 200"}</span>
+                <span style="font-size: 14px;">${t("easy_returns")}</span>
               </li>
-              <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                <span style="color: var(--success);">✓</span>
-                <span style="font-size: 14px;">${t("easy_returns") || "Easy 30-day returns"}</span>
-              </li>
-              <li style="display: flex; align-items: center; gap: 8px;">
-                <span style="color: var(--success);">✓</span>
-                <span style="font-size: 14px;">${t("secure_payment") || "Secure payment processing"}</span>
-              </li>
+              ${product.warranty ? `
+                <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <span style="color: var(--success);">🛡️</span>
+                  <span style="font-size: 14px;">${t("warranty_included")} (${product.warranty.duration})</span>
+                </li>
+              ` : ''}
+              ${product.sustainability?.ecoFriendly ? `
+                <li style="display: flex; align-items: center; gap: 8px;">
+                  <span style="color: var(--success);">🌱</span>
+                  <span style="font-size: 14px;">${t("eco_friendly")}</span>
+                </li>
+              ` : ''}
             </ul>
+            
+            <button onclick="showShippingInfo()" style="margin-top: 12px; background: none; border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; cursor: pointer; width: 100%; color: var(--text);">
+              ${t("shipping_info")} & ${t("return_policy")}
+            </button>
           </div>
         </div>
       </div>
 
+      <!-- Specifications -->
+      ${product.specifications ? `
+        <div class="specifications-section" style="margin: 40px 0; padding: 24px; background: var(--card); border-radius: 12px;">
+          <h3 style="margin-bottom: 20px; font-weight: 600;">${t("specifications")}</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+            ${Object.entries(product.specifications).map(([key, value]) => `
+              <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+                <span style="font-weight: 500; text-transform: capitalize;">${key.replace('_', ' ')}:</span>
+                <span style="color: var(--text-muted);">${loc(value) || value}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Similar Products -->
+      ${similarProducts.length > 0 ? `
+        <div class="similar-products" style="margin: 40px 0;">
+          <h3 style="margin-bottom: 20px; font-weight: 600;">${t("similar_products")}</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+            ${similarProducts.map(similar => `
+              <div onclick="location.hash='#/pdp/${similar.id}'" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.3s ease;">
+                <img src="${getProductImage(similar, 300)}" alt="${getProductTitle(similar)}" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 12px;">
+                  <h4 style="margin: 0 0 8px; font-size: 14px; font-weight: 600;">${getProductTitle(similar)}</h4>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: bold; color: var(--primary);">${fmtSAR(similar.price)}</span>
+                    <span style="font-size: 12px; color: var(--success);">${Math.round(similar.similarityScore)}% ${t("match")}</span>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
       <!-- Reviews Section -->
       <div class="reviews-section" style="border-top: 1px solid var(--border); padding-top: 40px;">
-        <!-- Reviews Header -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
           <h2 style="font-size: 24px; font-weight: 700;">${t("customer_reviews") || "Customer Reviews"}</h2>
           <button onclick="showReviewForm('${id}')" class="secondary">
@@ -495,7 +847,6 @@ const pdp = ({ el, state, actions }, id) => {
 
         <!-- Review Statistics -->
         <div class="review-stats" style="display: grid; grid-template-columns: 1fr 2fr; gap: 32px; margin-bottom: 32px; padding: 24px; background: var(--card); border-radius: 12px;">
-          <!-- Overall Rating -->
           <div style="text-align: center;">
             <div style="font-size: 48px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
               ${reviewStats.averageRating}
@@ -506,152 +857,177 @@ const pdp = ({ el, state, actions }, id) => {
             <div style="color: var(--text-muted); font-size: 14px;">
               ${t("based_on_reviews").replace("{n}", reviewStats.totalReviews) || `Based on ${reviewStats.totalReviews} reviews`}
             </div>
+            ${product.socialProof ? `
+              <div style="margin-top: 16px; font-size: 12px; color: var(--text-muted);">
+                ${product.socialProof.recommendationRate}% ${t("recommendation_rate")}
+              </div>
+            ` : ''}
           </div>
-
-          <!-- Rating Distribution -->
+          
+          <!-- Rating Breakdown -->
           <div>
-            ${[5, 4, 3, 2, 1].map(rating => {
-              const count = reviewStats.distribution[rating] || 0;
+            ${[5,4,3,2,1].map(rating => {
+              const count = reviewStats.ratingBreakdown[rating] || 0;
               const percentage = reviewStats.totalReviews > 0 ? (count / reviewStats.totalReviews) * 100 : 0;
               return `
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                  <span style="min-width: 12px; font-size: 14px;">${rating}</span>
-                  <span style="color: #ffa500;">⭐</span>
-                  <div style="flex: 1; background: var(--border); height: 8px; border-radius: 4px; overflow: hidden;">
-                    <div style="background: #ffa500; height: 100%; width: ${percentage}%; transition: width 0.3s ease;"></div>
+                  <span style="font-size: 14px; width: 60px;">${rating} ${t("stars")}</span>
+                  <div style="flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;">
+                    <div style="width: ${percentage}%; height: 100%; background: #ffa500; transition: width 0.3s ease;"></div>
                   </div>
-                  <span style="min-width: 24px; font-size: 14px; color: var(--text-muted);">${count}</span>
+                  <span style="font-size: 14px; color: var(--text-muted); width: 40px;">${count}</span>
                 </div>
               `;
             }).join('')}
           </div>
         </div>
 
-        <!-- Review Filters -->
-        <div class="review-filters" style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
-          <select onchange="filterReviews('${id}', 'rating', this.value)" style="padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px;">
-            <option value="all">${t("all_ratings") || "All ratings"}</option>
-            <option value="5" ${reviewFilters.rating === "5" ? "selected" : ""}>5 ${t("stars") || "stars"}</option>
-            <option value="4" ${reviewFilters.rating === "4" ? "selected" : ""}>4 ${t("stars") || "stars"}</option>
-            <option value="3" ${reviewFilters.rating === "3" ? "selected" : ""}>3 ${t("stars") || "stars"}</option>
-            <option value="2" ${reviewFilters.rating === "2" ? "selected" : ""}>2 ${t("stars") || "stars"}</option>
-            <option value="1" ${reviewFilters.rating === "1" ? "selected" : ""}>1 ${t("star") || "star"}</option>
-          </select>
-          
-          <label style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer;">
-            <input type="checkbox" ${reviewFilters.verified ? "checked" : ""} onchange="filterReviews('${id}', 'verified', this.checked)">
-            <span style="font-size: 14px;">${t("verified_only") || "Verified only"}</span>
-          </label>
-          
-          <label style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer;">
-            <input type="checkbox" ${reviewFilters.withPhotos ? "checked" : ""} onchange="filterReviews('${id}', 'withPhotos', this.checked)">
-            <span style="font-size: 14px;">${t("with_photos") || "With photos"}</span>
-          </label>
-
-          <select onchange="filterReviews('${id}', 'sortBy', this.value)" style="padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px;">
-            <option value="helpful" ${reviewFilters.sortBy === "helpful" ? "selected" : ""}>${t("most_helpful") || "Most helpful"}</option>
-            <option value="newest" ${reviewFilters.sortBy === "newest" ? "selected" : ""}>${t("newest") || "Newest"}</option>
-            <option value="oldest" ${reviewFilters.sortBy === "oldest" ? "selected" : ""}>${t("oldest") || "Oldest"}</option>
-            <option value="rating-high" ${reviewFilters.sortBy === "rating-high" ? "selected" : ""}>${t("highest_rated") || "Highest rated"}</option>
-            <option value="rating-low" ${reviewFilters.sortBy === "rating-low" ? "selected" : ""}>${t("lowest_rated") || "Lowest rated"}</option>
-          </select>
-        </div>
-
-        <!-- Reviews List -->
+        <!-- Individual Reviews -->
         <div class="reviews-list">
-          ${filteredReviews.length === 0 ? `
-            <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-              <div style="font-size: 48px; margin-bottom: 16px;">📝</div>
-              <h3>${t("no_reviews_yet") || "No reviews yet"}</h3>
-              <p>${t("be_first_to_review") || "Be the first to share your thoughts!"}</p>
-              <button onclick="showReviewForm('${id}')" class="primary" style="margin-top: 16px;">
-                ${t("write_first_review") || "Write the first review"}
-              </button>
-            </div>
-          ` : filteredReviews.map(review => `
-            <div class="review-item" style="padding: 24px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px;">
-              <!-- Review Header -->
-              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
-                <div style="display: flex; gap: 12px;">
-                  <img src="${review.userAvatar}" alt="${review.userName}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
-                  <div>
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                      <span style="font-weight: 600;">${review.userName}</span>
-                      ${review.verified ? `<span style="background: var(--success); color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px;">✓ ${t("verified") || "VERIFIED"}</span>` : ''}
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                      <span style="color: #ffa500;">${stars(review.rating)}</span>
-                      <span style="color: var(--text-muted); font-size: 12px;">${formatTimeAgo(review.date)}</span>
-                    </div>
+          ${filteredReviews.slice(0, 3).map(review => `
+            <div style="border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                <div>
+                  <div style="font-weight: 600; margin-bottom: 4px;">${review.userName}</div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="color: #ffa500;">${stars(review.rating)}</span>
+                    <span style="color: var(--text-muted); font-size: 14px;">${formatTimeAgo(review.timestamp)}</span>
+                    ${review.verified ? `<span style="background: var(--success); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px;">${t("verified")}</span>` : ''}
                   </div>
                 </div>
               </div>
-
-              <!-- Review Content -->
-              <div style="margin-bottom: 16px;">
-                <h4 style="margin-bottom: 8px; font-weight: 600; font-size: 16px;">
-                  ${loc(review, "title")}
-                </h4>
-                <p style="color: var(--text); line-height: 1.6; font-size: 14px;">
-                  ${loc(review, "content")}
-                </p>
-              </div>
-
-              <!-- Review Images -->
-              ${review.images && review.images.length > 0 ? `
-                <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
-                  ${review.images.map(img => `
-                    <img src="${img}" alt="Review photo" 
-                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer;"
-                         onclick="showImageModal('${img}')">
-                  `).join('')}
+              <p style="margin: 0; line-height: 1.5; color: var(--text);">${review.comment}</p>
+              ${review.helpful > 0 ? `
+                <div style="margin-top: 12px; font-size: 12px; color: var(--text-muted);">
+                  👍 ${review.helpful} ${t("found_helpful") || "found this helpful"}
                 </div>
               ` : ''}
-
-              <!-- Review Tags -->
-              ${review.tags && review.tags.length > 0 ? `
-                <div style="display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap;">
-                  ${review.tags.map(tag => `
-                    <span style="background: var(--panel); color: var(--text-muted); padding: 4px 8px; border-radius: 12px; font-size: 12px;">
-                      ${tag}
-                    </span>
-                  `).join('')}
-                </div>
-              ` : ''}
-
-              <!-- Review Actions -->
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="display: flex; gap: 16px;">
-                  <button onclick="markHelpful('${review.id}', '${id}', true)" 
-                          style="display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px;">
-                    <span>👍</span>
-                    <span>${t("helpful") || "Helpful"} (${review.helpful})</span>
-                  </button>
-                  <button onclick="markHelpful('${review.id}', '${id}', false)"
-                          style="display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px;">
-                    <span>👎</span>
-                    <span>${review.notHelpful}</span>
-                  </button>
-                </div>
-              </div>
             </div>
           `).join('')}
-        </div>
-
-        <!-- Load More Reviews -->
-        ${filteredReviews.length > 5 ? `
-          <div style="text-align: center; margin-top: 24px;">
-            <button class="secondary">
-              ${t("load_more_reviews") || "Load more reviews"}
+          
+          ${filteredReviews.length > 3 ? `
+            <button onclick="location.hash='#/reviews/${id}'" style="background: none; border: 1px solid var(--border); padding: 12px 24px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 16px;">
+              ${t("view_all_reviews") || "View All Reviews"} (${filteredReviews.length})
             </button>
-          </div>
-        ` : ''}
+          ` : ''}
+        </div>
       </div>
     </div>
   `);
 
-  // Set up review functionality
-  setupReviewFunctionality(id);
+  // Helper functions
+  function updateProductDisplay() {
+    if (selectedVariant) {
+      document.getElementById('currentPrice').textContent = fmtSAR(selectedVariant.price);
+      document.getElementById('mainProductImage').src = uns(selectedVariant.images[0], 600);
+    }
+  }
+  
+  function updateAvailableSizes() {
+    // Update available sizes based on selected color
+  }
+  
+  function updateAvailableColors() {
+    // Update available colors based on selected size
+  }
+  
+  function showARInterface(sessionId, capabilities) {
+    showSheet({
+      title: t("ar_experience"),
+      content: `
+        <div style="text-align: center; padding: 20px;">
+          <div style="font-size: 48px; margin: 20px 0;">📱</div>
+          <h3>${t("ar_experience")}</h3>
+          <p>${t("ar_loading") || "Loading AR experience..."}</p>
+          <div style="margin: 20px 0;">
+            ${capabilities.map(cap => `
+              <div style="background: var(--primary); color: white; padding: 8px 16px; border-radius: 6px; margin: 4px; display: inline-block;">
+                ${t(cap) || cap.replace('_', ' ')}
+              </div>
+            `).join('')}
+          </div>
+          <button onclick="closeSheet(); actions.endARSession('${sessionId}')" class="primary">
+            ${t("close") || "Close"}
+          </button>
+        </div>
+      `
+    });
+  }
+  
+  function renderSizeGuide(guide) {
+    return `
+      <div style="padding: 20px;">
+        <div style="margin-bottom: 20px;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: var(--card);">
+                <th style="padding: 12px; border: 1px solid var(--border); text-align: left;">${t("size")}</th>
+                ${Object.keys(guide.sizes[0]).filter(k => k !== 'size').map(key => `
+                  <th style="padding: 12px; border: 1px solid var(--border); text-align: left;">${key.replace('_', ' ')}</th>
+                `).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${guide.sizes.map(size => `
+                <tr>
+                  <td style="padding: 12px; border: 1px solid var(--border); font-weight: 600;">${size.size}</td>
+                  ${Object.entries(size).filter(([k]) => k !== 'size').map(([k, v]) => `
+                    <td style="padding: 12px; border: 1px solid var(--border);">${v}</td>
+                  `).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ${guide.fitAdvice ? `
+          <div style="background: var(--card); padding: 16px; border-radius: 8px; margin-top: 16px;">
+            <h4 style="margin: 0 0 8px;">${t("fit_advice") || "Fit Advice"}</h4>
+            <p style="margin: 0; color: var(--text-muted);">${loc(guide.fitAdvice)}</p>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+  
+  function renderShippingDetails(shipping) {
+    return `
+      <div style="padding: 20px;">
+        <h3 style="margin: 0 0 16px;">${t("delivery_options")}</h3>
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+            <span>${t("standard_shipping")}</span>
+            <span>${shipping.freeShipping ? t("free") : fmtSAR(shipping.cost || 25)}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+            <span>${t("estimated_delivery")}</span>
+            <span>${shipping.estimatedDays} ${t("days")}</span>
+          </div>
+          ${shipping.sameDayAvailable ? `
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
+              <span>${t("same_day_delivery")}</span>
+              <span>${fmtSAR(shipping.sameDayCost || 15)}</span>
+            </div>
+          ` : ''}
+        </div>
+        
+        <h3 style="margin: 20px 0 16px 0;">${t("return_policy")}</h3>
+        <ul style="list-style: none; padding: 0;">
+          <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="color: var(--success);">✓</span>
+            <span>30-day return window</span>
+          </li>
+          <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="color: var(--success);">✓</span>
+            <span>Free return shipping</span>
+          </li>
+          <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="color: var(--success);">✓</span>
+            <span>Full refund guarantee</span>
+          </li>
+        </ul>
+      </div>
+    `;
+  }
 };
 
 const checkout = ({ el, state, actions }) => {
@@ -678,20 +1054,26 @@ const checkout = ({ el, state, actions }) => {
     });
     
     if (result.success) {
-      showSheet({
-        title: t("payment_successful") || "Payment Successful!",
-        content: `
-          <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 48px; color: var(--success); margin: 20px 0;">✅</div>
-            <h3>${t("payment_successful")}</h3>
-            <p>${t("transaction_id")}: ${result.transactionId}</p>
-            <p>${t("total_amount")}: ${fmtSAR(result.total)}</p>
-            <button onclick="closeSheet(); location.hash='#/orders'" class="primary" style="margin-top: 20px;">
+      window.__showSheet(`
+        <div class="row between">
+          <strong>${t("payment_successful") || "Payment Successful!"}</strong>
+          <button class="small ghost" type="button" aria-label="Close" onclick="window.__hideSheet?.()">✕</button>
+        </div>
+        <div style="text-align: center; padding: 20px;">
+          <div style="font-size: 48px; color: var(--success); margin: 20px 0;">✅</div>
+          <h3>${t("payment_successful")}</h3>
+          <p>${t("transaction_id")}: ${result.transactionId}</p>
+          <p>${t("total_amount")}: ${fmtSAR(result.total)}</p>
+          <div class="row" style="gap:8px; justify-content: center; margin-top: 20px;">
+            <button onclick="window.__hideSheet?.(); location.hash='#/orders'" class="primary">
               ${t("view_orders") || "View Orders"}
             </button>
+            <button onclick="window.__hideSheet?.(); location.hash='#/home'" class="secondary">
+              ${t("continue_shopping") || "Continue Shopping"}  
+            </button>
           </div>
-        `
-      });
+        </div>
+      `);
     } else {
       alert(result.error || t("payment_failed"));
     }

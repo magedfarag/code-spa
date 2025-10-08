@@ -1,0 +1,386 @@
+{
+  "prefs": {
+    "theme": "dark",
+    "pdpl": true,
+    "flags": {
+      "live": true,
+      "ai": false,
+      "wallet": true
+    }
+  },
+  "notices": [],
+  "impersonating": null,
+  "metrics": {
+    "revenue": 145200,
+    "orders": 1842,
+    "aov": 236,
+    "users": 420000,
+    "creators": 2800,
+    "sellers": 1050,
+    "growth": 12.4,
+    "ticketsOpen": 7,
+    "reportsOpen": 0,
+    "incidents": 0,
+    "uptime": 99.98
+  },
+  "creators": {
+    "applications": [
+      {
+        "id": "CR001",
+        "name": "Sarah Al-Mahmoud",
+        "email": "sarah.m@email.com",
+        "followers": 15400,
+        "category": "Fashion",
+        "status": "Pending",
+        "appliedAt": 1734220800000,
+        "documents": [
+          "ID",
+          "Portfolio"
+        ],
+        "note": "Strong engagement rate"
+      },
+      {
+        "id": "CR002",
+        "name": "Ahmed Hassan",
+        "email": "ahmed.h@email.com",
+        "followers": 8900,
+        "category": "Tech",
+        "status": "Approved",
+        "appliedAt": 1733788800000,
+        "documents": [
+          "ID",
+          "Portfolio",
+          "Contract"
+        ],
+        "note": "Approved for electronics category"
+      },
+      {
+        "id": "CR003",
+        "name": "Fatima Al-Zahra",
+        "email": "fatima.z@email.com",
+        "followers": 22100,
+        "category": "Beauty",
+        "status": "Under Review",
+        "appliedAt": 1734480000000,
+        "documents": [
+          "ID"
+        ],
+        "note": "Pending document verification"
+      }
+    ],
+    "activeCreators": [
+      {
+        "id": "CR010",
+        "name": "Layla Fashion",
+        "email": "layla@email.com",
+        "followers": 45600,
+        "totalSales": 156780,
+        "avgRating": 4.8,
+        "productsListed": 67,
+        "liveSessionsMonth": 12,
+        "status": "Active",
+        "tier": "Gold",
+        "joinedAt": 1723680000000
+      },
+      {
+        "id": "CR011",
+        "name": "Tech Omar",
+        "email": "omar.tech@email.com",
+        "followers": 31200,
+        "totalSales": 89340,
+        "avgRating": 4.6,
+        "productsListed": 23,
+        "liveSessionsMonth": 8,
+        "status": "Active",
+        "tier": "Silver",
+        "joinedAt": 1726790400000
+      },
+      {
+        "id": "CR012",
+        "name": "Beauty by Nour",
+        "email": "nour.beauty@email.com",
+        "followers": 67800,
+        "totalSales": 234560,
+        "avgRating": 4.9,
+        "productsListed": 89,
+        "liveSessionsMonth": 15,
+        "status": "Warning",
+        "tier": "Platinum",
+        "joinedAt": 1720569600000
+      }
+    ],
+    "stats": {
+      "totalApplications": 47,
+      "pendingReview": 12,
+      "approvedThisMonth": 8,
+      "activeCreators": 156,
+      "topTier": 23,
+      "avgApprovalTime": "3.2 days",
+      "creatorRetention": "87%"
+    }
+  },
+  "liveCommerce": {
+    "activeSessions": [
+      {
+        "id": "LIVE001",
+        "creatorId": "CR010",
+        "creatorName": "Layla Fashion",
+        "title": "Summer Fashion Haul - Live Shopping",
+        "viewers": 1247,
+        "duration": 23,
+        "startTime": 1759949258297,
+        "status": "Live",
+        "products": [
+          {
+            "id": "P1",
+            "name": "Summer Dress",
+            "sales": 12,
+            "views": 890
+          },
+          {
+            "id": "P2",
+            "name": "Sandals",
+            "sales": 8,
+            "views": 567
+          }
+        ],
+        "revenue": 2340,
+        "chatMessages": 456,
+        "moderationFlags": 0
+      },
+      {
+        "id": "LIVE003",
+        "creatorId": "CR012",
+        "creatorName": "Beauty by Nour",
+        "title": "Skincare Routine Live Demo",
+        "viewers": 2156,
+        "duration": 35,
+        "startTime": 1759948538297,
+        "status": "Live",
+        "products": [
+          {
+            "id": "P5",
+            "name": "Face Serum",
+            "sales": 45,
+            "views": 1123
+          },
+          {
+            "id": "P6",
+            "name": "Moisturizer",
+            "sales": 38,
+            "views": 987
+          }
+        ],
+        "revenue": 4520,
+        "chatMessages": 789,
+        "moderationFlags": 0
+      }
+    ],
+    "scheduledSessions": [
+      {
+        "id": "SCHED001",
+        "creatorId": "CR010",
+        "creatorName": "Layla Fashion",
+        "title": "Evening Wear Collection Launch",
+        "scheduledTime": 1759957838297,
+        "estimatedDuration": 60,
+        "status": "Scheduled",
+        "products": 12
+      },
+      {
+        "id": "SCHED002",
+        "creatorId": "CR015",
+        "creatorName": "Home Decor Hub",
+        "title": "Interior Design Tips & Products",
+        "scheduledTime": 1759965038297,
+        "estimatedDuration": 45,
+        "status": "Scheduled",
+        "products": 8
+      }
+    ],
+    "recentSessions": [
+      {
+        "id": "HIST001",
+        "creatorId": "CR011",
+        "creatorName": "Tech Omar",
+        "title": "Holiday Tech Deals",
+        "endTime": 1759943438297,
+        "duration": 42,
+        "totalViewers": 3456,
+        "revenue": 8940,
+        "status": "Completed"
+      },
+      {
+        "id": "HIST002",
+        "creatorId": "CR010",
+        "creatorName": "Layla Fashion",
+        "title": "Winter Fashion Trends",
+        "endTime": 1759929038297,
+        "duration": 38,
+        "totalViewers": 2890,
+        "revenue": 6750,
+        "status": "Completed"
+      }
+    ],
+    "stats": {
+      "totalSessionsToday": 8,
+      "activeSessions": 2,
+      "totalViewersOnline": 4295,
+      "revenueToday": 34567,
+      "averageSessionLength": 42,
+      "conversionRate": 12.8,
+      "emergencyStops": 1,
+      "moderationActions": 2
+    }
+  },
+  "moderation": {
+    "content": [
+      {
+        "id": "ugc1",
+        "type": "ugc_post",
+        "risk": "High",
+        "reporter": "@sara_k",
+        "reason": "Inappropriate content in product review",
+        "ts": 1759949642472.0972,
+        "status": "Open"
+      },
+      {
+        "id": "ugc2",
+        "type": "ugc_post",
+        "risk": "Medium",
+        "reporter": "@maya_style",
+        "reason": "Potential fake testimonial",
+        "ts": 1759947342939.953,
+        "status": "Open"
+      },
+      {
+        "id": "c5",
+        "type": "creator",
+        "risk": "Medium",
+        "reporter": "@moh",
+        "reason": "Copyright infringement in posts",
+        "ts": 1759948248510.3076,
+        "status": "Open"
+      },
+      {
+        "id": "ugc3",
+        "type": "ugc_post",
+        "risk": "Low",
+        "reporter": "@styleuser",
+        "reason": "Minor content guideline violation",
+        "ts": 1759947358289.0073,
+        "status": "Open"
+      }
+    ],
+    "sellers": [
+      {
+        "id": "S-1003",
+        "name": "Glow Co.",
+        "status": "Active",
+        "note": "High risk spike - unusual order patterns",
+        "ts": 1759943516484.1304
+      },
+      {
+        "id": "S-1009",
+        "name": "PhoneMods",
+        "status": "Active",
+        "note": "Chargeback wave - investigating",
+        "ts": 1759946596748.7395
+      },
+      {
+        "id": "S-1015",
+        "name": "StyleHub",
+        "status": "Suspended",
+        "note": "Multiple UGC policy violations",
+        "ts": 1759947687664.4348
+      },
+      {
+        "id": "S-1021",
+        "name": "TechGear",
+        "status": "Active",
+        "note": "Under review for fake reviews",
+        "ts": 1759949251262.057
+      }
+    ],
+    "ugcStats": {
+      "totalPosts": 1247,
+      "pendingReview": 23,
+      "approvedToday": 89,
+      "rejectedToday": 7,
+      "flaggedContent": 12,
+      "averageReviewTime": 3.2
+    },
+    "liveStats": {
+      "activeSessions": 4,
+      "totalViewers": 2847,
+      "moderationActions": 12,
+      "emergencyStops": 1,
+      "averageSessionLength": 45
+    }
+  },
+  "orders": [
+    {
+      "id": "A-1001",
+      "customer": "Maya A.",
+      "items": [
+        {
+          "n": "Aura Serum",
+          "q": 1,
+          "p": 119
+        }
+      ],
+      "total": 119,
+      "status": "Paid",
+      "ts": 1759945828308.355
+    },
+    {
+      "id": "A-1002",
+      "customer": "Saad M.",
+      "items": [
+        {
+          "n": "CloudRunner",
+          "q": 1,
+          "p": 329
+        }
+      ],
+      "total": 329,
+      "status": "Delivered",
+      "ts": 1759949880490.5537
+    },
+    {
+      "id": "A-1003",
+      "customer": "Lina K.",
+      "items": [
+        {
+          "n": "Holo Case",
+          "q": 2,
+          "p": 49
+        }
+      ],
+      "total": 98,
+      "status": "Placed",
+      "ts": 1759948558606.5703
+    }
+  ],
+  "tickets": [
+    {
+      "id": "T-501",
+      "subject": "Refund request for A-1001",
+      "priority": "High",
+      "assignee": "Ahmed Support",
+      "status": "Open",
+      "ts": 1759947938572.3086,
+      "thread": []
+    },
+    {
+      "id": "T-502",
+      "subject": "Address change on A-1003",
+      "priority": "Normal",
+      "assignee": null,
+      "status": "Open",
+      "ts": 1759947441854.9165,
+      "thread": []
+    }
+  ],
+  "pdplLogs": []
+}

@@ -8,7 +8,7 @@ export const uns = (id, w = 900) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 /* ---------- product helper ---------- */
-function P(id, name, cat, price, listPrice = null, creatorId = null, img = null, nameAr = null, catAr = null) {
+function P(id, name, cat, price, listPrice = null, creatorId = null, img = null, nameAr = null, catAr = null, enhancedData = {}) {
   return {
     id, 
     price, 
@@ -18,7 +18,9 @@ function P(id, name, cat, price, listPrice = null, creatorId = null, img = null,
     rating: 4.2 + Math.random() * 0.6,
     name: { en: name, ar: nameAr || name },
     cat: { en: cat, ar: catAr || cat },
-    tags: ["#trending", "#new", "#popular"]
+    tags: ["#trending", "#new", "#popular"],
+    // Enhanced product data
+    ...enhancedData
   };
 }
 
@@ -74,7 +76,16 @@ export const state = {
     preferences: { marketing: false, orders: true, live: false },
     followedCreators: ["c1", "c3"],
     likedProducts: ["p1", "p2", "p5"],
-    stats: { productViews: 156, timeSpent: 3240, sessionsCount: 12 },
+    stats: { 
+      productViews: 156, 
+      timeSpent: 3240, 
+      sessionsCount: 12,
+      recentlyViewed: [
+        { productId: "p1", timestamp: Date.now() - 1800000 }, // 30 min ago
+        { productId: "p3", timestamp: Date.now() - 3600000 }, // 1 hour ago
+        { productId: "p5", timestamp: Date.now() - 7200000 }  // 2 hours ago
+      ]
+    },
     // Social features
     bio: "Fashion enthusiast & wellness lover 🌟",
     isPublic: true,
@@ -317,14 +328,233 @@ export const state = {
   },
   
   products: [
-    P("p1", "CloudRunner Sneakers", "Footwear", 329, 399, "c1", "1519744792095-ee0c2909d518", "حذاء الجري السحابي", "أحذية"),
-    P("p2", "Sunset Hoodie", "Apparel", 149, 189, "c2", "1515879218367-8466d910aaa4", "هودي الغروب", "ملابس"),
-    P("p3", "Mystic Diffuser", "Home", 89, 119, "c3", "1515378791036-0648a3ef77b2", "موزع عطر صوفي", "منزل"),
-    P("p4", "Travel Mug", "Accessories", 45, 65, "c2", "1521572267360-ee0c2909d518", "كوب السفر", "إكسسوارات"),
-    P("p5", "Plant Pot Set", "Home", 199, 249, "c3", "1519744792095-ee0c2909d518", "طقم أصص النباتات", "منزل"),
-    P("p6", "Active Leggings", "Apparel", 149, 189, "c1", "1521572267360-ee0c2909d518", "ليجنز رياضي", "ملابس"),
-    P("p7", "Blue Light Glasses", "Accessories", 99, 129, "c3", "1515879218367-8466d910aaa4", "نظارات الضوء الأزرق", "إكسسوارات"),
-    P("p8", "Detox Clay Mask", "Beauty", 79, null, "c3", "1515378791036-0648a3ef77b2", "ماسك الطين المنظف", "جمال")
+    P("p1", "CloudRunner Sneakers", "Footwear", 329, 399, "c1", "1519744792095-ee0c2909d518", "حذاء الجري السحابي", "أحذية", {
+      description: {
+        en: "Premium running shoes with cloud-like cushioning technology. Perfect for daily runs, gym workouts, and casual wear.",
+        ar: "أحذية جري فاخرة بتقنية توسيد تشبه السحاب. مثالية للجري اليومي وتمارين الصالة الرياضية والارتداء العادي."
+      },
+      specifications: {
+        material: { en: "Breathable mesh upper with synthetic overlays", ar: "جزء علوي من الشبك القابل للتنفس مع طبقات اصطناعية" },
+        sole: { en: "CloudFoam midsole with rubber outsole", ar: "نعل أوسط من CloudFoam مع نعل خارجي مطاطي" },
+        weight: { en: "280g per shoe", ar: "280 جرام لكل حذاء" },
+        waterproof: { en: "No", ar: "لا" },
+        breathability: { en: "High", ar: "عالية" }
+      },
+      variants: [
+        { id: "p1-black-39", color: "Black", size: "39", price: 329, stock: 12, images: ["1519744792095-ee0c2909d518", "1571019613454-1cb2f99b2d8b"] },
+        { id: "p1-black-40", color: "Black", size: "40", price: 329, stock: 8, images: ["1519744792095-ee0c2909d518", "1571019613454-1cb2f99b2d8b"] },
+        { id: "p1-white-39", color: "White", size: "39", price: 329, stock: 15, images: ["1515879218367-8466d910aaa4", "1521572267360-ee0c2909d518"] },
+        { id: "p1-white-40", color: "White", size: "40", price: 329, stock: 6, images: ["1515879218367-8466d910aaa4", "1521572267360-ee0c2909d518"] },
+        { id: "p1-blue-39", color: "Blue", size: "39", price: 339, stock: 10, images: ["1515378791036-0648a3ef77b2", "1494790108755-2616b612b9e3"] }
+      ],
+      sizeGuide: {
+        sizes: [
+          { size: "39", foot_length: "24.5-25cm", width: "Normal" },
+          { size: "40", foot_length: "25-25.5cm", width: "Normal" },
+          { size: "41", foot_length: "25.5-26cm", width: "Normal" },
+          { size: "42", foot_length: "26-26.5cm", width: "Normal" }
+        ],
+        fitAdvice: {
+          en: "True to size. For wide feet, consider sizing up.",
+          ar: "مقاس طبيعي. للأقدام العريضة، فكر في زيادة المقاس."
+        }
+      },
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "size_comparison", "color_preview"],
+      shipping: {
+        freeShipping: true,
+        estimatedDays: "2-3",
+        sameDay: true,
+        locations: ["Riyadh", "Jeddah", "Dammam"]
+      },
+      socialProof: {
+        totalReviews: 156,
+        averageRating: 4.8,
+        recommendationRate: 94
+      }
+    }),
+    P("p2", "Sunset Hoodie", "Apparel", 149, 189, "c2", "1515879218367-8466d910aaa4", "هودي الغروب", "ملابس", {
+      description: {
+        en: "Cozy cotton blend hoodie with vintage sunset print. Perfect for casual outings and lounging.",
+        ar: "هودي مريح من مزيج القطن مع طباعة غروب الشمس العتيقة. مثالي للنزهات العادية والاسترخاء."
+      },
+      specifications: {
+        material: { en: "70% Cotton, 30% Polyester", ar: "70% قطن، 30% بوليستر" },
+        fit: { en: "Regular fit", ar: "مقاس عادي" },
+        care: { en: "Machine washable", ar: "قابل للغسل في الغسالة" },
+        origin: { en: "Made in Turkey", ar: "صنع في تركيا" }
+      },
+      variants: [
+        { id: "p2-orange-s", color: "Sunset Orange", size: "S", price: 149, stock: 20, images: ["1515879218367-8466d910aaa4"] },
+        { id: "p2-orange-m", color: "Sunset Orange", size: "M", price: 149, stock: 18, images: ["1515879218367-8466d910aaa4"] },
+        { id: "p2-orange-l", color: "Sunset Orange", size: "L", price: 149, stock: 12, images: ["1515879218367-8466d910aaa4"] },
+        { id: "p2-navy-m", color: "Navy", size: "M", price: 159, stock: 8, images: ["1519744792095-ee0c2909d518"] }
+      ],
+      sizeGuide: {
+        sizes: [
+          { size: "S", chest: "96-101cm", length: "66cm" },
+          { size: "M", chest: "101-106cm", length: "68cm" },
+          { size: "L", chest: "106-111cm", length: "70cm" },
+          { size: "XL", chest: "111-116cm", length: "72cm" }
+        ]
+      },
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "color_preview"],
+      sustainability: {
+        ecoFriendly: true,
+        materials: "Organic cotton blend",
+        packaging: "Recyclable"
+      }
+    }),
+    P("p3", "Mystic Diffuser", "Home", 89, 119, "c3", "1515378791036-0648a3ef77b2", "موزع عطر صوفي", "منزل", {
+      description: {
+        en: "Ultrasonic essential oil diffuser with LED mood lighting. Creates a calming atmosphere for relaxation.",
+        ar: "موزع زيوت عطرية بالموجات فوق الصوتية مع إضاءة LED للمزاج. يخلق جواً مهدئاً للاسترخاء."
+      },
+      specifications: {
+        capacity: { en: "300ml", ar: "300 مل" },
+        runtime: { en: "8-10 hours", ar: "8-10 ساعات" },
+        coverage: { en: "25-30 sqm", ar: "25-30 متر مربع" },
+        power: { en: "24V adapter included", ar: "محول 24 فولت مشمول" },
+        features: { en: "Auto shut-off, 7 LED colors", ar: "إغلاق تلقائي، 7 ألوان LED" }
+      },
+      variants: [
+        { id: "p3-white", color: "White", price: 89, stock: 25, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p3-wood", color: "Wood Grain", price: 99, stock: 15, images: ["1519744792095-ee0c2909d518"] }
+      ],
+      arSupported: true,
+      arFeatures: ["placement_preview", "size_comparison"],
+      warranty: {
+        duration: "2 years",
+        coverage: "Full replacement for defects"
+      }
+    }),
+    P("p4", "Travel Mug", "Accessories", 45, 65, "c2", "1521572267360-ee0c2909d518", "كوب السفر", "إكسسوارات", {
+      description: {
+        en: "Insulated stainless steel travel mug with leak-proof lid. Keeps drinks hot for 6 hours, cold for 12 hours.",
+        ar: "كوب سفر من الستانلس ستيل معزول مع غطاء مقاوم للتسرب. يحافظ على المشروبات ساخنة لمدة 6 ساعات، باردة لمدة 12 ساعة."
+      },
+      specifications: {
+        capacity: { en: "400ml", ar: "400 مل" },
+        material: { en: "Food-grade stainless steel", ar: "ستانلس ستيل صالح للطعام" },
+        insulation: { en: "Double-wall vacuum", ar: "فراغ مزدوج الجدار" },
+        dishwasher_safe: { en: "Top rack only", ar: "الرف العلوي فقط" }
+      },
+      variants: [
+        { id: "p4-black", color: "Matte Black", price: 45, stock: 30, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p4-silver", color: "Brushed Silver", price: 45, stock: 25, images: ["1515879218367-8466d910aaa4"] },
+        { id: "p4-blue", color: "Ocean Blue", price: 49, stock: 18, images: ["1515378791036-0648a3ef77b2"] }
+      ],
+      arSupported: false,
+      warranty: {
+        duration: "1 year",
+        coverage: "Manufacturing defects"
+      }
+    }),
+    P("p5", "Plant Pot Set", "Home", 199, 249, "c3", "1519744792095-ee0c2909d518", "طقم أصص النباتات", "منزل", {
+      description: {
+        en: "Set of 3 ceramic planters with drainage holes and matching saucers. Perfect for indoor plants and herbs.",
+        ar: "طقم من 3 أصص سيراميك مع فتحات تصريف وأطباق مطابقة. مثالي للنباتات الداخلية والأعشاب."
+      },
+      specifications: {
+        material: { en: "High-quality ceramic", ar: "سيراميك عالي الجودة" },
+        sizes: { en: "Small (10cm), Medium (15cm), Large (20cm)", ar: "صغير (10 سم)، متوسط (15 سم)، كبير (20 سم)" },
+        drainage: { en: "Pre-drilled holes", ar: "ثقوب محفورة مسبقاً" },
+        finish: { en: "Matte glaze", ar: "طلاء غير لامع" }
+      },
+      variants: [
+        { id: "p5-terracotta", color: "Terracotta", price: 199, stock: 12, images: ["1519744792095-ee0c2909d518"] },
+        { id: "p5-white", color: "Pure White", price: 209, stock: 8, images: ["1515879218367-8466d910aaa4"] },
+        { id: "p5-sage", color: "Sage Green", price: 219, stock: 6, images: ["1515378791036-0648a3ef77b2"] }
+      ],
+      arSupported: true,
+      arFeatures: ["placement_preview", "size_comparison"],
+      careInstructions: {
+        en: "Wipe clean with damp cloth. Avoid harsh chemicals.",
+        ar: "امسح بقطعة قماش مبللة. تجنب المواد الكيميائية القاسية."
+      }
+    }),
+    P("p6", "Active Leggings", "Apparel", 149, 189, "c1", "1521572267360-ee0c2909d518", "ليجنز رياضي", "ملابس", {
+      description: {
+        en: "High-performance leggings with moisture-wicking fabric and side pockets. Perfect for workouts and yoga.",
+        ar: "ليجنز عالي الأداء مع قماش ماص للرطوبة وجيوب جانبية. مثالي للتمارين واليوغا."
+      },
+      specifications: {
+        material: { en: "88% Polyester, 12% Elastane", ar: "88% بوليستر، 12% إيلاستان" },
+        features: { en: "Moisture-wicking, 4-way stretch", ar: "ماص للرطوبة، مرونة في 4 اتجاهات" },
+        compression: { en: "Medium support", ar: "دعم متوسط" },
+        length: { en: "Full length", ar: "طول كامل" }
+      },
+      variants: [
+        { id: "p6-black-xs", color: "Black", size: "XS", price: 149, stock: 15, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p6-black-s", color: "Black", size: "S", price: 149, stock: 20, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p6-black-m", color: "Black", size: "M", price: 149, stock: 18, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p6-navy-s", color: "Navy", size: "S", price: 149, stock: 12, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p6-gray-m", color: "Heather Gray", size: "M", price: 159, stock: 10, images: ["1515879218367-8466d910aaa4"] }
+      ],
+      sizeGuide: {
+        sizes: [
+          { size: "XS", waist: "61-66cm", hips: "86-91cm", length: "96cm" },
+          { size: "S", waist: "66-71cm", hips: "91-96cm", length: "98cm" },
+          { size: "M", waist: "71-76cm", hips: "96-101cm", length: "100cm" },
+          { size: "L", waist: "76-81cm", hips: "101-106cm", length: "102cm" }
+        ]
+      },
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "size_comparison"],
+      performance: {
+        sweatWicking: true,
+        breathability: "High",
+        compression: "Medium"
+      }
+    }),
+    P("p7", "Blue Light Glasses", "Accessories", 99, 129, "c3", "1515879218367-8466d910aaa4", "نظارات الضوء الأزرق", "إكسسوارات", {
+      description: {
+        en: "Stylish blue light blocking glasses to reduce eye strain from screens. Perfect for remote work and gaming.",
+        ar: "نظارات أنيقة لحجب الضوء الأزرق لتقليل إجهاد العين من الشاشات. مثالية للعمل عن بُعد والألعاب."
+      },
+      specifications: {
+        lens_type: { en: "Anti-blue light coating", ar: "طلاء مضاد للضوء الأزرق" },
+        frame_material: { en: "Lightweight acetate", ar: "أسيتات خفيف الوزن" },
+        protection: { en: "Blocks 40% blue light", ar: "يحجب 40% من الضوء الأزرق" },
+        prescription: { en: "Available (additional cost)", ar: "متوفر (تكلفة إضافية)" }
+      },
+      variants: [
+        { id: "p7-black", color: "Classic Black", price: 99, stock: 22, images: ["1515879218367-8466d910aaa4"] },
+        { id: "p7-tortoise", color: "Tortoise Shell", price: 109, stock: 18, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p7-clear", color: "Clear Frame", price: 99, stock: 25, images: ["1515378791036-0648a3ef77b2"] }
+      ],
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "face_fit_analysis"],
+      warranty: {
+        duration: "1 year",
+        coverage: "Frame and lens defects"
+      }
+    }),
+    P("p8", "Detox Clay Mask", "Beauty", 79, null, "c3", "1515378791036-0648a3ef77b2", "ماسك الطين المنظف", "جمال", {
+      description: {
+        en: "Natural clay mask with activated charcoal for deep pore cleansing. Suitable for all skin types.",
+        ar: "قناع طين طبيعي مع الفحم المنشط لتنظيف المسام العميق. مناسب لجميع أنواع البشرة."
+      },
+      specifications: {
+        size: { en: "100ml tube", ar: "أنبوب 100 مل" },
+        ingredients: { en: "Bentonite clay, activated charcoal, tea tree oil", ar: "طين البنتونيت، الفحم المنشط، زيت شجرة الشاي" },
+        usage: { en: "2-3 times per week", ar: "2-3 مرات في الأسبوع" },
+        skin_type: { en: "All skin types", ar: "جميع أنواع البشرة" }
+      },
+      variants: [
+        { id: "p8-original", variant: "Original Formula", price: 79, stock: 35, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p8-sensitive", variant: "Sensitive Skin", price: 89, stock: 20, images: ["1519744792095-ee0c2909d518"] }
+      ],
+      arSupported: false,
+      ingredients: {
+        natural: true,
+        organic: "70%",
+        cruelty_free: true,
+        vegan: true
+      },
+      skinConcerns: ["acne", "blackheads", "oily_skin", "large_pores"]
+    })
   ],
 
   creators: [
@@ -2465,6 +2695,751 @@ export const actions = {
       posts: matchingPosts.slice(0, 10),
       creators: matchingCreators.slice(0, 5),
       hashtags: this.getTrendingHashtags().filter(h => h.tag.toLowerCase().includes(lowerQuery)).slice(0, 5)
+    };
+  },
+
+  // AI Personalization Engine
+  getPersonalizedRecommendations(userId = state.user.id, limit = 10) {
+    const user = state.user;
+    const userInterests = user.interests || [];
+    const userHistory = this.getUserBehaviorData(userId);
+    const followedCreators = user.following || [];
+    
+    // Get all products and score them based on personalization factors
+    const scoredProducts = state.products.map(product => {
+      let score = 0;
+      
+      // Interest matching (40% weight)
+      if (product.category && userInterests.includes(product.category.toLowerCase())) {
+        score += 40;
+      }
+      
+      // Creator following (30% weight)
+      if (followedCreators.includes(product.creatorId)) {
+        score += 30;
+      }
+      
+      // Price preference (15% weight)
+      const avgSpent = userHistory.avgOrderValue || 200;
+      const priceScore = Math.max(0, 15 - Math.abs(product.price - avgSpent) / 50);
+      score += priceScore;
+      
+      // Social proof (10% weight)
+      const socialMetrics = this.getProductSocialMetrics(product.id);
+      score += Math.min(10, socialMetrics.totalEngagement / 10);
+      
+      // Recency boost (5% weight)
+      const daysSinceAdded = (Date.now() - (product.addedDate || Date.now())) / (1000 * 60 * 60 * 24);
+      if (daysSinceAdded < 7) score += 5;
+      
+      return { ...product, personalizedScore: score };
+    });
+    
+    // Sort by score and return top recommendations
+    return scoredProducts
+      .sort((a, b) => b.personalizedScore - a.personalizedScore)
+      .slice(0, limit);
+  },
+
+  getTrendingProducts(category = null, location = "saudi", limit = 10) {
+    // Calculate trending score based on recent engagement
+    const now = Date.now();
+    const weekAgo = now - (7 * 24 * 60 * 60 * 1000);
+    
+    const trendingProducts = state.products.map(product => {
+      // Get recent social activity for this product
+      const recentPosts = state.social.posts.filter(post => 
+        post.productIds?.includes(product.id) && post.timestamp > weekAgo
+      );
+      
+      const recentLikes = recentPosts.reduce((sum, post) => sum + post.likes, 0);
+      const recentComments = recentPosts.reduce((sum, post) => sum + post.comments, 0);
+      const recentShares = recentPosts.reduce((sum, post) => sum + post.shares, 0);
+      
+      // Calculate trending score
+      let trendingScore = 0;
+      trendingScore += recentLikes * 1; // Like weight
+      trendingScore += recentComments * 3; // Comment weight (higher engagement)
+      trendingScore += recentShares * 5; // Share weight (viral potential)
+      trendingScore += recentPosts.length * 2; // Post frequency
+      
+      // Boost for creator location matching
+      const creator = creatorById(product.creatorId);
+      if (creator && creator.location && creator.location.toLowerCase().includes(location.toLowerCase())) {
+        trendingScore *= 1.2;
+      }
+      
+      return { ...product, trendingScore };
+    });
+
+    // Filter by category if specified
+    let filtered = trendingProducts;
+    if (category) {
+      filtered = trendingProducts.filter(p => p.category.toLowerCase() === category.toLowerCase());
+    }
+    
+    return filtered
+      .sort((a, b) => b.trendingScore - a.trendingScore)
+      .slice(0, limit);
+  },
+
+  getSimilarProducts(productId, limit = 6) {
+    const targetProduct = productById(productId);
+    if (!targetProduct) return [];
+    
+    const similarProducts = state.products
+      .filter(p => p.id !== productId)
+      .map(product => {
+        let similarityScore = 0;
+        
+        // Category matching (50% weight)
+        if (product.category === targetProduct.category) {
+          similarityScore += 50;
+        }
+        
+        // Creator matching (25% weight)
+        if (product.creatorId === targetProduct.creatorId) {
+          similarityScore += 25;
+        }
+        
+        // Price similarity (15% weight)
+        const priceDiff = Math.abs(product.price - targetProduct.price);
+        const priceScore = Math.max(0, 15 - (priceDiff / targetProduct.price) * 15);
+        similarityScore += priceScore;
+        
+        // Rating similarity (10% weight)
+        const targetRating = this.getProductRating(targetProduct.id);
+        const productRating = this.getProductRating(product.id);
+        const ratingScore = Math.max(0, 10 - Math.abs(targetRating - productRating) * 2);
+        similarityScore += ratingScore;
+        
+        return { ...product, similarityScore };
+      });
+    
+    return similarProducts
+      .sort((a, b) => b.similarityScore - a.similarityScore)
+      .slice(0, limit);
+  },
+
+  getProductRating(productId) {
+    const product = productById(productId);
+    if (!product) return 4.0; // Default rating
+    
+    // Check if product has avgRating, rating, or use reviews to calculate
+    if (product.avgRating) return product.avgRating;
+    if (product.rating) return product.rating;
+    
+    // Calculate from reviews if available
+    const reviews = state.reviews.byProduct[productId];
+    if (reviews && reviews.length > 0) {
+      const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+      return totalRating / reviews.length;
+    }
+    
+    // Default rating for products without reviews
+    return 4.0;
+  },
+
+  getRecentlyViewedProducts(userId = state.user.id, limit = 8) {
+    const userStats = state.user.stats || {};
+    const recentViews = userStats.recentlyViewed || [];
+    
+    return recentViews
+      .map(view => ({ ...productById(view.productId), viewedAt: view.timestamp }))
+      .filter(Boolean)
+      .sort((a, b) => b.viewedAt - a.viewedAt)
+      .slice(0, limit);
+  },
+
+  getPriceDropAlerts(userId = state.user.id) {
+    const wishlist = state.user.likedProducts || [];
+    const priceDrops = [];
+    
+    wishlist.forEach(productId => {
+      const product = productById(productId);
+      if (product && product.originalPrice && product.price < product.originalPrice) {
+        const discount = ((product.originalPrice - product.price) / product.originalPrice) * 100;
+        priceDrops.push({
+          ...product,
+          discount: Math.round(discount),
+          savings: product.originalPrice - product.price
+        });
+      }
+    });
+    
+    return priceDrops.sort((a, b) => b.discount - a.discount);
+  },
+
+  getUserBehaviorData(userId = state.user.id) {
+    const user = state.user;
+    const userStats = user.stats || {};
+    
+    // Calculate behavioral patterns
+    const orderHistory = state.cartEnhancements.paymentHistory || [];
+    const totalSpent = orderHistory.reduce((sum, order) => sum + order.total, 0);
+    const avgOrderValue = orderHistory.length > 0 ? totalSpent / orderHistory.length : 200;
+    
+    const categoryPreferences = {};
+    state.products.forEach(product => {
+      if (user.likedProducts?.includes(product.id)) {
+        categoryPreferences[product.category] = (categoryPreferences[product.category] || 0) + 1;
+      }
+    });
+    
+    const topCategory = Object.entries(categoryPreferences)
+      .sort(([,a], [,b]) => b - a)[0]?.[0] || 'fashion';
+    
+    return {
+      totalSpent,
+      avgOrderValue,
+      orderCount: orderHistory.length,
+      categoryPreferences,
+      topCategory,
+      timeSpent: userStats.timeSpent || 0,
+      sessionsCount: userStats.sessionsCount || 0,
+      engagement: {
+        productViews: userStats.productViews || 0,
+        likesGiven: this.getUserSocialActivity(userId).likesGiven,
+        commentsGiven: this.getUserSocialActivity(userId).commentsGiven
+      }
+    };
+  },
+
+  getUserSocialActivity(userId = state.user.id) {
+    const userPosts = state.social.posts.filter(post => post.userId === userId);
+    const userActivities = state.social.activities.filter(activity => activity.userId === userId);
+    
+    const likesGiven = userActivities.filter(a => a.type === 'like').length;
+    const commentsGiven = userActivities.filter(a => a.type === 'comment').length;
+    const followsGiven = userActivities.filter(a => a.type === 'follow').length;
+    
+    return {
+      postsCount: userPosts.length,
+      likesGiven,
+      commentsGiven,
+      followsGiven,
+      totalEngagement: likesGiven + commentsGiven + followsGiven
+    };
+  },
+
+  getProductSocialMetrics(productId) {
+    const productPosts = state.social.posts.filter(post => 
+      post.productIds?.includes(productId)
+    );
+    
+    const totalLikes = productPosts.reduce((sum, post) => sum + post.likes, 0);
+    const totalComments = productPosts.reduce((sum, post) => sum + post.comments, 0);
+    const totalShares = productPosts.reduce((sum, post) => sum + post.shares, 0);
+    const totalEngagement = totalLikes + totalComments + totalShares;
+    
+    return {
+      postsCount: productPosts.length,
+      totalLikes,
+      totalComments,
+      totalShares,
+      totalEngagement,
+      avgEngagementPerPost: productPosts.length > 0 ? totalEngagement / productPosts.length : 0
+    };
+  },
+
+  getCreatorRecommendations(userId = state.user.id, limit = 5) {
+    const user = state.user;
+    const following = user.following || [];
+    const interests = user.interests || [];
+    
+    // Score creators based on user preferences
+    const scoredCreators = state.creators
+      .filter(creator => !following.includes(creator.id))
+      .map(creator => {
+        let score = 0;
+        
+        // Interest alignment (40% weight)
+        const creatorCategories = creator.categories || [];
+        const categoryMatch = creatorCategories.filter(cat => 
+          interests.includes(cat.toLowerCase())
+        ).length;
+        score += categoryMatch * 10;
+        
+        // Engagement rate (30% weight)
+        score += creator.engagement * 3;
+        
+        // Follower count (20% weight) - but not too high to promote smaller creators
+        const followerScore = Math.min(20, creator.followers / 5000);
+        score += followerScore;
+        
+        // Location preference (10% weight)
+        if (creator.location?.includes('Saudi') || creator.location?.includes('Riyadh')) {
+          score += 10;
+        }
+        
+        return { ...creator, recommendationScore: score };
+      });
+    
+    return scoredCreators
+      .sort((a, b) => b.recommendationScore - a.recommendationScore)
+      .slice(0, limit);
+  },
+
+  getPersonalizedFeed(userId = state.user.id, limit = 20) {
+    const user = state.user;
+    const userBehavior = this.getUserBehaviorData(userId);
+    const followedCreators = user.following || [];
+    const userInterests = user.interests || [];
+    
+    // Get posts and score them for personalization
+    const scoredPosts = state.social.posts.map(post => {
+      let score = 0;
+      
+      // Following boost (40% weight)
+      if (followedCreators.includes(post.userId)) {
+        score += 40;
+      }
+      
+      // Interest alignment (25% weight)
+      if (post.hashtags && Array.isArray(userInterests)) {
+        const interestMatch = post.hashtags.filter(tag => 
+          userInterests.some(interest => tag.toLowerCase().includes(interest))
+        ).length;
+        score += interestMatch * 8;
+      }
+      
+      // Engagement quality (20% weight)
+      const engagementRate = (post.likes + post.comments * 2 + post.shares * 3) / 100;
+      score += Math.min(20, engagementRate);
+      
+      // Recency (10% weight)
+      const hoursAgo = (Date.now() - post.timestamp) / (1000 * 60 * 60);
+      const recencyScore = Math.max(0, 10 - hoursAgo / 6);
+      score += recencyScore;
+      
+      // Product relevance (5% weight)
+      if (post.productIds) {
+        const relevantProducts = post.productIds.filter(pid => {
+          const product = productById(pid);
+          return product && product.category && Array.isArray(userInterests) && userInterests.includes(product.category.toLowerCase());
+        }).length;
+        score += relevantProducts * 2.5;
+      }
+      
+      return { ...post, personalizedScore: score };
+    });
+    
+    return scoredPosts
+      .sort((a, b) => b.personalizedScore - a.personalizedScore)
+      .slice(0, limit);
+  },
+
+  trackUserInteraction(type, data) {
+    // Track user behavior for improved recommendations
+    if (!state.user.behaviorTracking) {
+      state.user.behaviorTracking = {
+        interactions: [],
+        preferences: {},
+        lastUpdated: Date.now()
+      };
+    }
+    
+    const interaction = {
+      type,
+      data,
+      timestamp: Date.now(),
+      session: state.user.stats.sessionsCount || 1
+    };
+    
+    state.user.behaviorTracking.interactions.push(interaction);
+    
+    // Keep only last 1000 interactions
+    if (state.user.behaviorTracking.interactions.length > 1000) {
+      state.user.behaviorTracking.interactions = 
+        state.user.behaviorTracking.interactions.slice(-1000);
+    }
+    
+    // Update preferences based on interaction
+    this.updateUserPreferences(type, data);
+    
+    saveState();
+  },
+
+  updateUserPreferences(type, data) {
+    if (!state.user.behaviorTracking.preferences) {
+      state.user.behaviorTracking.preferences = {};
+    }
+    
+    const prefs = state.user.behaviorTracking.preferences;
+    
+    switch (type) {
+      case 'product_view':
+        const product = productById(data.productId);
+        if (product) {
+          prefs[product.category] = (prefs[product.category] || 0) + 1;
+        }
+        break;
+      
+      case 'creator_follow':
+        const creator = creatorById(data.creatorId);
+        if (creator && creator.categories) {
+          creator.categories.forEach(cat => {
+            prefs[cat] = (prefs[cat] || 0) + 2;
+          });
+        }
+        break;
+      
+      case 'post_like':
+        if (data.hashtags) {
+          data.hashtags.forEach(tag => {
+            prefs[tag] = (prefs[tag] || 0) + 0.5;
+          });
+        }
+        break;
+    }
+    
+    // Update user interests based on strong preferences
+    const topPrefs = Object.entries(prefs)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 5)
+      .map(([key]) => key.toLowerCase());
+    
+    state.user.interests = [...new Set([...state.user.interests, ...topPrefs])];
+  },
+
+  // Enhanced Product Detail Features
+  getProductVariants(productId) {
+    const product = productById(productId);
+    return product?.variants || [];
+  },
+
+  getVariantById(variantId) {
+    for (const product of state.products) {
+      if (product.variants) {
+        const variant = product.variants.find(v => v.id === variantId);
+        if (variant) {
+          return { ...variant, parentProduct: product };
+        }
+      }
+    }
+    return null;
+  },
+
+  selectProductVariant(productId, variantId) {
+    // Track variant selection for analytics
+    this.trackUserInteraction('variant_selection', { productId, variantId });
+    
+    const variant = this.getVariantById(variantId);
+    if (variant) {
+      // Update recently viewed with variant
+      this.addToRecentlyViewed(productId, { variantId });
+      saveState();
+      return variant;
+    }
+    return null;
+  },
+
+  getProductSizeGuide(productId) {
+    const product = productById(productId);
+    return product?.sizeGuide || null;
+  },
+
+  getAvailableSizes(productId, color = null) {
+    const variants = this.getProductVariants(productId);
+    let filtered = variants;
+    
+    if (color) {
+      filtered = variants.filter(v => v.color === color);
+    }
+    
+    const sizes = [...new Set(filtered.map(v => v.size))].filter(Boolean);
+    return sizes.map(size => {
+      const sizeVariants = filtered.filter(v => v.size === size);
+      const totalStock = sizeVariants.reduce((sum, v) => sum + v.stock, 0);
+      const minPrice = Math.min(...sizeVariants.map(v => v.price));
+      
+      return {
+        size,
+        available: totalStock > 0,
+        stock: totalStock,
+        price: minPrice
+      };
+    });
+  },
+
+  getAvailableColors(productId, size = null) {
+    const variants = this.getProductVariants(productId);
+    let filtered = variants;
+    
+    if (size) {
+      filtered = variants.filter(v => v.size === size);
+    }
+    
+    const colors = [...new Set(filtered.map(v => v.color))].filter(Boolean);
+    return colors.map(color => {
+      const colorVariants = filtered.filter(v => v.color === color);
+      const totalStock = colorVariants.reduce((sum, v) => sum + v.stock, 0);
+      const minPrice = Math.min(...colorVariants.map(v => v.price));
+      const firstVariant = colorVariants[0];
+      
+      return {
+        color,
+        available: totalStock > 0,
+        stock: totalStock,
+        price: minPrice,
+        images: firstVariant?.images || []
+      };
+    });
+  },
+
+  getShippingInfo(productId, location = "Riyadh") {
+    const product = productById(productId);
+    const shipping = product?.shipping || {};
+    
+    const baseShipping = {
+      freeShipping: false,
+      estimatedDays: "5-7",
+      sameDay: false,
+      locations: ["Riyadh"],
+      cost: 25
+    };
+    
+    const shippingInfo = { ...baseShipping, ...shipping };
+    
+    // Calculate shipping cost based on location and product
+    if (shippingInfo.freeShipping || product.price > 200) {
+      shippingInfo.cost = 0;
+    }
+    
+    // Check same-day availability
+    if (shippingInfo.sameDay && shippingInfo.locations.includes(location)) {
+      shippingInfo.sameDayAvailable = true;
+      shippingInfo.sameDayCost = 15;
+    }
+    
+    return shippingInfo;
+  },
+
+  startARSession(productId, feature = "virtual_try_on") {
+    const product = productById(productId);
+    
+    if (!product?.arSupported || !product.arFeatures?.includes(feature)) {
+      return { success: false, message: "AR not supported for this product" };
+    }
+    
+    // Track AR usage
+    this.trackUserInteraction('ar_session', { productId, feature });
+    
+    // Simulate AR session data
+    const arSession = {
+      id: `ar_${Date.now()}`,
+      productId,
+      feature,
+      status: "active",
+      startTime: Date.now(),
+      capabilities: product.arFeatures,
+      sessionData: {
+        camerPermission: true,
+        calibrated: false,
+        tracking: false
+      }
+    };
+    
+    // Store AR session
+    if (!state.user.arSessions) {
+      state.user.arSessions = [];
+    }
+    state.user.arSessions.push(arSession);
+    
+    saveState();
+    return { success: true, sessionId: arSession.id, capabilities: product.arFeatures };
+  },
+
+  endARSession(sessionId) {
+    if (!state.user.arSessions) return;
+    
+    const session = state.user.arSessions.find(s => s.id === sessionId);
+    if (session) {
+      session.status = "completed";
+      session.endTime = Date.now();
+      session.duration = session.endTime - session.startTime;
+    }
+    
+    saveState();
+  },
+
+  addToRecentlyViewed(productId, metadata = {}) {
+    if (!state.user.stats.recentlyViewed) {
+      state.user.stats.recentlyViewed = [];
+    }
+    
+    // Remove if already exists
+    state.user.stats.recentlyViewed = state.user.stats.recentlyViewed.filter(
+      item => item.productId !== productId
+    );
+    
+    // Add to beginning
+    state.user.stats.recentlyViewed.unshift({
+      productId,
+      timestamp: Date.now(),
+      ...metadata
+    });
+    
+    // Keep only last 20 items
+    if (state.user.stats.recentlyViewed.length > 20) {
+      state.user.stats.recentlyViewed = state.user.stats.recentlyViewed.slice(0, 20);
+    }
+    
+    saveState();
+  },
+
+  getProductComparison(productIds) {
+    const products = productIds.map(id => productById(id)).filter(Boolean);
+    
+    if (products.length < 2) return null;
+    
+    // Extract comparison data
+    const comparison = {
+      products: products.map(product => ({
+        id: product.id,
+        name: getProductTitle(product),
+        price: product.price,
+        rating: product.rating,
+        image: uns(product.img, 300),
+        specifications: product.specifications || {},
+        features: product.features || [],
+        pros: this.getProductPros(product.id),
+        cons: this.getProductCons(product.id)
+      })),
+      commonSpecs: this.getCommonSpecifications(products),
+      differences: this.getSpecificationDifferences(products),
+      winner: this.determineComparisonWinner(products)
+    };
+    
+    return comparison;
+  },
+
+  getCommonSpecifications(products) {
+    if (products.length === 0) return {};
+    
+    const firstProduct = products[0];
+    const firstSpecs = firstProduct.specifications || {};
+    const commonSpecs = {};
+    
+    Object.keys(firstSpecs).forEach(spec => {
+      const allHaveSpec = products.every(p => p.specifications && p.specifications[spec]);
+      if (allHaveSpec) {
+        commonSpecs[spec] = products.map(p => p.specifications[spec]);
+      }
+    });
+    
+    return commonSpecs;
+  },
+
+  getSpecificationDifferences(products) {
+    const differences = {};
+    
+    products.forEach((product, index) => {
+      const specs = product.specifications || {};
+      Object.keys(specs).forEach(spec => {
+        if (!differences[spec]) {
+          differences[spec] = {};
+        }
+        differences[spec][product.id] = specs[spec];
+      });
+    });
+    
+    return differences;
+  },
+
+  determineComparisonWinner(products) {
+    // Simple scoring based on rating and price value
+    const scored = products.map(product => {
+      let score = 0;
+      score += product.rating * 20; // Rating weight
+      score += (1000 - product.price) / 10; // Price value (lower price = higher score)
+      score += (product.socialProof?.averageRating || 0) * 5; // Social proof
+      
+      return { product, score };
+    });
+    
+    const winner = scored.reduce((best, current) => 
+      current.score > best.score ? current : best
+    );
+    
+    return {
+      productId: winner.product.id,
+      score: winner.score,
+      reasons: ["Highest rating", "Best value for money", "Strong social proof"]
+    };
+  },
+
+  getProductPros(productId) {
+    // Simulate product pros based on reviews and features
+    const product = productById(productId);
+    const baseProps = [
+      "High quality materials",
+      "Great value for money", 
+      "Fast shipping",
+      "Excellent customer service"
+    ];
+    
+    const categoryProps = {
+      "Footwear": ["Comfortable fit", "Durable construction", "Good traction"],
+      "Apparel": ["Soft fabric", "True to size", "Stylish design"],
+      "Home": ["Easy to use", "Elegant design", "Space-saving"],
+      "Beauty": ["Effective formula", "Natural ingredients", "Gentle on skin"],
+      "Accessories": ["Practical design", "Good build quality", "Versatile use"]
+    };
+    
+    const category = loc(product, "cat", "en");
+    const specific = categoryProps[category] || [];
+    
+    return [...baseProps.slice(0, 2), ...specific.slice(0, 2)];
+  },
+
+  getProductCons(productId) {
+    // Simulate minor cons to maintain authenticity
+    const cons = [
+      "Limited color options",
+      "Could be more affordable",
+      "Packaging could be improved",
+      "Instructions could be clearer"
+    ];
+    
+    return cons.slice(0, 1 + Math.floor(Math.random() * 2));
+  },
+
+  getProductRecommendationReason(productId, userId = state.user.id) {
+    const product = productById(productId);
+    const user = state.user;
+    
+    // Determine recommendation reason
+    if (Array.isArray(user.interests) && user.interests.includes(loc(product, "cat", "en").toLowerCase())) {
+      return { 
+        type: "interest_match", 
+        text: "Based on your interests" 
+      };
+    }
+    
+    if (user.following.includes(product.creatorId)) {
+      const creator = creatorById(product.creatorId);
+      return { 
+        type: "creator_follow", 
+        text: `Because you follow ${creator?.name}` 
+      };
+    }
+    
+    const similarProducts = user.likedProducts.filter(likedId => {
+      const likedProduct = productById(likedId);
+      return likedProduct && loc(likedProduct, "cat") === loc(product, "cat");
+    });
+    
+    if (similarProducts.length > 0) {
+      return { 
+        type: "similar_likes", 
+        text: "Because you liked similar items" 
+      };
+    }
+    
+    return { 
+      type: "trending", 
+      text: "Trending in this category" 
     };
   }
 };

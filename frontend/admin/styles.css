@@ -27,6 +27,18 @@ html[data-theme="purple"]{
   --card:#1a1530; --border:#2a2050; --chip:#201a40; --ink:#140f24;
 }
 
+html[data-theme="sunset"] {
+  --bg:#140b0b; --panel:#1f1313; --muted:#d4b8b0; --text:#fff8f6;
+  --brand:#ff6b6b; --brand-2:#ffd166; --ok:#22c55e; --warn:#ffd166; --bad:#ff6b6b;
+  --card:#2a1717; --border:#3a2020; --chip:#2a1a19; --ink:#1a0f0f;
+}
+
+html[data-theme="ocean"]  {
+  --bg:#071217; --panel:#0d1c22; --muted:#9fc2cf; --text:#e7fbff;
+  --brand:#00bcd4; --brand-2:#26c6da; --ok:#2dd4bf; --warn:#f59e0b; --bad:#ef4444;
+  --card:#0f2530; --border:#17323f; --chip:#102a35; --ink:#0a1419;
+}
+
 html[data-theme="contrast"]{
   --bg:#000; --panel:#000; --muted:#bdbdbd; --text:#fff;
   --brand:#ffd700; --brand-2:#00ffff; --ok:#00ff99; --warn:#ffdd00; --bad:#ff3b30;
@@ -36,7 +48,22 @@ html[data-theme="contrast"]{
 /* ---------- Base ---------- */
 *{box-sizing:border-box}
 html{background:var(--bg); color:var(--text)}
-body{margin:0; font:15px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+body{
+  margin:0; 
+  font:15px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+  /* Comprehensive scrollbar hiding */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+/* Hide scrollbar for WebKit browsers */
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;
+}
+html, main, #view, .panel {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 a{color:inherit; text-decoration:none}
 img{display:block; width:100%; height:auto; border:0}
 hr{border:0; border-top:1px solid var(--border); margin:16px 0}
@@ -45,10 +72,14 @@ input,select,textarea{
   width:100%; min-height:44px; padding:.65rem .75rem; border-radius:12px;
   background:var(--ink); color:var(--text); border:1px solid var(--border);
 }
-button{font:inherit; min-height:40px; padding:.6rem .9rem; border-radius:10px; border:1px solid transparent; cursor:pointer; color:var(--text); background:var(--brand)}
-button.ghost{background:transparent; border-color:var(--border)}
+button{font:inherit; min-height:44px; padding:.7rem 1rem; border-radius:12px; border:0; cursor:pointer; color:var(--text); background:var(--brand)}
+button.ghost{background:transparent; border:1px solid var(--border)}
 button.secondary{background:var(--brand-2); color:#091016}
-button.small{min-height:32px; padding:.4rem .6rem; border-radius:8px}
+button.danger{background:var(--bad); color:white}
+button.small{min-height:36px; padding:.5rem .75rem; border-radius:10px}
+button:hover{opacity:0.9}
+button:focus-visible{outline:2px solid var(--brand); outline-offset:2px}
+button:active{transform:translateY(1px)}
 .icon-btn{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:transparent}
 .icon-btn.active{border-color:var(--brand-2); color:var(--brand-2)}
 
@@ -62,7 +93,32 @@ header{
 }
 header .logo{display:flex; align-items:center; gap:8px; font-weight:700}
 header .logo svg{width:24px; height:24px}
-header .actions{margin-inline-start:auto; display:flex; gap:8px; align-items:center}
+header .actions{
+  margin-inline-start:auto; 
+  display:flex; 
+  gap:8px; 
+  align-items:center;
+  flex-wrap: wrap;
+}
+
+/* Mobile-optimized header */
+@media (max-width: 480px) {
+  header {
+    padding: 0 8px;
+    gap: 6px;
+  }
+  header .actions {
+    gap: 6px;
+  }
+  header .logo {
+    gap: 6px;
+    font-size: 14px;
+  }
+  header .logo svg {
+    width: 20px;
+    height: 20px;
+  }
+}
 
 /* ---------- Layout ---------- */
 #view{padding:12px; padding-bottom:calc(64px + 12px); min-height:calc(100vh - 56px)}
@@ -74,7 +130,7 @@ header .actions{margin-inline-start:auto; display:flex; gap:8px; align-items:cen
 
 .card{background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden}
 .card .body{padding:10px}
-.row{display:flex; align-items:center; gap:8px}
+.row{display:flex; align-items:center; gap:8px; flex-wrap: wrap}
 .row.between{justify-content:space-between}
 .muted{color:var(--muted)}
 .chip{display:inline-flex; align-items:center; gap:6px; padding:.25rem .5rem; border-radius:999px; background:var(--chip); color:color-mix(in oklab, var(--text) 78%, var(--muted)); font-size:12px; border:1px solid var(--border)}
@@ -85,6 +141,33 @@ header .actions{margin-inline-start:auto; display:flex; gap:8px; align-items:cen
 .warning{color:var(--warn)}
 .danger{color:var(--bad)}
 
+/* Mobile-optimized layout */
+@media (max-width: 480px) {
+  #view {
+    padding: 8px;
+    padding-bottom: calc(64px + 8px);
+  }
+  .panel {
+    padding: 10px;
+    border-radius: 12px;
+  }
+  .grid {
+    gap: 8px;
+  }
+  .grid.cols-2 {
+    grid-template-columns: 1fr;
+  }
+  .grid.cols-3 {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+  .row {
+    gap: 6px;
+  }
+  .card .body {
+    padding: 8px;
+  }
+}
+
 /* ---------- Bottom nav ---------- */
 nav.bottom{
   position:sticky; bottom:0; inset-inline:0; height:64px; z-index:10;
@@ -92,9 +175,33 @@ nav.bottom{
   display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid var(--border)
 }
 html[data-theme="light"] nav.bottom{background:rgba(248,250,252,.92)}
-nav.bottom a{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; font-size:12px; padding:6px 0}
+nav.bottom a{
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  justify-content:center; 
+  gap:6px; 
+  font-size:12px; 
+  padding:6px 0;
+  transition: all 0.2s ease;
+}
 nav.bottom a.active{color:#fff}
 html[data-theme="light"] nav.bottom a.active{color:#000}
+
+/* Mobile-optimized navigation */
+@media (max-width: 480px) {
+  nav.bottom {
+    height: 60px;
+  }
+  nav.bottom a {
+    gap: 4px;
+    font-size: 11px;
+    padding: 4px 0;
+  }
+  nav.bottom a .icon {
+    font-size: 16px;
+  }
+}
 
 /* ---------- Table (responsive) ---------- */
 .table{width:100%; border-collapse:collapse; border:1px solid var(--border); border-radius:12px; overflow:hidden}

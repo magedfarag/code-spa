@@ -3,10 +3,10 @@
    and global helpers (sheet, badges). Routes render views.
    Imports are small/strict to keep coupling low.
 */
-import { setLang, getLang, t, tn, dirForLang, locale, fmtCurrency as currency, fmtDate } from "./i18n.js";
-import { state, loadState, saveState, resetState, actions, productById } from "./data.js";
-import { routes } from "./routes.js";
-import { aiEngine } from "./ai.js";
+import { setLang, getLang, t, tn, dirForLang, locale, fmtCurrency as currency, fmtDate } from "./i18n.js?v=20251008";
+import { state, loadState, saveState, resetState, actions, productById } from "./data.js?v=20251008";
+import { routes } from "./routes.js?v=20251008";
+import { aiEngine } from "./ai.js?v=20251008";
 
 /* ------------- tiny DOM helpers ------------- */
 const qs = (s, el = document) => el.querySelector(s);
@@ -53,8 +53,8 @@ function toggleDir() {
 
 /* ------------- KPIs & badges ------------- */
 function refreshBadges() {
-  const cartCount = state.cart.reduce((s, i) => s + i.quantity, 0);
-  const wishCount = state.wishlist.items.length;
+  const cartCount = (state.cart || []).reduce((s, i) => s + i.quantity, 0);
+  const wishCount = (state.wishlist?.items || []).length;
   const cartBadge = qs("#cartBadge");
   const wishBadge = qs("#wishlistBadge");
   if (cartBadge) cartBadge.textContent = String(cartCount);
@@ -99,6 +99,7 @@ function showSheet(messageKey = "sheet_msg") {
 }
 
 window.__hideSheet = hideSheet; // Make hideSheet globally accessible
+window.__showSheet = showSheet; // Make showSheet globally accessible
 
 function hideSheet() {
   if (!sheetEl) return;

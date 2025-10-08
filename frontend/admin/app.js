@@ -111,6 +111,18 @@ const I18N = {
     technical_support: "Technical Support",
     stream_quality: "Stream Quality",
     end_session: "End Session",
+    live_session_details: "Live Session Details",
+    peak_viewers: "Peak Viewers",
+    conversion_rate: "Conversion Rate",
+    avg_view_time: "Avg View Time",
+    moderate_chat: "Moderate Chat",
+    total_messages: "Total Messages",
+    flagged_messages: "Flagged Messages",
+    active_viewers: "Active Viewers",
+    live_chat_feed: "Live Chat Feed",
+    enable_slow_mode: "Enable Slow Mode",
+    pause_chat: "Pause Chat",
+    chat_messages: "Chat Messages",
 
     // Orders
     id: "ID",
@@ -260,6 +272,18 @@ const I18N = {
     technical_support: "الدعم التقني",
     stream_quality: "جودة البث",
     end_session: "إنهاء الجلسة",
+    live_session_details: "تفاصيل الجلسة المباشرة",
+    peak_viewers: "ذروة المشاهدين",
+    conversion_rate: "معدل التحويل",
+    avg_view_time: "متوسط وقت المشاهدة",
+    moderate_chat: "إشراف الدردشة",
+    total_messages: "إجمالي الرسائل",
+    flagged_messages: "الرسائل المبلغ عنها",
+    active_viewers: "المشاهدون النشطون",
+    live_chat_feed: "تغذية الدردشة المباشرة",
+    enable_slow_mode: "تفعيل الوضع البطيء",
+    pause_chat: "إيقاف الدردشة مؤقتاً",
+    chat_messages: "رسائل الدردشة",
 
     id: "المعرف",
     customer: "العميل",
@@ -448,6 +472,7 @@ function closeSheet(){
   sh.classList.remove("show"); sh.setAttribute("aria-hidden","true");
 }
 window.__closeSheet = closeSheet;
+window.hideSheet = closeSheet; // Alias for compatibility
 
 let toastTid=null;
 function toast(msg){
@@ -1293,6 +1318,33 @@ function reinstateSeller(id) {
             <div class="t">Emergency Stops Today</div>
           </div>
         </div>
+      ` : isSellers ? `
+        <div class="grid cols-3" style="margin:16px 0; gap:12px">
+          <div class="metric">
+            <div class="k">${state.moderation.sellers.filter(s => s.status === 'Suspended').length}</div>
+            <div class="t">Suspended Sellers</div>
+          </div>
+          <div class="metric">
+            <div class="k">${state.moderation.sellers.filter(s => s.status === 'Active').length}</div>
+            <div class="t">Active Sellers</div>
+          </div>
+          <div class="metric">
+            <div class="k">${state.moderation.sellers.length}</div>
+            <div class="t">Total Sellers</div>
+          </div>
+          <div class="metric">
+            <div class="k">12</div>
+            <div class="t">Applications Pending</div>
+          </div>
+          <div class="metric">
+            <div class="k">89%</div>
+            <div class="t">Approval Rate</div>
+          </div>
+          <div class="metric">
+            <div class="k">2.3d</div>
+            <div class="t">Avg Review Time</div>
+          </div>
+        </div>
       ` : ''}
       
       <!-- Enhanced Content Table -->
@@ -1558,6 +1610,310 @@ function wireHeader(){
   });
 
   qs("#btnReset")?.addEventListener("click", reset);
+}
+
+/* -------------------- Live Commerce Functions -------------------- */
+function showLiveSessionDetails(session) {
+  const title = `${t("live_session_details")} - ${session.id}`;
+  const body = html`
+    <div style="max-width:600px">
+      <div class="grid cols-2" style="gap:12px; margin:16px 0">
+        <div><strong>${t("creator")}:</strong> ${session.creator}</div>
+        <div><strong>${t("status")}:</strong> <span class="status ${session.status === 'Live' ? 'success' : 'pending'}">${session.status}</span></div>
+        <div><strong>${t("viewers")}:</strong> ${session.viewers.toLocaleString()}</div>
+        <div><strong>${t("duration")}:</strong> ${session.duration}</div>
+        <div><strong>${t("revenue")}:</strong> ${fmtCurrency(session.revenue)}</div>
+        <div><strong>${t("chat_messages")}:</strong> ${session.chatMessages}</div>
+      </div>
+      
+      <div style="margin:16px 0">
+        <strong>${t("session_title")}:</strong><br>
+        <div style="background:var(--bg2); padding:12px; border-radius:8px; margin:8px 0">
+          ${session.title}
+        </div>
+      </div>
+
+      <div class="metric-grid" style="margin:16px 0">
+        <div class="metric">
+          <div class="k">${session.peakViewers || session.viewers}</div>
+          <div class="t">${t("peak_viewers")}</div>
+        </div>
+        <div class="metric">
+          <div class="k">${session.conversionRate || "12.8%"}</div>
+          <div class="t">${t("conversion_rate")}</div>
+        </div>
+        <div class="metric">
+          <div class="k">${session.avgViewTime || "8m"}</div>
+          <div class="t">${t("avg_view_time")}</div>
+        </div>
+      </div>
+
+      <div class="flex" style="gap:12px; margin-top:24px">
+        <button class="btn secondary flex-1" onclick="showChatModeration('${session.id}')">
+          ${t("moderate_chat")}
+        </button>
+        <button class="btn ghost danger flex-1" onclick="confirmEmergencyStop('${session.id}')">
+          ${t("emergency_stop")}
+        </button>
+      </div>
+    </div>
+  `;
+  showSheet(title, body);
+}
+
+function showChatModeration(sessionId) {
+  const session = state.liveCommerce.activeSessions.find(x => x.id === sessionId);
+  if (!session) return;
+  
+  const title = `${t("chat_moderation")} - ${session.id}`;
+  const sampleMessages = [
+    { user: "@viewer1", message: "Amazing product! Where can I buy?", time: "2m ago", flagged: false },
+    { user: "@viewer2", message: "This looks great! 😍", time: "3m ago", flagged: false },
+    { user: "@spammer", message: "Check out my channel for better deals!", time: "5m ago", flagged: true },
+    { user: "@viewer3", message: "Love this color! Is it available in size M?", time: "7m ago", flagged: false },
+    { user: "@viewer4", message: "When will you restock?", time: "10m ago", flagged: false }
+  ];
+
+  const body = html`
+    <div style="max-width:700px">
+      <div style="margin:16px 0">
+        <div class="flex" style="gap:12px; margin-bottom:16px">
+          <div class="metric">
+            <div class="k">${session.chatMessages}</div>
+            <div class="t">${t("total_messages")}</div>
+          </div>
+          <div class="metric">
+            <div class="k">3</div>
+            <div class="t">${t("flagged_messages")}</div>
+          </div>
+          <div class="metric">
+            <div class="k">${session.viewers}</div>
+            <div class="t">${t("active_viewers")}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2); border-radius:8px; padding:16px; max-height:400px; overflow-y:auto">
+        <strong style="margin-bottom:12px; display:block">${t("live_chat_feed")}</strong>
+        ${sampleMessages.map(msg => html`
+          <div class="chat-message" style="padding:8px; border-bottom:1px solid var(--border); ${msg.flagged ? 'background:rgba(255,0,0,0.1); border-left:3px solid red;' : ''}">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+              <div>
+                <strong style="color:${msg.flagged ? 'red' : 'var(--primary)'}}">${msg.user}</strong>
+                <span style="font-size:0.9em; color:var(--text-muted); margin-left:8px">${msg.time}</span>
+              </div>
+              ${msg.flagged ? '<span style="color:red; font-weight:bold">⚠️ FLAGGED</span>' : ''}
+            </div>
+            <div style="margin-top:4px">${msg.message}</div>
+            <div style="margin-top:8px; display:flex; gap:8px">
+              <button class="btn small ghost" onclick="moderateMessage('${msg.user}', 'timeout')">Timeout</button>
+              <button class="btn small ghost" onclick="moderateMessage('${msg.user}', 'delete')">Delete</button>
+              ${msg.flagged ? '<button class="btn small secondary" onclick="moderateMessage(\'' + msg.user + '\', \'approve\')">Approve</button>' : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="flex" style="gap:12px; margin-top:16px">
+        <button class="btn secondary flex-1" onclick="enableSlowMode()">
+          ${t("enable_slow_mode")}
+        </button>
+        <button class="btn ghost flex-1" onclick="pauseChat()">
+          ${t("pause_chat")}
+        </button>
+      </div>
+    </div>
+  `;
+  showSheet(title, body);
+}
+
+function moderateMessage(user, action) {
+  const actions = {
+    timeout: `User ${user} has been timed out for 5 minutes`,
+    delete: `Message from ${user} has been deleted`,
+    approve: `Message from ${user} has been approved`
+  };
+  toast(actions[action] || "Action completed");
+}
+
+function enableSlowMode() {
+  toast("Slow mode enabled - users can send 1 message per 30 seconds");
+}
+
+function pauseChat() {
+  toast("Chat has been paused for moderation");
+}
+
+function confirmEmergencyStop(sessionId) {
+  if(confirm("Emergency stop this live session? This will immediately end the broadcast and notify viewers.")) {
+    // Find and update session
+    const sessionIndex = state.liveCommerce.activeSessions.findIndex(s => s.id === sessionId);
+    if (sessionIndex >= 0) {
+      state.liveCommerce.activeSessions.splice(sessionIndex, 1);
+      state.liveCommerce.emergencyStops++;
+      save();
+      toast("Live session stopped");
+      closeSheet();
+      route(); // Refresh the view
+    }
+  }
+}
+
+function showScheduledSessionDetails(session) {
+  const title = `${t("scheduled_sessions")} - ${session.id}`;
+  const timeUntil = Math.floor((session.scheduledTime - Date.now()) / (60*1000));
+  const timeDisplay = timeUntil > 60 ? `${Math.floor(timeUntil/60)}h ${timeUntil%60}m` : `${timeUntil}m`;
+  
+  const body = html`
+    <div style="max-width:600px">
+      <div class="grid cols-2" style="gap:12px; margin:16px 0">
+        <div><strong>${t("creator")}:</strong> ${session.creatorName}</div>
+        <div><strong>${t("status")}:</strong> <span class="status pending">${session.status}</span></div>
+        <div><strong>Scheduled Time:</strong> ${new Date(session.scheduledTime).toLocaleString()}</div>
+        <div><strong>Time Until Start:</strong> in ${timeDisplay}</div>
+        <div><strong>Estimated Duration:</strong> ${session.estimatedDuration || 60} minutes</div>
+        <div><strong>Products:</strong> ${session.products} items</div>
+      </div>
+      
+      <div style="margin:16px 0">
+        <strong>${t("session_title")}:</strong><br>
+        <div style="background:var(--bg2); padding:12px; border-radius:8px; margin:8px 0">
+          ${session.title}
+        </div>
+      </div>
+
+      <div class="metric-grid" style="margin:16px 0">
+        <div class="metric">
+          <div class="k">${session.estimatedViewers || "1.2K"}</div>
+          <div class="t">Expected Viewers</div>
+        </div>
+        <div class="metric">
+          <div class="k">${session.marketingReach || "5.8K"}</div>
+          <div class="t">Marketing Reach</div>
+        </div>
+        <div class="metric">
+          <div class="k">${session.prereg || "234"}</div>
+          <div class="t">Pre-registered</div>
+        </div>
+      </div>
+
+      <div class="flex" style="gap:12px; margin-top:24px">
+        <button class="btn secondary flex-1" onclick="startSessionEarly('${session.id}')">
+          ${t("start")} Early
+        </button>
+        <button class="btn ghost flex-1" onclick="editScheduledSession('${session.id}')">
+          Edit Schedule
+        </button>
+      </div>
+    </div>
+  `;
+  showSheet(title, body);
+}
+
+function showSessionAnalytics(session) {
+  const title = `Session Analytics - ${session.id}`;
+  const conversionRate = session.revenue && session.totalViewers ? 
+    ((session.revenue / session.totalViewers) * 100).toFixed(1) : "12.8";
+  
+  const body = html`
+    <div style="max-width:700px">
+      <div class="grid cols-2" style="gap:12px; margin:16px 0">
+        <div><strong>${t("creator")}:</strong> ${session.creatorName}</div>
+        <div><strong>${t("status")}:</strong> <span class="status ${session.status === 'Completed' ? 'paid' : 'failed'}">${session.status}</span></div>
+        <div><strong>End Time:</strong> ${new Date(session.endTime).toLocaleString()}</div>
+        <div><strong>${t("duration")}:</strong> ${session.duration} minutes</div>
+        <div><strong>Total Viewers:</strong> ${session.totalViewers.toLocaleString()}</div>
+        <div><strong>${t("revenue")}:</strong> ${fmtCurrency(session.revenue)}</div>
+      </div>
+      
+      <div style="margin:16px 0">
+        <strong>${t("session_title")}:</strong><br>
+        <div style="background:var(--bg2); padding:12px; border-radius:8px; margin:8px 0">
+          ${session.title}
+        </div>
+      </div>
+
+      <div class="metric-grid" style="margin:16px 0">
+        <div class="metric">
+          <div class="k">${session.peakViewers || Math.floor(session.totalViewers * 1.3)}</div>
+          <div class="t">Peak Viewers</div>
+        </div>
+        <div class="metric">
+          <div class="k">${conversionRate}%</div>
+          <div class="t">Conversion Rate</div>
+        </div>
+        <div class="metric">
+          <div class="k">${session.avgWatchTime || "8.5m"}</div>
+          <div class="t">Avg Watch Time</div>
+        </div>
+        <div class="metric">
+          <div class="k">${session.chatEngagement || "456"}</div>
+          <div class="t">Chat Messages</div>
+        </div>
+        <div class="metric">
+          <div class="k">${session.productViews || "2.1K"}</div>
+          <div class="t">Product Views</div>
+        </div>
+        <div class="metric">
+          <div class="k">${session.shares || "89"}</div>
+          <div class="t">Social Shares</div>
+        </div>
+      </div>
+
+      <div style="margin:16px 0">
+        <strong>Performance Summary:</strong><br>
+        <div style="background:var(--bg2); padding:12px; border-radius:8px; margin:8px 0">
+          ${session.status === 'Completed' ? 
+            `✅ Session completed successfully with ${fmtCurrency(session.revenue)} revenue` :
+            `⚠️ Session ended unexpectedly`}
+        </div>
+      </div>
+
+      <div class="flex" style="gap:12px; margin-top:24px">
+        <button class="btn secondary flex-1" onclick="exportSessionData('${session.id}')">
+          Export Data
+        </button>
+        <button class="btn ghost flex-1" onclick="closeSheet()">
+          Close
+        </button>
+      </div>
+    </div>
+  `;
+  showSheet(title, body);
+}
+
+function startSessionEarly(sessionId) {
+  if(confirm("Start this session early?")) {
+    const session = state.liveCommerce.scheduledSessions.find(x => x.id === sessionId);
+    if(session) {
+      // Move to active sessions
+      state.liveCommerce.activeSessions.push({
+        ...session,
+        viewers: 0,
+        duration: 0,
+        startTime: Date.now(),
+        status: "Live",
+        revenue: 0,
+        chatMessages: 0,
+        moderationFlags: 0,
+        products: [{id:"P1",name:"Sample Product",sales:0,views:0}]
+      });
+      state.liveCommerce.scheduledSessions = state.liveCommerce.scheduledSessions.filter(x => x.id !== sessionId);
+      state.liveCommerce.stats.activeSessions += 1;
+      save();
+      toast("Session started early");
+      closeSheet();
+      route();
+    }
+  }
+}
+
+function editScheduledSession(sessionId) {
+  toast("Edit functionality will open session management modal");
+}
+
+function exportSessionData(sessionId) {
+  toast("Session analytics exported to downloads");
 }
 
 /* -------------------- PDPL logging (demo) -------------------- */
