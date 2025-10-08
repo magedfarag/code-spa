@@ -53,19 +53,21 @@
       <button class="small ghost" id="btnImpersonate" type="button" title="Impersonate user">Impersonate</button>
       <button class="small secondary" id="btnCreateNotice" type="button" title="Create global notice">+ Notice</button>
       <button class="small ghost" id="btnReset" type="button" title="Reset demo data">Reset</button>
+      <a href="#/settings" class="small ghost" style="text-decoration:none;padding:8px 12px" title="Settings">⚙️</a>
     </div>
   </header>
 
   <!-- Main view -->
   <main id="view" tabindex="-1" aria-live="polite"></main>
 
-  <!-- Bottom navigation (5 primary destinations per spec) -->
+  <!-- Bottom navigation (6 primary destinations for social commerce admin) -->
   <nav class="bottom" aria-label="Primary">
     <a href="#/overview" data-tab="overview"><span>📊</span><span data-i18n="nav_overview">Overview</span></a>
+    <a href="#/creators" data-tab="creators"><span>👤</span><span data-i18n="nav_creators">Creators</span><span class="badge" id="creatorsBadge" aria-hidden="true">0</span></a>
+    <a href="#/live" data-tab="live"><span>📺</span><span data-i18n="nav_live">Live</span><span class="badge" id="liveBadge" aria-hidden="true">0</span></a>
     <a href="#/moderation" data-tab="moderation"><span>🛡️</span><span data-i18n="nav_moderation">Moderation</span></a>
     <a href="#/orders" data-tab="orders"><span>📦</span><span data-i18n="nav_orders">Orders</span><span class="badge" id="ordersBadge" aria-hidden="true">0</span></a>
     <a href="#/support" data-tab="support"><span>💬</span><span data-i18n="nav_support">Support</span><span class="badge" id="ticketsBadge" aria-hidden="true">0</span></a>
-    <a href="#/settings" data-tab="settings"><span>⚙️</span><span data-i18n="nav_settings">Settings</span></a>
   </nav>
 
   <!-- Bottom sheet -->

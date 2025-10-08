@@ -76,23 +76,53 @@ function updateKPI() {
 const sheetEl = qs("#sheet");
 function showSheet(messageKey = "sheet_msg") {
   if (!sheetEl) return;
-  qs("#sheetTitle")?.replaceChildren(document.createTextNode(t("sheet_title")));
-  qs("#sheetMsg")?.replaceChildren(document.createTextNode(t(messageKey)));
-  sheetEl.classList.add("show");
-  sheetEl.setAttribute("aria-hidden", "false");
-  // auto-close after 2.2s
-  window.clearTimeout(showSheet._tid);
-  showSheet._tid = window.setTimeout(hideSheet, 2200);
+  
+  // If messageKey contains HTML tags, treat it as custom content
+  if (typeof messageKey === 'string' && messageKey.includes('<')) {
+    // Custom HTML content
+    sheetEl.innerHTML = messageKey;
+    sheetEl.classList.add("show");
+    sheetEl.setAttribute("aria-hidden", "false");
+    // Don't auto-close for custom content
+    window.clearTimeout(showSheet._tid);
+  } else {
+    // Original behavior for message keys
+    qs("#sheetTitle")?.replaceChildren(document.createTextNode(t("sheet_title")));
+    qs("#sheetMsg")?.replaceChildren(document.createTextNode(t(messageKey)));
+    sheetEl.classList.add("show");
+    sheetEl.setAttribute("aria-hidden", "false");
+    // auto-close after 2.2s
+    window.clearTimeout(showSheet._tid);
+    showSheet._tid = window.setTimeout(hideSheet, 2200);
+  }
 }
+
+window.__hideSheet = hideSheet; // Make hideSheet globally accessible
+
 function hideSheet() {
   if (!sheetEl) return;
   sheetEl.classList.remove("show");
   sheetEl.setAttribute("aria-hidden", "true");
+  
+  // Reset to original content structure if it was custom
+  if (!qs("#sheetTitle")) {
+    sheetEl.innerHTML = `
+      <div class="sheet-content">
+        <h3 id="sheetTitle"></h3>
+        <p id="sheetMsg"></p>
+        <button type="button" onclick="hideSheet()">Close</button>
+      </div>
+    `;
+  }
 }
+
 // expose for HTML buttons
 window.__hideSheet = hideSheet;
 
 /* ------------- Routing ------------- */
+let navigationHistory = [];
+let currentPath = "";
+
 function parseHash() {
   // "#/pdp/p1" -> { path: "/pdp", id: "p1" }
   const h = location.hash.slice(1) || "/home";
@@ -100,14 +130,42 @@ function parseHash() {
   if (parts.length === 1) return { path: "/" + parts[0], id: undefined };
   return { path: "/" + parts[0], id: parts[1] };
 }
+
 function highlightTab(path) {
   qsa("nav.bottom a").forEach(a => {
     a.classList.toggle("active", a.getAttribute("href") === `#${path}`);
   });
 }
-export function navigate(hash) { location.hash = hash; }
+
+export function navigate(hash, addToHistory = true) { 
+  // Clean up live shopping intervals when navigating away
+  if (window.__cleanupLive && !hash.includes('/live')) {
+    window.__cleanupLive();
+  }
+  
+  if (addToHistory && currentPath && currentPath !== hash.slice(1)) {
+    navigationHistory.push(currentPath);
+    // Keep history reasonable size
+    if (navigationHistory.length > 10) {
+      navigationHistory = navigationHistory.slice(-10);
+    }
+  }
+  location.hash = hash; 
+}
+
+export function goBack() {
+  if (navigationHistory.length > 0) {
+    const previous = navigationHistory.pop();
+    navigate(`#${previous}`, false);
+  } else {
+    navigate("#/home", false);
+  }
+}
+
 function route() {
   const { path, id } = parseHash();
+  currentPath = path + (id ? `/${id}` : "");
+  
   // simple auth gate for demo
   if (!state.user.authed && path !== "/landing" && path !== "/auth") {
     return navigate("#/landing");
@@ -132,6 +190,7 @@ window.addEventListener("hashchange", route);
 function wireHeader() {
   const btnWishlist = qs("#btnWishlist");
   const btnSponsor = qs("#btnSponsor");
+  const btnAnalytics = qs("#btnAnalytics");
   const btnReset = qs("#btnReset");
   const btnRtl = qs("#btnRtl");
 
@@ -145,6 +204,8 @@ function wireHeader() {
     updateKPI();
     btnSponsor.setAttribute("aria-pressed", String(state.prefs.sponsor));
   });
+
+  btnAnalytics?.addEventListener("click", () => navigate("#/analytics"));
 
   btnReset?.addEventListener("click", () => {
     resetState();
@@ -197,6 +258,40 @@ function boot() {
       saveState(state);
       refreshBadges();
     }
+    if (action === "toggle-like" && pid) {
+      // Initialize liked products if not exists
+      if (!state.user.likedProducts) {
+        state.user.likedProducts = [];
+      }
+      
+      const liked = state.user.likedProducts.includes(pid);
+      if (liked) {
+        state.user.likedProducts = state.user.likedProducts.filter(id => id !== pid);
+      } else {
+        state.user.likedProducts.push(pid);
+      }
+      
+      saveState(state);
+      
+      // Update button appearance
+      el.classList.toggle("active", !liked);
+    }
+    if (action === "share-product" && pid) {
+      const product = productById(pid);
+      const shareData = {
+        title: product.name,
+        text: `Check out ${product.name} on StoreZ - ${fmt(product.price)}`,
+        url: `${location.origin}${location.pathname}#/pdp/${pid}`
+      };
+      
+      if (navigator.share) {
+        navigator.share(shareData);
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareData.url).then(() => {
+          showSheet("link_copied");
+        });
+      }
+    }
   });
 
   // initial route
@@ -207,5 +302,5 @@ document.addEventListener("DOMContentLoaded", boot);
 
 /* ------------- Dev handle for quick inspection ------------- */
 window.StoreZ = {
-  state, actions, navigate, t, tn, currency, fmtDate, productById
+  state, actions, navigate, goBack, t, tn, currency, fmtDate, productById
 };

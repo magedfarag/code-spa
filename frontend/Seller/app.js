@@ -22,12 +22,16 @@ const DICT = {
     nav_catalog: "Catalog",
     nav_orders: "Orders",
     nav_live: "Live",
-    nav_inbox: "Inbox",
+    nav_ugc: "UGC",
 
     kpi_gmv: "GMV (30d)",
     kpi_orders: "Orders",
     kpi_aov: "AOV",
     kpi_ret: "Return rate",
+    kpi_followers: "Followers",
+    kpi_engagement: "Engagement",
+    kpi_live_viewers: "Live viewers",
+    kpi_social_gmv: "Social GMV",
 
     quick_add: "Add product",
     quick_import: "Import CSV",
@@ -70,6 +74,31 @@ const DICT = {
     live_go: "Start live session",
     live_end: "End live session",
     pick_product: "Pick product to feature",
+    live_viewers: "Live viewers",
+    session_sales: "Session sales",
+    current_viewers: "Current viewers",
+    engagement_rate: "Engagement",
+    spotlight_product: "Spotlight",
+    send_message: "Send Message",
+    toggle_chat: "Toggle Chat",
+    share_link: "Share Link",
+    add_discount: "Add Discount",
+    invite_followers: "Invite Followers",
+    save_highlight: "Save Highlight",
+
+    ugc_title: "UGC Content",
+    ugc_posts: "Creator Posts",
+    ugc_pending: "Pending Review",
+    ugc_approved: "Approved",
+    ugc_flagged: "Flagged",
+    ugc_rejected: "Rejected",
+    content_policy: "Content Policy",
+    moderation_queue: "Moderation Queue",
+    approve_post: "Approve",
+    reject_post: "Reject",
+    view_post: "View",
+    flag_reason: "Flag reason",
+    content_guidelines: "Content Guidelines",
 
     analytics_title: "Analytics",
     settings_title: "Settings",
@@ -88,16 +117,63 @@ const DICT = {
     ai_title_rewrite: "Title rewrite",
     ai_image_enhance: "Image enhance",
     ai_auto_translate: "Auto-translate",
+    
+    // Enhanced product management
+    edit_product: "Edit Product",
+    back_to_catalog: "Back to Catalog",
+    delete: "Delete",
+    duplicate: "Duplicate",
+    save_changes: "Save Changes",
+    product_status: "Product Status",
+    active: "Active",
+    hidden: "Hidden",
+    draft: "Draft",
+    product_images: "Product Images",
+    change_image: "Change Image",
+    image_guidelines: "Image Guidelines",
+    min_resolution: "Minimum resolution",
+    max_file_size: "Maximum file size",
+    supported_formats: "Supported formats",
+    square_aspect_ratio: "Use square aspect ratio for best results",
+    product_information: "Product Information",
+    product_name: "Product Name",
+    english: "English",
+    arabic: "Arabic",
+    enter_product_name_en: "Enter product name in English",
+    enter_product_name_ar: "Enter product name in Arabic",
+    category: "Category",
+    product_description: "Product Description",
+    enter_product_description_en: "Enter product description in English",
+    enter_product_description_ar: "Enter product description in Arabic",
+    pricing_inventory: "Pricing & Inventory",
+    price: "Price",
+    sar: "SAR",
+    compare_price: "Compare at Price",
+    compare_price_help: "Show original price before discount",
+    stock_quantity: "Stock Quantity",
+    cancel: "Cancel",
+    preview: "Preview",
+    confirm_delete_product: "Are you sure you want to delete this product?",
+    product_name_required: "Product name is required",
+    price_required: "Price must be greater than 0",
+    product_saved_successfully: "Product saved successfully!",
+    image_upload_coming_soon: "Image upload feature coming soon",
   },
   ar: {
     nav_dashboard: "لوحة التحكم",
     nav_catalog: "المنتجات",
     nav_orders: "الطلبات",
     nav_live: "البث",
-    nav_inbox: "الرسائل",
+    nav_ugc: "المحتوى",
 
     kpi_gmv: "المبيعات (٣٠ يوم)",
     kpi_orders: "الطلبات",
+    kpi_aov: "متوسط قيمة الطلب",
+    kpi_ret: "معدل الإرجاع",
+    kpi_followers: "المتابعون",
+    kpi_engagement: "التفاعل",
+    kpi_live_viewers: "مشاهدو البث",
+    kpi_social_gmv: "مبيعات التواصل",
     kpi_aov: "متوسط قيمة الطلب",
     kpi_ret: "معدل الاسترجاع",
 
@@ -142,6 +218,31 @@ const DICT = {
     live_go: "ابدأ البث",
     live_end: "إنهاء البث",
     pick_product: "اختر منتج للعرض",
+    live_viewers: "مشاهدو البث",
+    session_sales: "مبيعات الجلسة", 
+    current_viewers: "المشاهدون الحاليون",
+    engagement_rate: "معدل التفاعل",
+    spotlight_product: "تسليط الضوء",
+    send_message: "إرسال رسالة",
+    toggle_chat: "تبديل الدردشة",
+    share_link: "مشاركة الرابط",
+    add_discount: "إضافة خصم",
+    invite_followers: "دعوة المتابعين",
+    save_highlight: "حفظ مقطع مميز",
+
+    ugc_title: "المحتوى المُنشأ",
+    ugc_posts: "منشورات المبدعين",
+    ugc_pending: "في الانتظار",
+    ugc_approved: "موافق عليه",
+    ugc_flagged: "مبلغ عنه",
+    ugc_rejected: "مرفوض",
+    content_policy: "سياسة المحتوى",
+    moderation_queue: "طابور المراجعة",
+    approve_post: "موافقة",
+    reject_post: "رفض",
+    view_post: "عرض",
+    flag_reason: "سبب الإبلاغ",
+    content_guidelines: "إرشادات المحتوى",
 
     analytics_title: "التحليلات",
     settings_title: "الإعدادات",
@@ -160,6 +261,47 @@ const DICT = {
     ai_title_rewrite: "تحسين العنوان",
     ai_image_enhance: "تحسين الصور",
     ai_auto_translate: "ترجمة تلقائية",
+    
+    // Enhanced product management
+    edit_product: "تحرير المنتج",
+    back_to_catalog: "العودة للمنتجات",
+    delete: "حذف",
+    duplicate: "نسخ",
+    save_changes: "حفظ التغييرات",
+    product_status: "حالة المنتج",
+    active: "نشط",
+    hidden: "مخفي",
+    draft: "مسودة",
+    product_images: "صور المنتج",
+    change_image: "تغيير الصورة",
+    image_guidelines: "إرشادات الصور",
+    min_resolution: "الحد الأدنى للدقة",
+    max_file_size: "الحد الأقصى لحجم الملف",
+    supported_formats: "الصيغ المدعومة",
+    square_aspect_ratio: "استخدم نسبة مربعة للحصول على أفضل النتائج",
+    product_information: "معلومات المنتج",
+    product_name: "اسم المنتج",
+    english: "الإنجليزية",
+    arabic: "العربية",
+    enter_product_name_en: "أدخل اسم المنتج بالإنجليزية",
+    enter_product_name_ar: "أدخل اسم المنتج بالعربية",
+    category: "الفئة",
+    product_description: "وصف المنتج",
+    enter_product_description_en: "أدخل وصف المنتج بالإنجليزية",
+    enter_product_description_ar: "أدخل وصف المنتج بالعربية",
+    pricing_inventory: "التسعير والمخزون",
+    price: "السعر",
+    sar: "ر.س",
+    compare_price: "السعر المقارن",
+    compare_price_help: "أظهر السعر الأصلي قبل الخصم",
+    stock_quantity: "كمية المخزون",
+    cancel: "إلغاء",
+    preview: "معاينة",
+    confirm_delete_product: "هل أنت متأكد من حذف هذا المنتج؟",
+    product_name_required: "اسم المنتج مطلوب",
+    price_required: "يجب أن يكون السعر أكبر من 0",
+    product_saved_successfully: "تم حفظ المنتج بنجاح!",
+    image_upload_coming_soon: "ميزة رفع الصور قادمة قريباً",
   },
 };
 const LANG_KEY = "storez_seller_lang";
@@ -214,11 +356,58 @@ function seed(){
     inbox: [
       { id:"t1", with:"@linafit", last:"When is the new colorway?", ts: now-3*3600e3 }
     ],
-    metrics: { gmv30: 6150, orders30: 58, aov: 106, ret: 3.8, spark: buildSpark(24) },
+    ugcPosts: [
+      { id:"ugc1", creator:"@sarah_k", content:"Love my new CloudRunner sneakers! 😍", products:["s1"], status:"approved", ts:now-2*3600e3, likes:45, comments:12, shares:3 },
+      { id:"ugc2", creator:"@maya_style", content:"Aura serum is amazing for my skin routine ✨", products:["s2"], status:"pending", ts:now-1*3600e3, likes:23, comments:5, shares:1 },
+      { id:"ugc3", creator:"@fahad_tech", content:"Check out this phone case! Perfect protection 📱", products:["s3"], status:"flagged", ts:now-4*3600e3, likes:12, comments:2, shares:0, flagReason:"Inappropriate content" },
+      { id:"ugc4", creator:"@lina_fashionista", content:"This oversized tee is perfect for casual vibes", products:["s4"], status:"approved", ts:now-6*3600e3, likes:89, comments:25, shares:8 }
+    ],
+    metrics: { 
+      gmv30: 6150, 
+      orders30: 58, 
+      aov: 106, 
+      ret: 3.8, 
+      followers: 1247,
+      engagement: 7.2,
+      liveViewers: 0,
+      socialGmv: 2850,
+      spark: buildSpark(24) 
+    },
   };
 }
 function P(id,name,cat,price,listPrice,imgId){
-  return { id, name, cat, price, listPrice, imgId, stock: rnd(10,40) };
+  return { 
+    id, 
+    name: { en: name, ar: name }, // Add Arabic support
+    cat: { en: cat, ar: cat }, // Add Arabic support  
+    price, 
+    listPrice, 
+    imgId, 
+    stock: rnd(10,40),
+    description: { 
+      en: "High-quality product with premium materials and excellent craftsmanship.",
+      ar: "منتج عالي الجودة بمواد فاخرة وحرفية ممتازة."
+    },
+    features: [
+      { en: "Premium materials", ar: "مواد فاخرة" },
+      { en: "Sustainable packaging", ar: "تغليف صديق للبيئة" },
+      { en: "30-day return policy", ar: "سياسة إرجاع 30 يوماً" }
+    ],
+    sizeOptions: ["S", "M", "L", "XL"],
+    colorOptions: [
+      { en: "Black", ar: "أسود", hex: "#000000" },
+      { en: "White", ar: "أبيض", hex: "#FFFFFF" },
+      { en: "Mint", ar: "نعناعي", hex: "#98FB98" }
+    ],
+    tags: [],
+    seo: {
+      title: { en: name, ar: name },
+      description: { en: `Buy ${name} online`, ar: `اشتري ${name} أونلاين` }
+    },
+    visibility: "active", // active, hidden, draft
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
 }
 function O(id,ts,items,total,status,customer){
   return { id, ts, items, total, status, customer, timeline: ["Placed"].concat(status==="Shipped"?["Shipped"]:[]).concat(status==="Delivered"?["Shipped","Out for delivery","Delivered"]:[]) };
@@ -242,12 +431,13 @@ const routes = {
   "/dashboard": renderDashboard,
   "/catalog": renderCatalog,
   "/catalog-new": renderCatalogNew,
+  "/catalog-edit": renderCatalogEdit,
   "/catalog-import": renderCatalogImport,
   "/orders": renderOrders,
   "/order": renderOrderDetail,
   "/returns": renderReturns,
   "/live": renderLive,
-  "/inbox": renderInbox,
+  "/ugc": renderUGC,
   "/analytics": renderAnalytics,
   "/settings": renderSettings,
   "/billing": renderBilling,
@@ -307,24 +497,74 @@ function setSheet(title, bodyHTML){
 function renderDashboard(){
   const v = qs("#view");
   const m = state.metrics;
+  const ordersPending = state.orders.filter(x=>x.status==="Processing").length;
+  const returnsPending = state.returns.filter(x=>x.status==="Pending").length;
+  
   v.innerHTML = html(`
     <section class="panel">
-      <div class="kpis">
-        <div class="kpi"><div class="head">${t("kpi_gmv")}</div><div class="val">${fmtSAR(m.gmv30)}</div></div>
-        <div class="kpi"><div class="head">${t("kpi_orders")}</div><div class="val">${state.orders.length}</div></div>
-        <div class="kpi"><div class="head">${t("kpi_aov")}</div><div class="val">${fmtSAR(m.aov)}</div></div>
-        <div class="kpi"><div class="head">${t("kpi_ret")}</div><div class="val">${m.ret}%</div></div>
+      <div class="row between">
+        <strong>Dashboard</strong>
+        <span class="chip">${state.store.live ? "🔴 LIVE" : "Offline"}</span>
       </div>
-      <canvas id="spark" height="60" style="width:100%; margin-top:12px"></canvas>
-      <hr/>
-      <div class="grid cols-2">
-        <a class="panel" href="#/catalog"><strong>${t("catalog_title")}</strong><div class="muted">${state.catalog.length} items</div></a>
-        <a class="panel" href="#/orders"><strong>${t("orders_title")}</strong><div class="muted">${state.orders.length} total</div></a>
-        <a class="panel" href="#/analytics"><strong>${t("analytics_title")}</strong><div class="muted">CTR / CVR</div></a>
-        <a class="panel" href="#/billing"><strong>${t("billing_title")}</strong><div class="muted">${t("plan")}: ${state.store.tier}</div></a>
+      
+      <!-- Creator KPIs Grid -->
+      <div class="kpis" style="margin-top:16px">
+        <div class="kpi">
+          <div class="head">${t("kpi_gmv")}</div>
+          <div class="val">${fmtSAR(m.gmv30)}</div>
+        </div>
+        <div class="kpi">
+          <div class="head">${t("kpi_social_gmv")}</div>
+          <div class="val">${fmtSAR(m.socialGmv)}</div>
+          <div class="sub">${Math.round((m.socialGmv/m.gmv30)*100)}% of total</div>
+        </div>
+        <div class="kpi">
+          <div class="head">${t("kpi_followers")}</div>
+          <div class="val">${m.followers.toLocaleString()}</div>
+          <div class="sub positive">+${Math.floor(Math.random()*50)+10} this week</div>
+        </div>
+        <div class="kpi">
+          <div class="head">${t("kpi_engagement")}</div>
+          <div class="val">${m.engagement}%</div>
+          <div class="sub">${t("kpi_live_viewers")}: ${state.store.live ? Math.floor(Math.random()*500)+200 : 0}</div>
+        </div>
+        <div class="kpi">
+          <div class="head">${t("kpi_orders")}</div>
+          <div class="val">${m.orders30}</div>
+        </div>
+        <div class="kpi">
+          <div class="head">${t("kpi_aov")}</div>
+          <div class="val">${fmtSAR(m.aov)}</div>
+        </div>
+      </div>
+      
+      <canvas id="spark" height="60" style="width:100%; margin:16px 0"></canvas>
+      
+      <!-- Quick Actions -->
+      <div class="row" style="gap:8px; margin-top:16px">
+        <button class="secondary" onclick="navigate('#/catalog-new')" style="flex:1">${t("quick_add")}</button>
+        <button class="secondary" onclick="navigate('#/live')" style="flex:1">${state.store.live ? "Manage Live" : "Go Live"}</button>
+        <button class="ghost" onclick="navigate('#/catalog-import')" style="flex:1">${t("quick_import")}</button>
+      </div>
+      
+      <!-- Alerts/Notifications -->
+      ${ordersPending ? `<div class="alert" style="margin-top:12px">⚠️ ${ordersPending} orders need processing</div>` : ""}
+      ${returnsPending ? `<div class="alert" style="margin-top:8px">📦 ${returnsPending} returns pending review</div>` : ""}
+      
+      <!-- Creator Performance Insights -->
+      <div class="panel" style="margin-top:16px; background:var(--panel-secondary,var(--panel))">
+        <strong>Creator Insights</strong>
+        <div style="margin-top:8px; line-height:1.5">
+          <div class="muted">• Your live sessions drive ${Math.round((m.socialGmv/m.gmv30)*100)}% of total sales</div>
+          <div class="muted">• Engagement rate is ${m.engagement > 5 ? 'above' : 'below'} industry average (5.2%)</div>
+          <div class="muted">• Peak viewer times: 7-9 PM ${getLang() === 'ar' ? 'مساءً' : ''}</div>
+        </div>
       </div>
     </section>
   `);
+  
+  qs("#ordersBadge")?.replaceChildren(document.createTextNode(String(ordersPending)));
+  qs("#ugcBadge")?.replaceChildren(document.createTextNode(String((state.ugcPosts || []).filter(p => p.status === 'pending' || p.status === 'flagged').length)));
   drawSpark("spark", state.metrics.spark);
 }
 function drawSpark(id, arr){
@@ -389,6 +629,160 @@ function renderCatalogNew(){
       <div class="row" style="gap:8px; margin-top:10px">
         <button class="secondary" onclick="(function(){ const id='s'+(Date.now()%100000); state.catalog.unshift({ id, name:qs('#p_name').value||'New Product', cat:qs('#p_cat').value, price:Number(qs('#p_price').value||0), listPrice:null, imgId:qs('#p_img').value||'1519744792095-2f2205e87b6f', stock:20 }); saveState(); navigate('#/catalog'); })()">${t("save")}</button>
         <button class="ghost" onclick="navigate('#/catalog')">Cancel</button>
+      </div>
+    </section>
+  `);
+}
+
+function renderCatalogEdit(id) {
+  const product = state.catalog.find(p => p.id === id);
+  if (!product) {
+    navigate("#/catalog");
+    return;
+  }
+
+  const v = qs("#view");
+  v.innerHTML = html(`
+    <section class="panel">
+      <div class="row between" style="margin-bottom:20px">
+        <div>
+          <button class="ghost small" onclick="navigate('#/catalog')" style="display:flex;align-items:center;gap:4px">
+            <span>←</span> ${t("back_to_catalog")}
+          </button>
+          <h2 style="margin:8px 0 0">${t("edit_product")}</h2>
+        </div>
+        <div class="row" style="gap:8px">
+          <button class="ghost danger" onclick="deleteProduct('${product.id}')">${t("delete")}</button>
+          <button class="secondary" onclick="duplicateProduct('${product.id}')">${t("duplicate")}</button>
+          <button class="primary" onclick="saveProduct('${product.id}')">${t("save_changes")}</button>
+        </div>
+      </div>
+
+      <!-- Product Status -->
+      <div class="row between" style="margin-bottom:20px; padding:12px; background:var(--bg2); border-radius:8px">
+        <div>
+          <strong>${t("product_status")}:</strong>
+          <span class="chip" style="background:${(product.visibility || 'active') === 'active' ? 'var(--good)' : (product.visibility || 'active') === 'hidden' ? 'orange' : 'var(--muted)'}; color:white; margin-left:8px">
+            ${t(product.visibility || 'active')}
+          </span>
+        </div>
+        <select id="productVisibility">
+          <option value="active" ${(product.visibility || 'active') === 'active' ? 'selected' : ''}>${t("active")}</option>
+          <option value="hidden" ${(product.visibility || 'active') === 'hidden' ? 'selected' : ''}>${t("hidden")}</option>
+          <option value="draft" ${(product.visibility || 'active') === 'draft' ? 'selected' : ''}>${t("draft")}</option>
+        </select>
+      </div>
+
+      <!-- Product Images -->
+      <div style="margin-bottom:24px">
+        <h3 style="margin:0 0 12px">${t("product_images")}</h3>
+        <div class="row" style="gap:12px; flex-wrap:wrap">
+          <div class="media" style="width:200px; aspect-ratio:1/1; border-radius:8px; overflow:hidden; position:relative">
+            <img src="${uns(product.imgId, 600)}" alt="${product.name.en || product.name}" id="mainProductImage"/>
+            <button class="icon-btn" style="position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.5); color:white" onclick="uploadImage('main')" title="${t("change_image")}">📷</button>
+          </div>
+          <div style="flex:1; min-width:200px">
+            <div class="muted small" style="margin-bottom:8px">${t("image_guidelines")}</div>
+            <ul class="muted small" style="padding-left:16px">
+              <li>${t("min_resolution")}: 800x800px</li>
+              <li>${t("max_file_size")}: 5MB</li>
+              <li>${t("supported_formats")}: JPG, PNG, WebP</li>
+              <li>${t("square_aspect_ratio")}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Information -->
+      <div style="margin-bottom:24px">
+        <h3 style="margin:0 0 16px">${t("product_information")}</h3>
+        
+        <!-- Product Name -->
+        <div style="margin-bottom:16px">
+          <label style="display:block; font-weight:bold; margin-bottom:4px">${t("product_name")} *</label>
+          <div class="row" style="gap:12px">
+            <div style="flex:1">
+              <label class="muted small">${t("english")}</label>
+              <input type="text" id="nameEn" value="${product.name.en || product.name}" placeholder="${t("enter_product_name_en")}" style="width:100%"/>
+            </div>
+            <div style="flex:1">
+              <label class="muted small">${t("arabic")}</label>
+              <input type="text" id="nameAr" value="${product.name.ar || product.name}" placeholder="${t("enter_product_name_ar")}" style="width:100%" dir="rtl"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category -->
+        <div style="margin-bottom:16px">
+          <label style="display:block; font-weight:bold; margin-bottom:4px">${t("category")} *</label>
+          <div class="row" style="gap:12px">
+            <div style="flex:1">
+              <label class="muted small">${t("english")}</label>
+              <select id="catEn" style="width:100%">
+                <option value="Footwear" ${(product.cat.en || product.cat) === 'Footwear' ? 'selected' : ''}>Footwear</option>
+                <option value="Beauty" ${(product.cat.en || product.cat) === 'Beauty' ? 'selected' : ''}>Beauty</option>
+                <option value="Accessories" ${(product.cat.en || product.cat) === 'Accessories' ? 'selected' : ''}>Accessories</option>
+                <option value="Apparel" ${(product.cat.en || product.cat) === 'Apparel' ? 'selected' : ''}>Apparel</option>
+                <option value="Electronics" ${(product.cat.en || product.cat) === 'Electronics' ? 'selected' : ''}>Electronics</option>
+                <option value="Home" ${(product.cat.en || product.cat) === 'Home' ? 'selected' : ''}>Home & Living</option>
+              </select>
+            </div>
+            <div style="flex:1">
+              <label class="muted small">${t("arabic")}</label>
+              <select id="catAr" style="width:100%">
+                <option value="أحذية" ${(product.cat.ar || product.cat) === 'أحذية' ? 'selected' : ''}>أحذية</option>
+                <option value="جمال" ${(product.cat.ar || product.cat) === 'جمال' ? 'selected' : ''}>جمال</option>
+                <option value="إكسسوارات" ${(product.cat.ar || product.cat) === 'إكسسوارات' ? 'selected' : ''}>إكسسوارات</option>
+                <option value="ملابس" ${(product.cat.ar || product.cat) === 'ملابس' ? 'selected' : ''}>ملابس</option>
+                <option value="إلكترونيات" ${(product.cat.ar || product.cat) === 'إلكترونيات' ? 'selected' : ''}>إلكترونيات</option>
+                <option value="المنزل" ${(product.cat.ar || product.cat) === 'المنزل' ? 'selected' : ''}>المنزل والمعيشة</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div style="margin-bottom:16px">
+          <label style="display:block; font-weight:bold; margin-bottom:4px">${t("product_description")}</label>
+          <div class="row" style="gap:12px">
+            <div style="flex:1">
+              <label class="muted small">${t("english")}</label>
+              <textarea id="descEn" placeholder="${t("enter_product_description_en")}" style="width:100%; min-height:80px">${product.description ? product.description.en : ''}</textarea>
+            </div>
+            <div style="flex:1">
+              <label class="muted small">${t("arabic")}</label>
+              <textarea id="descAr" placeholder="${t("enter_product_description_ar")}" style="width:100%; min-height:80px" dir="rtl">${product.description ? product.description.ar : ''}</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing & Inventory -->
+      <div style="margin-bottom:24px">
+        <h3 style="margin:0 0 16px">${t("pricing_inventory")}</h3>
+        
+        <div class="row" style="gap:16px; margin-bottom:16px">
+          <div style="flex:1">
+            <label style="display:block; font-weight:bold; margin-bottom:4px">${t("price")} (${t("sar")}) *</label>
+            <input type="number" id="price" value="${product.price}" placeholder="0.00" min="0" step="0.01" style="width:100%"/>
+          </div>
+          <div style="flex:1">
+            <label style="display:block; font-weight:bold; margin-bottom:4px">${t("compare_price")} (${t("sar")})</label>
+            <input type="number" id="listPrice" value="${product.listPrice || ''}" placeholder="0.00" min="0" step="0.01" style="width:100%"/>
+            <div class="muted small">${t("compare_price_help")}</div>
+          </div>
+          <div style="flex:1">
+            <label style="display:block; font-weight:bold; margin-bottom:4px">${t("stock_quantity")} *</label>
+            <input type="number" id="stock" value="${product.stock}" placeholder="0" min="0" style="width:100%"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="row" style="gap:12px; margin-top:24px; padding-top:24px; border-top:1px solid var(--border)">
+        <button class="ghost" onclick="navigate('#/catalog')">${t("cancel")}</button>
+        <button class="secondary" onclick="previewProduct('${product.id}')">${t("preview")}</button>
+        <button class="primary" onclick="saveProduct('${product.id}')">${t("save_changes")}</button>
       </div>
     </section>
   `);
@@ -490,16 +884,126 @@ function renderReturns(){
 
 function renderLive(){
   const live = state.store.live;
-  const options = state.catalog.map(p=>`<option value="${p.id}">${p.name} — ${fmtSAR(p.price)}</option>`).join("");
+  const currentViewers = live ? Math.floor(Math.random()*500)+200 : 0;
+  const products = state.catalog.map(p=>`<option value="${p.id}" ${p.stock < 5 ? 'data-low-stock="true"' : ''}>${p.name} — ${fmtSAR(p.price)} (Stock: ${p.stock})</option>`).join("");
+  const featuredProductId = qs('#live_product')?.value || state.catalog[0]?.id;
+  const featuredProduct = state.catalog.find(x=>x.id===featuredProductId);
+  
   qs("#view").innerHTML = html(`
     <section class="panel">
-      <strong>${t("live_title")}</strong>
-      <div class="row" style="gap:8px; margin-top:8px">
-        <select id="live_product">${options}</select>
-        <button class="secondary" onclick="(function(){ state.store.live=!state.store.live; saveState(); route(); })()">${live? t("live_end"): t("live_go")}</button>
+      <div class="row between">
+        <strong>${t("live_title")}</strong>
+        <span class="chip ${live ? 'danger' : ''}">${live ? '🔴 LIVE' : 'Offline'}</span>
       </div>
-      <p class="muted" style="margin-top:8px">${t("pick_product")}</p>
-      ${live? `<div class="panel" style="margin-top:12px"><strong>Live now</strong><div class="muted">Featuring: ${state.catalog.find(x=>x.id===qs('#live_product').value)?.name || state.catalog[0].name}</div></div>`:""}
+      
+      ${live ? `
+        <!-- Live Session Stats -->
+        <div class="kpis" style="margin-top:16px">
+          <div class="kpi">
+            <div class="head">Current Viewers</div>
+            <div class="val">${currentViewers}</div>
+            <div class="sub">Peak: ${currentViewers + Math.floor(Math.random()*100)}</div>
+          </div>
+          <div class="kpi">
+            <div class="head">Session Sales</div>
+            <div class="val">${fmtSAR(Math.floor(Math.random()*2000)+500)}</div>
+            <div class="sub">${Math.floor(Math.random()*15)+5} orders</div>
+          </div>
+          <div class="kpi">
+            <div class="head">Engagement</div>
+            <div class="val">${(Math.random()*5+3).toFixed(1)}%</div>
+            <div class="sub">${Math.floor(Math.random()*50)+20} comments/min</div>
+          </div>
+        </div>
+        
+        <!-- Featured Product Control -->
+        <div class="panel" style="margin-top:16px; background:var(--card)">
+          <strong>Featured Product</strong>
+          <div class="row" style="gap:8px; margin-top:8px">
+            <select id="live_product" onchange="updateFeaturedProduct()">${products}</select>
+            <button class="secondary small" onclick="spotlightProduct()">Spotlight</button>
+          </div>
+          ${featuredProduct ? `
+            <div class="row" style="gap:12px; margin-top:12px">
+              <img src="${uns(featuredProduct.imgId, 300)}" alt="${featuredProduct.name}" style="width:60px;height:60px;object-fit:cover;border-radius:8px">
+              <div style="flex:1">
+                <strong>${featuredProduct.name}</strong>
+                <div class="muted">${fmtSAR(featuredProduct.price)} • Stock: ${featuredProduct.stock}</div>
+                ${featuredProduct.stock < 5 ? '<div class="warning small">⚠️ Low stock</div>' : ''}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+        
+        <!-- Live Controls -->
+        <div class="panel" style="margin-top:16px; background:var(--card)">
+          <strong>Live Controls</strong>
+          <div class="row" style="gap:8px; margin-top:8px">
+            <button class="ghost small" onclick="addViewerMessage()">📢 Send Message</button>
+            <button class="ghost small" onclick="toggleChat()">💬 Toggle Chat</button>
+            <button class="ghost small" onclick="shareSession()">📤 Share Link</button>
+          </div>
+          <div class="row" style="gap:8px; margin-top:8px">
+            <button class="ghost small" onclick="addDiscount()">🎫 Add Discount</button>
+            <button class="ghost small" onclick="inviteViewers()">👥 Invite Followers</button>
+            <button class="ghost small" onclick="recordHighlight()">⭐ Save Highlight</button>
+          </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="panel" style="margin-top:16px; background:var(--card)">
+          <strong>Recent Activity</strong>
+          <div style="margin-top:8px; max-height:200px; overflow-y:auto">
+            <div class="muted small" style="margin-bottom:4px">👤 @sarah_k joined the stream</div>
+            <div class="muted small" style="margin-bottom:4px">🛒 @maya_user added CloudRunner Sneakers to cart</div>
+            <div class="muted small" style="margin-bottom:4px">💬 @fahad_sa: "Love the quality!"</div>
+            <div class="muted small" style="margin-bottom:4px">🎉 @lina_fit purchased Aura Skin Serum</div>
+            <div class="muted small" style="margin-bottom:4px">❤️ @style_hunter liked the stream</div>
+          </div>
+        </div>
+      ` : `
+        <!-- Pre-Live Setup -->
+        <div style="margin-top:16px">
+          <label>Featured Product</label>
+          <select id="live_product">${products}</select>
+          <p class="muted" style="margin-top:8px">${t("pick_product")}</p>
+          
+          <div class="panel" style="margin-top:16px; background:var(--card)">
+            <strong>Live Session Setup</strong>
+            <div style="margin-top:8px">
+              <label class="checkbox-option">
+                <input type="checkbox" id="autoNotify" checked>
+                <span>Notify followers when going live</span>
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" id="recordSession">
+                <span>Record session for highlights</span>
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" id="allowComments" checked>
+                <span>Allow viewer comments</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="panel" style="margin-top:16px; background:var(--card)">
+            <strong>Tips for Success</strong>
+            <div style="margin-top:8px; line-height:1.5">
+              <div class="muted small">• Test your connection before going live</div>
+              <div class="muted small">• Feature 2-3 products max per session</div>
+              <div class="muted small">• Engage with viewers in the chat</div>
+              <div class="muted small">• Prime time: 7-9 PM for best engagement</div>
+            </div>
+          </div>
+        </div>
+      `}
+      
+      <!-- Main Action Button -->
+      <div style="margin-top:20px">
+        <button class="${live ? 'danger' : 'secondary'}" onclick="toggleLiveSession()" style="width:100%; font-weight:600">
+          ${live ? t("live_end") : t("live_go")}
+        </button>
+      </div>
     </section>
   `);
 }
@@ -521,6 +1025,125 @@ function renderInbox(){
     </section>
   `);
   qs("#inboxBadge")?.replaceChildren(document.createTextNode(String(state.inbox.length)));
+}
+
+function renderUGC(){
+  const posts = state.ugcPosts || [];
+  const pendingCount = posts.filter(p => p.status === 'pending').length;
+  const flaggedCount = posts.filter(p => p.status === 'flagged').length;
+  
+  const postsHTML = posts.map(post => {
+    const product = state.catalog.find(p => p.id === post.products[0]);
+    const statusColor = {
+      'approved': 'var(--ok)',
+      'pending': 'var(--warn)', 
+      'flagged': 'var(--bad)',
+      'rejected': 'var(--muted)'
+    }[post.status];
+    
+    return `
+      <div class="card" style="margin-bottom:12px">
+        <div class="row between" style="padding:12px; border-bottom:1px solid var(--border)">
+          <div>
+            <strong>${post.creator}</strong>
+            <div class="muted small">${new Date(post.ts).toLocaleDateString(getLocale())}</div>
+          </div>
+          <span class="chip" style="background:${statusColor}; color:white; font-size:11px">
+            ${t(`ugc_${post.status}`)}
+          </span>
+        </div>
+        <div style="padding:12px">
+          <p style="margin:0 0 8px 0">${post.content}</p>
+          ${product ? `
+            <div class="row" style="gap:8px; margin-bottom:8px">
+              <img src="${uns(product.imgId, 150)}" alt="${product.name}" style="width:40px;height:40px;object-fit:cover;border-radius:6px">
+              <div style="flex:1">
+                <div class="small">${product.name}</div>
+                <div class="muted small">${fmtSAR(product.price)}</div>
+              </div>
+            </div>
+          ` : ''}
+          <div class="row between" style="margin-top:8px">
+            <div class="muted small">
+              ❤️ ${post.likes} • 💬 ${post.comments} • 📤 ${post.shares}
+            </div>
+            <div class="row" style="gap:4px">
+              ${post.status === 'pending' ? `
+                <button class="small secondary" onclick="moderatePost('${post.id}', 'approved')">${t("approve_post")}</button>
+                <button class="small ghost" onclick="moderatePost('${post.id}', 'rejected')">${t("reject_post")}</button>
+              ` : ''}
+              <button class="small ghost" onclick="viewPostDetails('${post.id}')">${t("view_post")}</button>
+            </div>
+          </div>
+          ${post.flagReason ? `
+            <div class="alert" style="margin-top:8px; background:var(--bad); color:white">
+              ${t("flag_reason")}: ${post.flagReason}
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  qs("#view").innerHTML = html(`
+    <section class="panel">
+      <div class="row between">
+        <strong>${t("ugc_title")}</strong>
+        <button class="ghost small" onclick="showContentPolicy()">${t("content_policy")}</button>
+      </div>
+      
+      <!-- UGC Stats -->
+      <div class="kpis" style="margin-top:16px">
+        <div class="kpi">
+          <div class="head">Total Posts</div>
+          <div class="val">${posts.length}</div>
+        </div>
+        <div class="kpi">
+          <div class="head">${t("ugc_pending")}</div>
+          <div class="val">${pendingCount}</div>
+          <div class="sub ${pendingCount > 0 ? 'warning' : ''}">Needs review</div>
+        </div>
+        <div class="kpi">
+          <div class="head">${t("ugc_flagged")}</div>
+          <div class="val">${flaggedCount}</div>
+          <div class="sub ${flaggedCount > 0 ? 'danger' : ''}">Requires action</div>
+        </div>
+        <div class="kpi">
+          <div class="head">Engagement</div>
+          <div class="val">${(posts.reduce((sum, p) => sum + p.likes + p.comments, 0) / posts.length || 0).toFixed(0)}</div>
+          <div class="sub">Avg per post</div>
+        </div>
+      </div>
+      
+      <!-- Filter Tabs -->
+      <div class="row" style="gap:8px; margin:16px 0">
+        <button class="small secondary" onclick="filterUGC('all')" id="filterAll">All Posts</button>
+        <button class="small ghost" onclick="filterUGC('pending')" id="filterPending">
+          ${t("ugc_pending")} ${pendingCount > 0 ? `(${pendingCount})` : ''}
+        </button>
+        <button class="small ghost" onclick="filterUGC('flagged')" id="filterFlagged">
+          ${t("ugc_flagged")} ${flaggedCount > 0 ? `(${flaggedCount})` : ''}
+        </button>
+        <button class="small ghost" onclick="filterUGC('approved')" id="filterApproved">${t("ugc_approved")}</button>
+      </div>
+      
+      <!-- Posts List -->
+      <div id="ugcPosts">
+        ${postsHTML || '<div class="panel center muted">No posts yet</div>'}
+      </div>
+      
+      <!-- Content Guidelines -->
+      <div class="panel" style="margin-top:16px; background:var(--card)">
+        <strong>${t("content_guidelines")}</strong>
+        <div style="margin-top:8px; line-height:1.5">
+          <div class="muted small">• Products must be clearly featured</div>
+          <div class="muted small">• No inappropriate or offensive content</div>
+          <div class="muted small">• Must comply with PDPL regulations</div>
+          <div class="muted small">• Authentic reviews and experiences only</div>
+        </div>
+      </div>
+    </section>
+  `);
 }
 
 function renderAnalytics(){
@@ -572,7 +1195,303 @@ function renderBilling(){
   `);
 }
 
+/* ---------- UGC Management Functions ---------- */
+function moderatePost(postId, action) {
+  const post = state.ugcPosts.find(p => p.id === postId);
+  if (post) {
+    post.status = action;
+    saveState();
+    renderUGC(); // Re-render to update the UI
+    
+    const actionText = action === 'approved' ? 'approved' : 'rejected';
+    alert(`Post by ${post.creator} has been ${actionText}.`);
+  }
+}
+
+function viewPostDetails(postId) {
+  const post = state.ugcPosts.find(p => p.id === postId);
+  if (post) {
+    const product = state.catalog.find(p => p.id === post.products[0]);
+    setSheet(`Post Details`, `
+      <div style="max-width:400px">
+        <div class="row" style="gap:12px; margin-bottom:16px">
+          <div>
+            <strong>${post.creator}</strong>
+            <div class="muted small">${new Date(post.ts).toLocaleString(getLocale())}</div>
+          </div>
+        </div>
+        
+        <p style="margin:0 0 16px 0">${post.content}</p>
+        
+        ${product ? `
+          <div class="card" style="margin-bottom:16px">
+            <div class="row" style="gap:12px; padding:12px">
+              <img src="${uns(product.imgId, 200)}" alt="${product.name}" style="width:60px;height:60px;object-fit:cover;border-radius:8px">
+              <div>
+                <strong>${product.name}</strong>
+                <div class="muted">${fmtSAR(product.price)}</div>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+        
+        <div class="row between" style="margin-bottom:16px">
+          <div class="muted">❤️ ${post.likes} likes</div>
+          <div class="muted">💬 ${post.comments} comments</div>
+          <div class="muted">📤 ${post.shares} shares</div>
+        </div>
+        
+        ${post.status === 'pending' ? `
+          <div class="row" style="gap:8px">
+            <button class="secondary" onclick="moderatePost('${post.id}', 'approved'); window.__closeSheet()">Approve</button>
+            <button class="ghost" onclick="moderatePost('${post.id}', 'rejected'); window.__closeSheet()">Reject</button>
+          </div>
+        ` : ''}
+      </div>
+    `);
+  }
+}
+
+function filterUGC(filter) {
+  // Reset button styles
+  qsa('[id^="filter"]').forEach(btn => {
+    btn.className = 'small ghost';
+  });
+  
+  // Highlight selected filter
+  qs(`#filter${filter.charAt(0).toUpperCase() + filter.slice(1)}`).className = 'small secondary';
+  
+  // Filter posts
+  const posts = state.ugcPosts.filter(post => 
+    filter === 'all' || post.status === filter
+  );
+  
+  // Re-render posts list (simplified - in a real app, you'd update just the posts container)
+  renderUGC();
+}
+
+function showContentPolicy() {
+  setSheet('Content Policy', `
+    <div style="max-width:500px">
+      <h3>Community Guidelines</h3>
+      
+      <h4>Approved Content</h4>
+      <ul style="margin-left:20px">
+        <li>Authentic product reviews and experiences</li>
+        <li>Clear product demonstrations</li>
+        <li>Genuine testimonials and recommendations</li>
+        <li>Creative styling or usage suggestions</li>
+      </ul>
+      
+      <h4>Prohibited Content</h4>
+      <ul style="margin-left:20px">
+        <li>Inappropriate, offensive, or harmful content</li>
+        <li>Fake reviews or misleading claims</li>
+        <li>Content not featuring our products</li>
+        <li>Copyrighted material without permission</li>
+        <li>Personal information of others</li>
+      </ul>
+      
+      <h4>Moderation Process</h4>
+      <p>All posts are reviewed within 24 hours. Flagged content is escalated for manual review. Appeals can be submitted through our support system.</p>
+      
+      <p><strong>Note:</strong> All content must comply with PDPL (Saudi Data Protection Law) requirements.</p>
+    </div>
+  `);
+}
+
+/* ---------- Live Commerce Functions ---------- */
+function toggleLiveSession() {
+  state.store.live = !state.store.live;
+  if (state.store.live) {
+    // Update metrics when going live
+    state.metrics.liveViewers = Math.floor(Math.random()*500)+200;
+  } else {
+    state.metrics.liveViewers = 0;
+  }
+  saveState();
+  route();
+}
+
+function updateFeaturedProduct() {
+  const productId = qs('#live_product')?.value;
+  if (productId && state.store.live) {
+    // In a real app, this would update the live stream
+    console.log(`Featuring product: ${productId}`);
+  }
+}
+
+function spotlightProduct() {
+  const productId = qs('#live_product')?.value;
+  const product = state.catalog.find(p => p.id === productId);
+  if (product) {
+    alert(`Spotlighting "${product.name}" for 30 seconds!`);
+    // In a real app, this would highlight the product in the live stream
+  }
+}
+
+function addViewerMessage() {
+  const message = prompt('Send message to viewers:');
+  if (message) {
+    alert(`Message sent: "${message}"`);
+    // In a real app, this would appear in the live chat
+  }
+}
+
+function toggleChat() {
+  alert('Chat visibility toggled');
+  // In a real app, this would show/hide the chat overlay
+}
+
+function shareSession() {
+  const shareUrl = `${location.origin}${location.pathname.replace('Seller', 'buyer')}#/live/${state.store.name.replace(/\s+/g, '-').toLowerCase()}`;
+  if (navigator.share) {
+    navigator.share({
+      title: `${state.store.name} is live!`,
+      text: 'Join my live shopping session',
+      url: shareUrl
+    });
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      alert('Live session link copied to clipboard!');
+    });
+  } else {
+    alert(`Share this link: ${shareUrl}`);
+  }
+}
+
+function addDiscount() {
+  const discount = prompt('Enter discount percentage (e.g., 10):');
+  if (discount && !isNaN(discount)) {
+    alert(`${discount}% discount activated for live viewers!`);
+    // In a real app, this would apply the discount to the featured product
+  }
+}
+
+function inviteViewers() {
+  alert('Notifications sent to your 1,247 followers!');
+  // In a real app, this would send push notifications
+}
+
+function recordHighlight() {
+  alert('Highlight saved! This moment will be available in your highlights reel.');
+  // In a real app, this would save a clip from the live stream
+}
+
 /* ---------- Boot ---------- */
+/* ---------- Product Management Functions ---------- */
+
+// Delete a product
+window.deleteProduct = function(id) {
+  if (!confirm(t("confirm_delete_product"))) return;
+  state.catalog = state.catalog.filter(p => p.id !== id);
+  saveState();
+  navigate("#/catalog");
+};
+
+// Duplicate a product
+window.duplicateProduct = function(id) {
+  const original = state.catalog.find(p => p.id === id);
+  if (!original) return;
+  
+  const duplicate = {
+    ...original,
+    id: 's' + (Date.now() % 100000),
+    name: typeof original.name === 'object' 
+      ? { en: (original.name.en || original.name) + " (Copy)", ar: (original.name.ar || original.name) + " (نسخة)" }
+      : original.name + " (Copy)"
+  };
+  
+  state.catalog.unshift(duplicate);
+  saveState();
+  navigate(`#/catalog-edit/${duplicate.id}`);
+};
+
+// Save product changes
+window.saveProduct = function(id) {
+  const product = state.catalog.find(p => p.id === id);
+  if (!product) return;
+  
+  // Get form values
+  const nameEn = qs("#nameEn").value.trim();
+  const nameAr = qs("#nameAr").value.trim();
+  const catEn = qs("#catEn").value;
+  const catAr = qs("#catAr").value;
+  const descEn = qs("#descEn").value.trim();
+  const descAr = qs("#descAr").value.trim();
+  const price = parseFloat(qs("#price").value) || 0;
+  const listPrice = parseFloat(qs("#listPrice").value) || null;
+  const stock = parseInt(qs("#stock").value) || 0;
+  const visibility = qs("#productVisibility").value;
+  
+  // Validation
+  if (!nameEn && !nameAr) {
+    alert(t("product_name_required"));
+    return;
+  }
+  
+  if (price <= 0) {
+    alert(t("price_required"));
+    return;
+  }
+  
+  // Update product
+  product.name = { en: nameEn, ar: nameAr };
+  product.cat = { en: catEn, ar: catAr };
+  product.description = { en: descEn, ar: descAr };
+  product.price = price;
+  product.listPrice = listPrice;
+  product.stock = stock;
+  product.visibility = visibility;
+  product.updatedAt = new Date().toISOString();
+  
+  saveState();
+  
+  // Show success message
+  showNotification(t("product_saved_successfully"));
+  navigate("#/catalog");
+};
+
+// Preview product in buyer SPA
+window.previewProduct = function(id) {
+  const product = state.catalog.find(p => p.id === id);
+  if (!product) return;
+  
+  // Open buyer SPA with this product in a new tab
+  const buyerUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/buyer/') + `#/pdp/${id}`;
+  window.open(buyerUrl, '_blank');
+};
+
+// Upload image placeholder
+window.uploadImage = function(type) {
+  alert(t("image_upload_coming_soon"));
+};
+
+// Show notification
+window.showNotification = function(message) {
+  const notification = document.createElement('div');
+  notification.textContent = message;
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--good);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+  `;
+  
+  document.body.appendChild(notification);
+  setTimeout(() => {
+    notification.style.animation = 'slideOut 0.3s ease';
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+};
+
+/* ---------- Boot ---------- */
+
 function boot(){
   // language
   const L = setLang(getLang());
