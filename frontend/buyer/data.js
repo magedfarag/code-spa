@@ -340,6 +340,153 @@ export const state = {
     ]
   },
 
+  // Product Reviews & Ratings System
+  reviews: {
+    // Product reviews organized by productId
+    byProduct: {
+      "p1": [
+        {
+          id: "r1",
+          productId: "p1",
+          userId: "u1",
+          userName: "سارة أحمد",
+          userAvatar: uns("1494790108755-2616b612b9e3", 80),
+          rating: 5,
+          title: { en: "Perfect for running!", ar: "مثالي للجري!" },
+          content: { 
+            en: "These sneakers are incredibly comfortable and perfect for my daily runs. The cushioning is amazing and they look great too!",
+            ar: "هذه الأحذية مريحة بشكل لا يصدق ومثالية لجري اليومي. التبطين رائع وتبدو جميلة أيضاً!"
+          },
+          images: [
+            uns("1571019613454-1cb2f99b2d8b", 400),
+            uns("1605296867424-35aaf25826ef", 400)
+          ],
+          verified: true,
+          helpful: 24,
+          notHelpful: 2,
+          date: Date.now() - 86400000 * 3, // 3 days ago
+          tags: ["comfort", "quality", "style"]
+        },
+        {
+          id: "r2", 
+          productId: "p1",
+          userId: "u2",
+          userName: "أحمد السعد",
+          userAvatar: uns("1507003211169-0a1dd7bf0ec3", 80),
+          rating: 4,
+          title: { en: "Great quality", ar: "جودة ممتازة" },
+          content: {
+            en: "Really good shoes, fit well and look stylish. Only minus is they run a bit small, so order half size up.",
+            ar: "أحذية جيدة حقاً، مناسبة وأنيقة. العيب الوحيد أنها صغيرة قليلاً، لذا اطلب نصف مقاس أكبر."
+          },
+          images: [],
+          verified: true,
+          helpful: 18,
+          notHelpful: 1,
+          date: Date.now() - 86400000 * 7, // 1 week ago
+          tags: ["sizing", "style"]
+        },
+        {
+          id: "r3",
+          productId: "p1", 
+          userId: "u3",
+          userName: "Maya K.",
+          userAvatar: uns("1438761681033-6461ffad8d80", 80),
+          rating: 5,
+          title: { en: "Love them!", ar: "أحبها!" },
+          content: {
+            en: "Best sneakers I've ever owned. Super comfortable for long walks and the design is trendy.",
+            ar: "أفضل أحذية رياضية امتلكتها على الإطلاق. مريحة جداً للمشي الطويل والتصميم عصري."
+          },
+          images: [uns("1549298916-b41d501f42fb", 400)],
+          verified: false,
+          helpful: 12,
+          notHelpful: 0,
+          date: Date.now() - 86400000 * 14, // 2 weeks ago
+          tags: ["comfort", "design"]
+        }
+      ],
+      "p2": [
+        {
+          id: "r4",
+          productId: "p2",
+          userId: "u4", 
+          userName: "فاطمة علي",
+          userAvatar: uns("1544005313-94dc875841af", 80),
+          rating: 5,
+          title: { en: "Cozy and stylish", ar: "مريح وأنيق" },
+          content: {
+            en: "This hoodie is so soft and comfortable. Perfect for chilly evenings and the color is exactly as shown.",
+            ar: "هذا الهودي ناعم ومريح جداً. مثالي للأمسيات الباردة واللون تماماً كما هو موضح."
+          },
+          images: [uns("1515879218367-8466d910aaa4", 400)],
+          verified: true,
+          helpful: 16,
+          notHelpful: 0,
+          date: Date.now() - 86400000 * 5, // 5 days ago
+          tags: ["comfort", "color", "quality"]
+        }
+      ],
+      "p3": [
+        {
+          id: "r5",
+          productId: "p3",
+          userId: "u5",
+          userName: "نورا محمد", 
+          userAvatar: uns("1487412720-8a98462a3baa", 80),
+          rating: 4,
+          title: { en: "Nice ambiance", ar: "أجواء جميلة" },
+          content: {
+            en: "Creates a lovely atmosphere in my room. The scent lasts long and it looks elegant on my nightstand.",
+            ar: "يخلق أجواء جميلة في غرفتي. الرائحة تدوم طويلاً ويبدو أنيقاً على طاولة السرير."
+          },
+          images: [],
+          verified: true,
+          helpful: 9,
+          notHelpful: 1,
+          date: Date.now() - 86400000 * 10, // 10 days ago
+          tags: ["ambiance", "scent", "design"]
+        }
+      ]
+    },
+    
+    // Review statistics by product
+    stats: {
+      "p1": {
+        averageRating: 4.7,
+        totalReviews: 3,
+        distribution: { 5: 2, 4: 1, 3: 0, 2: 0, 1: 0 },
+        verifiedCount: 2,
+        photoCount: 3,
+        helpfulCount: 54
+      },
+      "p2": {
+        averageRating: 5.0,
+        totalReviews: 1,
+        distribution: { 5: 1, 4: 0, 3: 0, 2: 0, 1: 0 },
+        verifiedCount: 1,
+        photoCount: 1,
+        helpfulCount: 16
+      },
+      "p3": {
+        averageRating: 4.0,
+        totalReviews: 1,
+        distribution: { 5: 0, 4: 1, 3: 0, 2: 0, 1: 0 },
+        verifiedCount: 1,
+        photoCount: 0,
+        helpfulCount: 9
+      }
+    },
+
+    // Review filters and sorting
+    filters: {
+      rating: "all", // all, 5, 4, 3, 2, 1
+      verified: false, // true/false
+      withPhotos: false, // true/false
+      sortBy: "helpful" // helpful, newest, oldest, rating-high, rating-low
+    }
+  },
+
   analytics: {
     pageViews: 0,
     sessionStart: Date.now(),
@@ -632,5 +779,140 @@ export const actions = {
     });
     
     return suggestions.slice(0, 8);
+  },
+
+  // Review & Rating Actions
+  submitReview(productId, reviewData) {
+    const review = {
+      id: `r${Date.now()}`,
+      productId,
+      userId: state.user.id,
+      userName: state.user.name || "Anonymous User",
+      userAvatar: state.user.avatar || uns("1494790108755-2616b612b9e3", 80),
+      rating: reviewData.rating,
+      title: reviewData.title,
+      content: reviewData.content,
+      images: reviewData.images || [],
+      verified: state.user.authed && reviewData.verified,
+      helpful: 0,
+      notHelpful: 0,
+      date: Date.now(),
+      tags: reviewData.tags || []
+    };
+
+    // Add review to product reviews
+    if (!state.reviews.byProduct[productId]) {
+      state.reviews.byProduct[productId] = [];
+    }
+    state.reviews.byProduct[productId].unshift(review);
+
+    // Update review statistics
+    this.updateReviewStats(productId);
+    saveState();
+    return review;
+  },
+
+  updateReviewStats(productId) {
+    const reviews = state.reviews.byProduct[productId] || [];
+    if (reviews.length === 0) return;
+
+    const totalReviews = reviews.length;
+    const averageRating = reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews;
+    const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    const verifiedCount = reviews.filter(r => r.verified).length;
+    const photoCount = reviews.filter(r => r.images && r.images.length > 0).length;
+    const helpfulCount = reviews.reduce((sum, r) => sum + r.helpful, 0);
+
+    reviews.forEach(review => {
+      distribution[review.rating]++;
+    });
+
+    state.reviews.stats[productId] = {
+      averageRating: Math.round(averageRating * 10) / 10,
+      totalReviews,
+      distribution,
+      verifiedCount,
+      photoCount,
+      helpfulCount
+    };
+
+    // Update product rating
+    const product = state.products.find(p => p.id === productId);
+    if (product) {
+      product.rating = averageRating;
+    }
+  },
+
+  markReviewHelpful(reviewId, productId, helpful = true) {
+    const reviews = state.reviews.byProduct[productId] || [];
+    const review = reviews.find(r => r.id === reviewId);
+    
+    if (review) {
+      if (helpful) {
+        review.helpful++;
+      } else {
+        review.notHelpful++;
+      }
+      this.updateReviewStats(productId);
+      saveState();
+    }
+  },
+
+  filterReviews(productId, filters) {
+    state.reviews.filters = { ...state.reviews.filters, ...filters };
+    return this.getFilteredReviews(productId);
+  },
+
+  getFilteredReviews(productId) {
+    let reviews = state.reviews.byProduct[productId] || [];
+    const filters = state.reviews.filters;
+
+    // Filter by rating
+    if (filters.rating && filters.rating !== "all") {
+      reviews = reviews.filter(r => r.rating === parseInt(filters.rating));
+    }
+
+    // Filter by verified status
+    if (filters.verified) {
+      reviews = reviews.filter(r => r.verified);
+    }
+
+    // Filter by photos
+    if (filters.withPhotos) {
+      reviews = reviews.filter(r => r.images && r.images.length > 0);
+    }
+
+    // Sort reviews
+    switch (filters.sortBy) {
+      case "newest":
+        reviews.sort((a, b) => b.date - a.date);
+        break;
+      case "oldest":
+        reviews.sort((a, b) => a.date - b.date);
+        break;
+      case "rating-high":
+        reviews.sort((a, b) => b.rating - a.rating);
+        break;
+      case "rating-low":
+        reviews.sort((a, b) => a.rating - b.rating);
+        break;
+      case "helpful":
+      default:
+        reviews.sort((a, b) => b.helpful - a.helpful);
+        break;
+    }
+
+    return reviews;
+  },
+
+  getReviewStats(productId) {
+    return state.reviews.stats[productId] || {
+      averageRating: 0,
+      totalReviews: 0,
+      distribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
+      verifiedCount: 0,
+      photoCount: 0,
+      helpfulCount: 0
+    };
   }
 };
