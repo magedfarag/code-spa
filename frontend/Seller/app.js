@@ -583,7 +583,7 @@ function setSheet(title, bodyHTML){
 }
 
 function showScheduleStream(){
-  const products = state.catalog.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
+  const products = state.catalog.map(p => `<option value="${p.id}">${loc(p.name)}</option>`).join("");
   setSheet(t("schedule_stream"), html(`
     <form onsubmit="scheduleNewStream(event)" style="display:flex; flex-direction:column; gap:16px">
       <label>
@@ -1124,19 +1124,26 @@ function drawSpark(id, arr){
 }
 function buildSpark(n){ const a=[]; let v=100; for(let i=0;i<n;i++){ v += (Math.random()-0.4)*8; a.push(Math.max(40, Math.min(160, Math.round(v)))); } return a; }
 
+// Helper function to get localized text
+function loc(obj, fallback = "en") {
+  if (typeof obj === "string") return obj; // backward compatibility
+  const lang = getLang();
+  return obj?.[lang] || obj?.[fallback] || obj || "";
+}
+
 function renderCatalog(){
   const v=qs("#view");
   const items = state.catalog.map(p=>`
     <article class="card">
-      <a class="media" href="#/catalog-edit/${p.id}"><img src="${uns(p.imgId, 600)}" alt="${p.name}"></a>
+      <a class="media" href="#/catalog-edit/${p.id}"><img src="${uns(p.imgId, 600)}" alt="${loc(p.name)}"></a>
       <div class="body">
         <div class="row between">
-          <strong>${p.name}</strong>
-          <span class="chip">${p.cat}</span>
+          <strong>${loc(p.name)}</strong>
+          <span class="chip">${loc(p.cat)}</span>
         </div>
         <div class="row between">
           <div class="row" style="gap:6px"><span class="price">${fmtSAR(p.price)}</span>${p.listPrice?`<span class="muted" style="text-decoration:line-through">${fmtSAR(p.listPrice)}</span>`:""}</div>
-          <button class="small ghost" onclick="(function(){ const i=state.catalog.findIndex(x=>x.id==='${p.id}'); state.catalog.splice(i,1); saveState(); location.hash='#/catalog'; })()">✕</button>
+          <button class="small ghost" onclick="deleteProduct('${p.id}')">✕</button>
         </div>
       </div>
     </article>
@@ -1165,7 +1172,7 @@ function renderCatalogNew(){
       <label>Category<select id="p_cat"><option>Apparel</option><option>Footwear</option><option>Accessories</option><option>Beauty</option></select></label>
       <label>Unsplash Image ID<input id="p_img" placeholder="1519744792095-2f2205e87b6f"></label>
       <div class="row" style="gap:8px; margin-top:10px">
-        <button class="secondary" onclick="(function(){ const id='s'+(Date.now()%100000); state.catalog.unshift({ id, name:qs('#p_name').value||'New Product', cat:qs('#p_cat').value, price:Number(qs('#p_price').value||0), listPrice:null, imgId:qs('#p_img').value||'1519744792095-2f2205e87b6f', stock:20 }); saveState(); navigate('#/catalog'); })()">${t("save")}</button>
+        <button class="secondary" onclick="saveNewProduct()">${t("save")}</button>
         <button class="ghost" onclick="navigate('#/catalog')">Cancel</button>
       </div>
     </section>
@@ -1334,7 +1341,7 @@ function renderCatalogImport(){
       <p class="muted">${t("import_hint")}</p>
       <textarea id="csv" rows="6" placeholder="CloudRunner Sneakers,329,Footwear,1519744792095-2f2205e87b6f&#10;Aura Skin Serum,119,Beauty,1522336572468-97b06e8ef143"></textarea>
       <div class="row" style="gap:8px; margin-top:10px">
-        <button class="secondary" onclick="(function(){ const raw=qs('#csv').value.trim(); if(!raw){alert('Empty');return;} raw.split(/\\r?\\n/).forEach(line=>{ const [name,price,cat,img]=line.split(','); if(!name||!price) return; state.catalog.push({id:'s'+(Date.now()%100000)+Math.floor(Math.random()*9), name:name.trim(), cat:(cat||'Apparel').trim(), price:Number(price), listPrice:null, imgId:(img||'1519744792095-2f2205e87b6f').trim(), stock:rnd(10,30)}); }); saveState(); navigate('#/catalog'); })()">${t("parse")}</button>
+        <button class="secondary" onclick="parseCSVImport()">${t("parse")}</button>
         <button class="ghost" onclick="navigate('#/catalog')">Cancel</button>
       </div>
     </section>
@@ -1615,7 +1622,7 @@ function renderCreator(){
 function renderLive(){
   const live = state.store.live;
   const currentViewers = live ? Math.floor(Math.random()*500)+200 : 0;
-  const products = state.catalog.map(p=>`<option value="${p.id}" ${p.stock < 5 ? 'data-low-stock="true"' : ''}>${p.name} — ${fmtSAR(p.price)} (Stock: ${p.stock})</option>`).join("");
+  const products = state.catalog.map(p=>`<option value="${p.id}" ${p.stock < 5 ? 'data-low-stock="true"' : ''}>${loc(p.name)} — ${fmtSAR(p.price)} (Stock: ${p.stock})</option>`).join("");
   const featuredProductId = qs('#live_product')?.value || state.catalog[0]?.id;
   const featuredProduct = state.catalog.find(x=>x.id===featuredProductId);
   
@@ -2220,6 +2227,81 @@ window.duplicateProduct = function(id) {
   state.catalog.unshift(duplicate);
   saveState();
   navigate(`#/catalog-edit/${duplicate.id}`);
+};
+
+// Delete product
+window.deleteProduct = function(id) {
+  const index = state.catalog.findIndex(x => x.id === id);
+  if (index !== -1) {
+    state.catalog.splice(index, 1);
+    saveState();
+    location.hash = '#/catalog';
+  }
+};
+
+// Parse CSV import
+window.parseCSVImport = function() {
+  const raw = qs('#csv').value.trim();
+  if (!raw) {
+    alert('Empty');
+    return;
+  }
+  
+  raw.split(/\r?\n/).forEach(line => {
+    const [name, price, cat, img] = line.split(',');
+    if (!name || !price) return;
+    
+    const productName = name.trim();
+    const productCat = (cat || 'Apparel').trim();
+    
+    state.catalog.push({
+      id: 's' + (Date.now() % 100000) + Math.floor(Math.random() * 9),
+      name: { en: productName, ar: productName },
+      cat: { en: productCat, ar: productCat },
+      price: Number(price),
+      listPrice: null,
+      imgId: (img || '1519744792095-2f2205e87b6f').trim(),
+      stock: rnd(10, 30),
+      description: { 
+        en: "High-quality product with premium materials.",
+        ar: "منتج عالي الجودة بمواد فاخرة."
+      },
+      visibility: "active",
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
+  });
+  
+  saveState();
+  navigate('#/catalog');
+};
+
+// Save new product
+window.saveNewProduct = function() {
+  const id = 's' + (Date.now() % 100000);
+  const productName = qs('#p_name').value || 'New Product';
+  const productCat = qs('#p_cat').value;
+  
+  const newProduct = {
+    id,
+    name: { en: productName, ar: productName },
+    cat: { en: productCat, ar: productCat },
+    price: Number(qs('#p_price').value || 0),
+    listPrice: null,
+    imgId: qs('#p_img').value || '1519744792095-2f2205e87b6f',
+    stock: 20,
+    description: { 
+      en: "High-quality product with premium materials.",
+      ar: "منتج عالي الجودة بمواد فاخرة."
+    },
+    visibility: "active",
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
+  
+  state.catalog.unshift(newProduct);
+  saveState();
+  navigate('#/catalog');
 };
 
 // Save product changes

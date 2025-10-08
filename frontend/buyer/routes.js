@@ -525,11 +525,26 @@ const auth = ({ el, actions, navigate }) => {
 };
 
 const pdp = ({ el, state, actions }, id) => {
+  // Ensure we have a valid id
+  if (!id) {
+    el.innerHTML = h(`
+      <div style="padding: 20px; text-align: center;">
+        <h2>${t("product_not_found") || "Product not found"}</h2>
+        <p>${t("invalid_product_id") || "Invalid product ID"}</p>
+        <button onclick="location.hash='#/home'" class="primary">
+          ${t("back_to_home") || "Back to Home"}
+        </button>
+      </div>
+    `);
+    return;
+  }
+
   const product = productById(id);
   if (!product) {
     el.innerHTML = h(`
       <div style="padding: 20px; text-align: center;">
         <h2>${t("product_not_found") || "Product not found"}</h2>
+        <p>${t("product_id_not_found") || `Product with ID "${id}" not found`}</p>
         <button onclick="location.hash='#/home'" class="primary">
           ${t("back_to_home") || "Back to Home"}
         </button>

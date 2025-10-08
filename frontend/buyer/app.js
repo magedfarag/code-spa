@@ -132,6 +132,7 @@ function parseHash() {
   if (h === "/" || h === "") return { path: "/home", id: undefined };
   
   const parts = h.split("/").filter(Boolean);
+  if (parts.length === 0) return { path: "/home", id: undefined };
   if (parts.length === 1) return { path: "/" + parts[0], id: undefined };
   return { path: "/" + parts[0], id: parts[1] };
 }
