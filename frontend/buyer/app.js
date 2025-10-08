@@ -54,7 +54,7 @@ function toggleDir() {
 /* ------------- KPIs & badges ------------- */
 function refreshBadges() {
   const cartCount = state.cart.reduce((s, i) => s + i.quantity, 0);
-  const wishCount = state.wishlist.length;
+  const wishCount = state.wishlist.items.length;
   const cartBadge = qs("#cartBadge");
   const wishBadge = qs("#wishlistBadge");
   if (cartBadge) cartBadge.textContent = String(cartCount);
@@ -126,7 +126,10 @@ let currentPath = "";
 
 function parseHash() {
   // "#/pdp/p1" -> { path: "/pdp", id: "p1" }
+  // Handle empty hash or just "#" -> default to home
   const h = location.hash.slice(1) || "/home";
+  if (h === "/" || h === "") return { path: "/home", id: undefined };
+  
   const parts = h.split("/").filter(Boolean);
   if (parts.length === 1) return { path: "/" + parts[0], id: undefined };
   return { path: "/" + parts[0], id: parts[1] };
