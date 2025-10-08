@@ -4355,7 +4355,7 @@ window.__reportLive = (streamId) => {
   }
   
   const reasons = [t("inappropriate_content"), t("spam"), t("fake_products"), t("harassment"), t("other")];
-  const reason = prompt(t("report_live_reason") + "\\n\\n" + reasons.map((r, i) => `${i+1}. ${r}`).join("\\n"));
+  const reason = prompt(t("report_live_reason") + "\n\n" + reasons.map((r, i) => `${i+1}. ${r}`).join("\n"));
   
   if (reason) {
     alert(t("report_submitted"));
