@@ -118,7 +118,7 @@ export const state = {
         id: "post1",
         userId: "u2",
         username: "@sara_style",
-        avatar: uns("1494790108755-2616b612b9e3", 100),
+        avatar: uns("1535713875002-d1d0cf377fde", 100),
         content: "Just got these amazing CloudRunner sneakers! Perfect for my morning jogs 🏃‍♀️ The cushioning is incredible and they're so stylish! #fitness #style #running",
         productIds: ["p1"],
         images: [uns("1515879218367-8466d910aaa4", 400), uns("1571019613454-1cb2f99b2d8b", 400)],
@@ -186,7 +186,7 @@ export const state = {
         id: "post3",
         userId: "c1",
         username: "@linafit",
-        avatar: uns("1494790108755-2616b612b9e3", 100),
+        avatar: uns("1535713875002-d1d0cf377fde", 100),
         content: "New active leggings collection dropping tomorrow! Who's excited? 💪 Early access for followers! Use code LINA20 for 20% off 🔥",
         productIds: ["p6"],
         images: [uns("1521572267360-ee0c2909d518", 400), uns("1571019613454-1cb2f99b2d8b", 400)],
@@ -230,7 +230,7 @@ export const state = {
         avatar: uns("1507003211169-0a1dd7bf0ec3", 100),
         content: "Traditional kabsa spice blend is now available! 🍛 Made with authentic Saudi spices, just like my grandmother's recipe. Perfect for family dinners! 👨‍👩‍👧‍👦",
         productIds: ["p4"], // Using travel mug as placeholder for spice blend
-        images: [uns("1556760524-dcb8b3bb3e45", 400)],
+        images: [uns("1515378791036-0648a3ef77b2", 400)],
         likes: 67,
         comments: 18,
         shares: 8,
@@ -328,7 +328,7 @@ export const state = {
   },
   
   products: [
-    P("p1", "CloudRunner Sneakers", "Footwear", 329, 399, "c1", "1519744792095-ee0c2909d518", "حذاء الجري السحابي", "أحذية", {
+    P("p1", "CloudRunner Sneakers", "Footwear", 329, 399, "c1", "1542291026-7eec264c27ff", "حذاء الجري السحابي", "أحذية", {
       description: {
         en: "Premium running shoes with cloud-like cushioning technology. Perfect for daily runs, gym workouts, and casual wear.",
         ar: "أحذية جري فاخرة بتقنية توسيد تشبه السحاب. مثالية للجري اليومي وتمارين الصالة الرياضية والارتداء العادي."
@@ -341,11 +341,11 @@ export const state = {
         breathability: { en: "High", ar: "عالية" }
       },
       variants: [
-        { id: "p1-black-39", color: "Black", size: "39", price: 329, stock: 12, images: ["1519744792095-ee0c2909d518", "1571019613454-1cb2f99b2d8b"] },
-        { id: "p1-black-40", color: "Black", size: "40", price: 329, stock: 8, images: ["1519744792095-ee0c2909d518", "1571019613454-1cb2f99b2d8b"] },
+        { id: "p1-black-39", color: "Black", size: "39", price: 329, stock: 12, images: ["1542291026-7eec264c27ff", "1571019613454-1cb2f99b2d8b"] },
+        { id: "p1-black-40", color: "Black", size: "40", price: 329, stock: 8, images: ["1542291026-7eec264c27ff", "1571019613454-1cb2f99b2d8b"] },
         { id: "p1-white-39", color: "White", size: "39", price: 329, stock: 15, images: ["1515879218367-8466d910aaa4", "1521572267360-ee0c2909d518"] },
         { id: "p1-white-40", color: "White", size: "40", price: 329, stock: 6, images: ["1515879218367-8466d910aaa4", "1521572267360-ee0c2909d518"] },
-        { id: "p1-blue-39", color: "Blue", size: "39", price: 339, stock: 10, images: ["1515378791036-0648a3ef77b2", "1494790108755-2616b612b9e3"] }
+        { id: "p1-blue-39", color: "Blue", size: "39", price: 339, stock: 10, images: ["1515378791036-0648a3ef77b2", "1535713875002-d1d0cf377fde"] }
       ],
       sizeGuide: {
         sizes: [
@@ -388,7 +388,7 @@ export const state = {
         { id: "p2-orange-s", color: "Sunset Orange", size: "S", price: 149, stock: 20, images: ["1515879218367-8466d910aaa4"] },
         { id: "p2-orange-m", color: "Sunset Orange", size: "M", price: 149, stock: 18, images: ["1515879218367-8466d910aaa4"] },
         { id: "p2-orange-l", color: "Sunset Orange", size: "L", price: 149, stock: 12, images: ["1515879218367-8466d910aaa4"] },
-        { id: "p2-navy-m", color: "Navy", size: "M", price: 159, stock: 8, images: ["1519744792095-ee0c2909d518"] }
+        { id: "p2-navy-m", color: "Navy", size: "M", price: 159, stock: 8, images: ["1521572163474-6864f9cf17ab"] }
       ],
       sizeGuide: {
         sizes: [
@@ -420,7 +420,7 @@ export const state = {
       },
       variants: [
         { id: "p3-white", color: "White", price: 89, stock: 25, images: ["1515378791036-0648a3ef77b2"] },
-        { id: "p3-wood", color: "Wood Grain", price: 99, stock: 15, images: ["1519744792095-ee0c2909d518"] }
+        { id: "p3-wood", color: "Wood Grain", price: 99, stock: 15, images: ["1570197788417-0e82375c9371"] }
       ],
       arSupported: true,
       arFeatures: ["placement_preview", "size_comparison"],
@@ -451,7 +451,7 @@ export const state = {
         coverage: "Manufacturing defects"
       }
     }),
-    P("p5", "Plant Pot Set", "Home", 199, 249, "c3", "1519744792095-ee0c2909d518", "طقم أصص النباتات", "منزل", {
+    P("p5", "Plant Pot Set", "Home", 199, 249, "c3", "1515378791036-0648a3ef77b2", "طقم أصص النباتات", "منزل", {
       description: {
         en: "Set of 3 ceramic planters with drainage holes and matching saucers. Perfect for indoor plants and herbs.",
         ar: "طقم من 3 أصص سيراميك مع فتحات تصريف وأطباق مطابقة. مثالي للنباتات الداخلية والأعشاب."
@@ -463,7 +463,7 @@ export const state = {
         finish: { en: "Matte glaze", ar: "طلاء غير لامع" }
       },
       variants: [
-        { id: "p5-terracotta", color: "Terracotta", price: 199, stock: 12, images: ["1519744792095-ee0c2909d518"] },
+        { id: "p5-terracotta", color: "Terracotta", price: 199, stock: 12, images: ["1515378791036-0648a3ef77b2"] },
         { id: "p5-white", color: "Pure White", price: 209, stock: 8, images: ["1515879218367-8466d910aaa4"] },
         { id: "p5-sage", color: "Sage Green", price: 219, stock: 6, images: ["1515378791036-0648a3ef77b2"] }
       ],
@@ -544,7 +544,7 @@ export const state = {
       },
       variants: [
         { id: "p8-original", variant: "Original Formula", price: 79, stock: 35, images: ["1515378791036-0648a3ef77b2"] },
-        { id: "p8-sensitive", variant: "Sensitive Skin", price: 89, stock: 20, images: ["1519744792095-ee0c2909d518"] }
+        { id: "p8-sensitive", variant: "Sensitive Skin", price: 89, stock: 20, images: ["1515378791036-0648a3ef77b2"] }
       ],
       arSupported: false,
       ingredients: {
@@ -562,7 +562,7 @@ export const state = {
       id: "c1", 
       name: "@linafit", 
       handle: "@linafit",
-      avatar: uns("1494790108755-2616b612b9e3", 150), 
+      avatar: uns("1535713875002-d1d0cf377fde", 150), 
       coverImage: uns("1571019613454-1cb2f99b2d8b", 800),
       followers: 128000, 
       following: 245,
@@ -594,7 +594,7 @@ export const state = {
       name: "@saudichef", 
       handle: "@saudichef",
       avatar: uns("1507003211169-0a1dd7bf0ec3", 150), 
-      coverImage: uns("1556760524-dcb8b3bb3e45", 800),
+      coverImage: uns("1515378791036-0648a3ef77b2", 800),
       followers: 98000, 
       following: 156,
       verified: false,
@@ -654,7 +654,7 @@ export const state = {
       name: "@techtalks_sa",
       handle: "@techtalks_sa", 
       avatar: uns("1507003211169-0a1dd7bf0ec3", 150),
-      coverImage: uns("1518199266325-65595ac2dfa7", 800),
+      coverImage: uns("1571019613454-1cb2f99b2d8b", 800),
       followers: 87000,
       following: 312,
       verified: true,
@@ -981,7 +981,7 @@ export const state = {
       id: "ugc1",
       creator: "@linafit",
       creatorId: "c1", 
-      creatorAvatar: "https://images.unsplash.com/photo-1494790108755-2616b612b9e3?auto=format&fit=crop&w=150&q=70",
+      creatorAvatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=70",
       image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=70",
       caption: "New workout routine using these amazing CloudRunner sneakers! Perfect for morning runs 🏃‍♀️✨ #fitness #running",
       timestamp: Date.now() - 7200000, // 2 hours ago
@@ -1163,7 +1163,7 @@ export const state = {
           productId: "p1",
           userId: "u1",
           userName: "سارة أحمد",
-          userAvatar: uns("1494790108755-2616b612b9e3", 80),
+          userAvatar: uns("1535713875002-d1d0cf377fde", 80),
           rating: 5,
           title: { en: "Perfect for running!", ar: "مثالي للجري!" },
           content: { 
@@ -1246,7 +1246,7 @@ export const state = {
           productId: "p3",
           userId: "u5",
           userName: "نورا محمد", 
-          userAvatar: uns("1487412720-8a98462a3baa", 80),
+          userAvatar: uns("1535713875002-d1d0cf377fde", 80),
           rating: 4,
           title: { en: "Nice ambiance", ar: "أجواء جميلة" },
           content: {
@@ -2220,7 +2220,7 @@ export const actions = {
       productId,
       userId: state.user.id,
       userName: state.user.name || "Anonymous User",
-      userAvatar: state.user.avatar || uns("1494790108755-2616b612b9e3", 80),
+      userAvatar: state.user.avatar || uns("1535713875002-d1d0cf377fde", 80),
       rating: reviewData.rating,
       title: reviewData.title,
       content: reviewData.content,
@@ -2422,7 +2422,7 @@ export const actions = {
       id: `post_${Date.now()}`,
       userId: state.user.id,
       username: `@${state.user.name.toLowerCase()}`,
-      avatar: uns("1494790108755-2616b612b9e3", 100),
+      avatar: uns("1535713875002-d1d0cf377fde", 100),
       content: content,
       productIds: productIds,
       images: images,

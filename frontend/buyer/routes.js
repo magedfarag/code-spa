@@ -3,9 +3,9 @@
      ctx = { el, state, actions, t, tn, currency, fmtDate, navigate, showSheet, refresh }
    and optional id from the hash (e.g., #/pdp/p1 => id = "p1")
 */
-import { uns, state, actions, productById, creatorById, cartTotal, getProductField, getProductTitle, getProductImage, loc } from "./data.js?v=20251008";
-import { t, tn, getLang, formatTimeAgo, fmtSAR } from "./i18n.js?v=20251008";
-import { aiEngine } from "./ai.js?v=20251008";
+import { uns, state, actions, productById, creatorById, cartTotal, getProductField, getProductTitle, getProductImage, loc } from "./data.js?v=20251010";
+import { t, tn, getLang, formatTimeAgo, fmtSAR } from "./i18n.js?v=20251010";
+import { aiEngine } from "./ai.js?v=20251010";
 
 /* ---------- tiny DOM helpers ---------- */
 const h = (html) => html.trim();
@@ -2629,15 +2629,18 @@ function renderSocialPost(post) {
           <div class="tagged-products" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
             ${post.productIds.map(pid => {
               const product = productById(pid);
-              return product ? `
+              if (!product) return '';
+              const productImage = getProductImage(product);
+              const productTitle = getProductTitle(product);
+              return `
                 <div onclick="location.hash='#/pdp/${pid}'" class="tagged-product" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--bg); border-radius: 8px; cursor: pointer; border: 1px solid var(--border);">
-                  <img src="${getProductImage(product)}" alt="${product.name}" style="width: 32px; height: 32px; border-radius: 4px;" loading="lazy">
+                  <img src="${productImage}" alt="${productTitle}" style="width: 32px; height: 32px; border-radius: 4px;" loading="lazy">
                   <div>
-                    <div style="font-size: 12px; font-weight: 500;">${getProductTitle(product)}</div>
+                    <div style="font-size: 12px; font-weight: 500;">${productTitle}</div>
                     <div style="font-size: 11px; color: var(--text-muted);">${fmtSAR(product.price)}</div>
                   </div>
                 </div>
-              ` : '';
+              `;
             }).join('')}
           </div>
         ` : ''}

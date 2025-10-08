@@ -428,9 +428,9 @@ function seed(){
     prefs: { sponsor: true },
     store: { name: "Maya Fit Co.", tier: "Starter", live: false, ai: { title: true, image: true, translate: false } },
     catalog: [
-      P("s1","CloudRunner Sneakers","Footwear",329,399,"1519744792095-2f2205e87b6f"),
+      P("s1","CloudRunner Sneakers","Footwear",329,399,"1542291026-7eec264c27ff"),
       P("s2","Aura Skin Serum","Beauty",119,null,"1522336572468-97b06e8ef143"),
-      P("s3","Hologram Phone Case","Accessories",49,69,"1580894895111-1fc068d51666"),
+      P("s3","Hologram Phone Case","Accessories",49,69,"1570197788417-0e82375c9371"),
       P("s4","Oversize Tee “Shift”","Apparel",89,119,"1521572163474-6864f9cf17ab"),
     ],
     orders: [
@@ -1128,14 +1128,16 @@ function buildSpark(n){ const a=[]; let v=100; for(let i=0;i<n;i++){ v += (Math.
 function loc(obj, fallback = "en") {
   if (typeof obj === "string") return obj; // backward compatibility
   const lang = getLang();
-  return obj?.[lang] || obj?.[fallback] || obj || "";
+  const result = obj?.[lang] || obj?.[fallback] || obj || "";
+  // Ensure we always return a string, never an object
+  return typeof result === "string" ? result : "";
 }
 
 function renderCatalog(){
   const v=qs("#view");
   const items = state.catalog.map(p=>`
     <article class="card">
-      <a class="media" href="#/catalog-edit/${p.id}"><img src="${uns(p.imgId, 600)}" alt="${loc(p.name)}"></a>
+      <a class="media" href="#/catalog-edit/${p.id}"><img src="${uns(p.imgId, 600)}" alt="${loc(p.name) || p.name || 'Product'}"></a>
       <div class="body">
         <div class="row between">
           <strong>${loc(p.name)}</strong>
@@ -1150,14 +1152,25 @@ function renderCatalog(){
   `).join("");
   v.innerHTML = html(`
     <section class="panel">
-      <div class="row between">
-        <strong>${t("catalog_title")}</strong>
-        <div class="row">
-          <a class="small secondary" href="#/catalog-new">+ ${t("add_product")}</a>
-          <a class="small ghost" style="margin-inline-start:8px" href="#/catalog-import">⇪ ${t("import_catalog")}</a>
+      <div class="catalog-header">
+        <div class="catalog-title">
+          <h1>${t("catalog_title")}</h1>
+          <div class="catalog-stats">
+            ${getState().products.length} products
+          </div>
+        </div>
+        <div class="catalog-actions">
+          <a class="btn-secondary" href="#/catalog-new">
+            <span class="btn-icon">+</span>
+            ${t("add_product")}
+          </a>
+          <a class="btn-ghost" href="#/catalog-import">
+            <span class="btn-icon">↗</span>
+            ${t("import_catalog")}
+          </a>
         </div>
       </div>
-      <div class="grid cols-3" style="margin-top:12px">${items}</div>
+      <div class="grid cols-3" style="margin-top:20px">${items}</div>
     </section>
   `);
 }
@@ -1339,7 +1352,7 @@ function renderCatalogImport(){
     <section class="panel">
       <strong>${t("import_catalog")}</strong>
       <p class="muted">${t("import_hint")}</p>
-      <textarea id="csv" rows="6" placeholder="CloudRunner Sneakers,329,Footwear,1519744792095-2f2205e87b6f&#10;Aura Skin Serum,119,Beauty,1522336572468-97b06e8ef143"></textarea>
+      <textarea id="csv" rows="6" placeholder="CloudRunner Sneakers,329,Footwear,1542291026-7eec264c27ff&#10;Aura Skin Serum,119,Beauty,1522336572468-97b06e8ef143"></textarea>
       <div class="row" style="gap:8px; margin-top:10px">
         <button class="secondary" onclick="parseCSVImport()">${t("parse")}</button>
         <button class="ghost" onclick="navigate('#/catalog')">Cancel</button>

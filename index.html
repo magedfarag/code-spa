@@ -787,15 +787,36 @@
         buyerTitle: "🛒 تجربة المشتري",
         buyerPath: "📱 /frontend/buyer",
         buyerDescription: "منصة التجارة الاجتماعية المتقدمة للجوال مع التسوق الشخصي والخلاصات الاجتماعية والدفع السلس.",
+        buyerFeatures: [
+          "خلاصة التجارة الاجتماعية مع المحتوى المُنشأ من المستخدمين",
+          "التوصيات المدعومة بالذكاء الاصطناعي",
+          "التسوق المباشر والبث المباشر",
+          "دعم متعدد اللغات (العربية/الإنجليزية)",
+          "بوابات الدفع السعودية"
+        ],
         buyerOpen: "🚀 افتح تطبيق المشتري",
         directLink: "🔗 رابط مباشر",
         sellerTitle: "📊 لوحة البائع",
         sellerPath: "🏢 /frontend/Seller",
         sellerDescription: "لوحة تحكم شاملة للمنشئين والبائعين مع التحليلات وإدارة المخزون وأدوات التجارة المباشرة.",
+        sellerFeatures: [
+          "إدارة كتالوج المنتجات",
+          "لوحة تحكم البث المباشر",
+          "تحليلات المبيعات والرؤى",
+          "أدوات اقتصاد المنشئين",
+          "إدارة الطلبات والمرتجعات"
+        ],
         sellerOpen: "🏪 افتح لوحة البائع",
         adminTitle: "⚙️ لوحة الإدارة",
         adminPath: "🏛️ /frontend/admin",
         adminDescription: "منصة إدارة متقدمة للمشرفين مع الإحصائيات الشاملة وأدوات الإشراف وإدارة المحتوى.",
+        adminFeatures: [
+          "نظرة عامة على المنصة والمقاييس",
+          "إدارة المستخدمين ومراقبة المحتوى",
+          "إعدادات النظام والتكوينات",
+          "إدارة تذاكر الدعم",
+          "ضوابط علامات الميزات"
+        ],
         adminOpen: "🛡️ افتح لوحة الإدارة"
       },
       en: {
@@ -810,15 +831,36 @@
         buyerTitle: "🛒 Buyer Experience",
         buyerPath: "📱 /frontend/buyer",
         buyerDescription: "Advanced mobile social commerce platform with personalized shopping, social feeds, and seamless checkout.",
+        buyerFeatures: [
+          "✨ Social commerce feed with user-generated content",
+          "✨ AI-powered recommendations",
+          "✨ Live shopping and streaming",
+          "✨ Multi-language support (Arabic/English)",
+          "✨ Saudi payment gateways"
+        ],
         buyerOpen: "🚀 Open Buyer App",
         directLink: "🔗 Direct Link",
         sellerTitle: "📊 Seller Console",
         sellerPath: "🏢 /frontend/Seller", 
         sellerDescription: "Comprehensive creator and seller dashboard with analytics, inventory management, and live commerce tools.",
+        sellerFeatures: [
+          "✨ Product catalog management",
+          "✨ Live streaming dashboard",
+          "✨ Sales analytics and insights",
+          "✨ Creator economy tools",
+          "✨ Order and returns management"
+        ],
         sellerOpen: "🏪 Open Seller Console",
         adminTitle: "⚙️ Admin Dashboard",
         adminPath: "🏛️ /frontend/admin",
         adminDescription: "Advanced management platform for administrators with comprehensive analytics, moderation tools, and content management.",
+        adminFeatures: [
+          "✨ Platform overview and metrics",
+          "✨ User management and content moderation",
+          "✨ System settings and configurations",
+          "✨ Support ticket management",
+          "✨ Feature flag controls"
+        ],
         adminOpen: "🛡️ Open Admin Dashboard"
       }
     };
@@ -849,6 +891,8 @@
       buyerCard.querySelector('.card-title').textContent = t.buyerTitle;
       buyerCard.querySelector('.card-path').textContent = t.buyerPath;
       buyerCard.querySelector('.card-description').textContent = t.buyerDescription;
+      const buyerFeatures = buyerCard.querySelector('.card-features');
+      buyerFeatures.innerHTML = t.buyerFeatures.map(feature => `<li>${feature}</li>`).join('');
       buyerCard.querySelector('.btn-primary').textContent = t.buyerOpen;
       buyerCard.querySelector('.btn-secondary').textContent = t.directLink;
       
@@ -857,6 +901,8 @@
       sellerCard.querySelector('.card-title').textContent = t.sellerTitle;
       sellerCard.querySelector('.card-path').textContent = t.sellerPath;
       sellerCard.querySelector('.card-description').textContent = t.sellerDescription;
+      const sellerFeatures = sellerCard.querySelector('.card-features');
+      sellerFeatures.innerHTML = t.sellerFeatures.map(feature => `<li>${feature}</li>`).join('');
       sellerCard.querySelector('.btn-primary').textContent = t.sellerOpen;
       sellerCard.querySelector('.btn-secondary').textContent = t.directLink;
       
@@ -865,6 +911,8 @@
       adminCard.querySelector('.card-title').textContent = t.adminTitle;
       adminCard.querySelector('.card-path').textContent = t.adminPath;
       adminCard.querySelector('.card-description').textContent = t.adminDescription;
+      const adminFeatures = adminCard.querySelector('.card-features');
+      adminFeatures.innerHTML = t.adminFeatures.map(feature => `<li>${feature}</li>`).join('');
       adminCard.querySelector('.btn-primary').textContent = t.adminOpen;
       adminCard.querySelector('.btn-secondary').textContent = t.directLink;
     }

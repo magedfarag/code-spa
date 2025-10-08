@@ -3,10 +3,10 @@
    and global helpers (sheet, badges). Routes render views.
    Imports are small/strict to keep coupling low.
 */
-import { setLang, getLang, t, tn, dirForLang, locale, fmtCurrency as currency, fmtDate } from "./i18n.js?v=20251008";
-import { state, loadState, saveState, resetState, actions, productById } from "./data.js?v=20251008";
-import { routes } from "./routes.js?v=20251008";
-import { aiEngine } from "./ai.js?v=20251008";
+import { setLang, getLang, t, tn, dirForLang, locale, fmtCurrency as currency, fmtDate } from "./i18n.js?v=20251010-imageFix";
+import { state, loadState, saveState, resetState, actions, productById } from "./data.js?v=20251010-imageFix";
+import { routes } from "./routes.js?v=20251010-imageFix";
+import { aiEngine } from "./ai.js?v=20251010-imageFix";
 
 /* ------------- tiny DOM helpers ------------- */
 const qs = (s, el = document) => el.querySelector(s);

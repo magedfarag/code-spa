@@ -64,20 +64,95 @@ hr { border:0; border-top:1px solid var(--border); margin:16px 0; }
 
 input, select, textarea {
   width: 100%; min-height: 44px; padding: .65rem .75rem;
-  background:#0f1016; color:var(--text); border:1px solid var(--border); border-radius:12px;
+  background: var(--panel); color: var(--text); 
+  border: 1px solid var(--border); border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
 }
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand) 20%, transparent);
+}
+
+input:hover, select:hover, textarea:hover {
+  border-color: color-mix(in oklab, var(--border) 150%, var(--text) 20%);
+}
+
 html[data-theme="light"] input,
 html[data-theme="light"] select,
-html[data-theme="light"] textarea { background:#fff; color:var(--text); }
+html[data-theme="light"] textarea { 
+  background: #fff; 
+  border-color: #e2e8f0;
+}
 
-button { font: inherit; color: var(--text); background: var(--brand); border:0; border-radius:12px; padding:.7rem 1rem; cursor:pointer; min-height:44px; }
-button.ghost { background: transparent; border:1px solid var(--border); }
-button.secondary { background: var(--brand-2); color:#06110a; }
-button.danger { background: var(--bad); color: white; }
-button.small { padding:.5rem .75rem; border-radius:10px; min-height:36px; }
-button:hover { opacity: 0.9; }
-button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
-button:active { transform: translateY(1px); }
+html[data-theme="light"] input:hover,
+html[data-theme="light"] select:hover,
+html[data-theme="light"] textarea:hover {
+  border-color: #cbd5e1;
+}
+
+button { 
+  font: inherit; color: var(--text); background: var(--brand); 
+  border: 0; border-radius: 8px; padding: .7rem 1rem; cursor: pointer; 
+  min-height: 44px; font-weight: 500; font-size: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+button.ghost { 
+  background: transparent; 
+  border: 1px solid var(--border); 
+  box-shadow: none;
+}
+
+button.secondary { 
+  background: var(--brand-2); 
+  color: var(--bg); 
+  font-weight: 600;
+}
+
+button.danger { 
+  background: var(--bad); 
+  color: white; 
+}
+
+button.small { 
+  padding: .5rem .75rem; 
+  border-radius: 6px; 
+  min-height: 36px; 
+  font-size: 13px;
+}
+
+button:hover { 
+  opacity: 0.9; 
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+button.ghost:hover {
+  background: color-mix(in oklab, var(--border) 20%, transparent);
+  box-shadow: none;
+  transform: none;
+}
+
+button:focus-visible { 
+  outline: 2px solid var(--brand); 
+  outline-offset: 2px; 
+}
+
+button:active { 
+  transform: translateY(0px); 
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 .icon-btn { background:transparent; border:1px solid var(--border); width:36px; height:36px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:18px; line-height:1; padding:0; }
 .icon-btn.active { color: var(--brand-2); border-color: var(--brand-2); }
 
@@ -94,40 +169,193 @@ button:active { transform: translateY(1px); }
 
 /* ---------- Header ---------- */
 header {
-  height:56px; display:flex; align-items:center; gap:8px; padding:0 12px;
+  height:64px; display:flex; align-items:center; gap:12px; padding:0 20px;
   position: sticky; top:0; z-index: 10;
-  background: linear-gradient(180deg,
-    color-mix(in oklab, var(--bg) 95%, transparent),
-    color-mix(in oklab, var(--bg) 50%, transparent) 70%,
-    transparent);
-  backdrop-filter: blur(8px);
+  background: color-mix(in oklab, var(--bg) 95%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid color-mix(in oklab, var(--border) 40%, transparent);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-header .logo { display:flex; align-items:center; gap:8px; font-weight:700; }
-header .logo svg { width:24px; height:24px; }
+
+header .logo { 
+  display:flex; align-items:center; gap:10px; font-weight:700; 
+  min-width: 0; /* Allow flex shrinking */
+}
+header .logo svg { width:28px; height:28px; flex-shrink: 0; }
+header .logo .brand { 
+  font-size: 16px; 
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 header .actions { 
   margin-inline-start:auto; 
   display:flex; 
-  gap:8px; 
+  gap:12px; 
   align-items:center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+}
+
+/* Improved action buttons */
+header .actions button {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-height: 36px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+header .actions button.small {
+  padding: 6px 10px;
+  min-height: 32px;
+  font-size: 13px;
+}
+
+/* New button system compatibility */
+header .actions .btn-secondary,
+header .actions .btn-ghost,
+header .actions .btn-primary {
+  min-height: 32px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+header .actions .btn-secondary {
+  background: var(--brand-2);
+  color: var(--bg);
+  border: 1px solid var(--brand-2);
+}
+
+header .actions .btn-primary {
+  background: var(--brand);
+  color: var(--text);
+  border: 1px solid var(--brand);
+}
+
+header .actions .btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+/* Style selects to match buttons */
+header .actions select {
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 13px;
+  min-width: 80px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+header .actions select:hover {
+  border-color: var(--brand);
+}
+
+header .actions select:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand) 20%, transparent);
+}
+
+/* Add subtle labels for controls */
+header .actions > *:not(button) {
+  position: relative;
+}
+
+header .actions > *:not(button)::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -18px;
+  left: 0;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
 }
 
 /* Mobile-optimized header spacing */
+@media (max-width: 768px) {
+  header {
+    height: 60px;
+    padding: 0 16px;
+    gap: 10px;
+  }
+  
+  header .logo .brand {
+    font-size: 15px;
+  }
+  
+  header .logo svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  header .actions {
+    gap: 8px;
+  }
+  
+  header .actions button,
+  header .actions select {
+    min-height: 32px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+  
+  header .actions select {
+    min-width: 70px;
+  }
+}
+
 @media (max-width: 480px) {
   header {
-    padding: 0 8px;
-    gap: 6px;
+    padding: 0 12px;
+    gap: 8px;
   }
-  header .actions {
-    gap: 6px;
-  }
+  
   header .logo {
-    gap: 6px;
+    gap: 8px;
+  }
+  
+  header .logo .brand {
     font-size: 14px;
   }
+  
   header .logo svg {
     width: 20px;
     height: 20px;
+  }
+  
+  header .actions {
+    gap: 6px;
+  }
+  
+  header .actions button {
+    padding: 4px 6px;
+    font-size: 11px;
+    min-height: 28px;
+  }
+  
+  header .actions select {
+    padding: 4px 6px;
+    font-size: 11px;
+    min-height: 28px;
+    min-width: 60px;
+  }
+  
+  /* Hide labels on mobile */
+  header .actions > *:not(button)::before {
+    display: none;
   }
 }
 
@@ -186,6 +414,116 @@ header .actions {
   }
   .row {
     gap: 6px;
+  }
+}
+
+/* ---------- Catalog Header ---------- */
+.catalog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.catalog-title h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.catalog-stats {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.catalog-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Improved button styles for consistency */
+.btn-secondary, .btn-ghost, .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  min-height: 36px;
+  white-space: nowrap;
+}
+
+.btn-secondary {
+  background: var(--brand-2);
+  color: var(--bg);
+  border-color: var(--brand-2);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-primary {
+  background: var(--brand);
+  color: var(--text);
+  border-color: var(--brand);
+}
+
+.btn-secondary:hover, .btn-ghost:hover, .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  text-decoration: none;
+}
+
+.btn-ghost:hover {
+  background: color-mix(in oklab, var(--border) 20%, transparent);
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-icon {
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+/* Mobile responsive catalog header */
+@media (max-width: 640px) {
+  .catalog-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .catalog-title {
+    text-align: center;
+  }
+  
+  .catalog-title h1 {
+    font-size: 20px;
+  }
+  
+  .catalog-actions {
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .btn-secondary, .btn-ghost, .btn-primary {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
   }
 }
 

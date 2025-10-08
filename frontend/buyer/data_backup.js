@@ -36,7 +36,7 @@ const LS_STATE_KEY = "storez_spa_state_v2";
       id: "ugc1",
       creator: "@linafit",
       creatorId: "c1", 
-      creatorAvatar: "https://images.unsplash.com/photo-1494790108755-2616b612b9e3?auto=format&fit=crop&w=150&q=70",
+      creatorAvatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=70",
       image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=70",
       caption: "New workout routine using these amazing CloudRunner sneakers! Perfect for morning runs 🏃‍♀️✨ #fitness #running",
       timestamp: Date.now() - 7200000, // 2 hours ago
@@ -153,7 +153,7 @@ const LS_STATE_KEY = "storez_spa_state_v2";
     }
   ],2205e87b6f", "حذاء كلاود رانر الرياضي", "أحذية"),
     P("p2", "Aura Skin Serum", "Beauty", 119, null, "c3", "1522336572468-97b06e8ef143", "سيروم أورا للبشرة", "جمال"),
-    P("p3", "Hologram Phone Case", "Accessories", 49, 69, "c2", "1580894895111-1fc068d51666", "جراب هولوجرام للهاتف", "إكسسوارات"),
+    P("p3", "Hologram Phone Case", "Accessories", 49, 69, "c2", "1570197788417-0e82375c9371", "جراب هولوجرام للهاتف", "إكسسوارات"),
     P("p4", "Oversize Tee "Shift"", "Apparel", 89, 119, "c1", "1521572163474-6864f9cf17ab", "تيشيرت شيفت الواسع", "ملابس"),
     P("p5", "Fold Wallet Nano", "Accessories", 79, null, "c2", "1522312346375-d1a52e2b99b3", "محفظة فولد نانو", "إكسسوارات"),
     P("p6", "Active Leggings", "Apparel", 149, 189, "c1", "1521572267360-ee0c2909d518", "ليجنز رياضي", "ملابس"),
@@ -249,9 +249,9 @@ export const state = {
   ],
 
   products: [
-    P("p1", "CloudRunner Sneakers", "Footwear", 329, 399, "c1", "1519744792095-2f2205e87b6f"),
+    P("p1", "CloudRunner Sneakers", "Footwear", 329, 399, "c1", "1542291026-7eec264c27ff"),
     P("p2", "Aura Skin Serum", "Beauty", 119, null, "c3", "1522336572468-97b06e8ef143"),
-    P("p3", "Hologram Phone Case", "Accessories", 49, 69, "c2", "1580894895111-1fc068d51666"),
+    P("p3", "Hologram Phone Case", "Accessories", 49, 69, "c2", "1570197788417-0e82375c9371"),
     P("p4", "Oversize Tee “Shift”", "Apparel", 89, 119, "c1", "1521572163474-6864f9cf17ab"),
     P("p5", "Fold Wallet Nano", "Accessories", 79, null, "c2", "1522312346375-d1a52e2b99b3"),
     P("p6", "Active Leggings", "Apparel", 149, 189, "c1", "1521572267360-ee0c2909d518"),
