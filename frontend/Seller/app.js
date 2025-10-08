@@ -21,6 +21,7 @@ const DICT = {
     nav_dashboard: "Dashboard",
     nav_catalog: "Catalog",
     nav_orders: "Orders",
+    nav_creator: "Creator",
     nav_live: "Live",
     nav_ugc: "UGC",
 
@@ -118,6 +119,49 @@ const DICT = {
     ai_image_enhance: "Image enhance",
     ai_auto_translate: "Auto-translate",
     
+    // Creator economy features
+    creator_title: "Creator Economy",
+    creator_dashboard: "Creator Dashboard",
+    performance_analytics: "Performance Analytics",
+    commission_tracking: "Commission Tracking",
+    livestream_management: "Livestream Management",
+    revenue_overview: "Revenue Overview",
+    total_earnings: "Total Earnings",
+    this_month: "This Month",
+    last_month: "Last Month",
+    growth_rate: "Growth Rate",
+    commission_rate: "Commission Rate",
+    followers_count: "Followers",
+    engagement_rate: "Engagement Rate",
+    avg_order_value: "Avg Order Value",
+    conversion_rate: "Conversion Rate",
+    content_views: "Content Views",
+    revenue_trends: "Revenue Trends",
+    top_products: "Top Performing Products",
+    audience_demographics: "Audience Demographics",
+    payment_schedule: "Payment Schedule",
+    next_payment: "Next Payment",
+    payment_method: "Payment Method",
+    earnings_breakdown: "Earnings Breakdown",
+    product_commissions: "Product Commissions",
+    referral_bonuses: "Referral Bonuses",
+    live_stream_tips: "Livestream Tips",
+    performance_bonuses: "Performance Bonuses",
+    scheduled_streams: "Scheduled Streams",
+    stream_analytics: "Stream Analytics",
+    peak_viewers: "Peak Viewers",
+    stream_duration: "Stream Duration",
+    revenue_per_stream: "Revenue per Stream",
+    viewer_retention: "Viewer Retention",
+    schedule_stream: "Schedule Stream",
+    stream_title: "Stream Title",
+    stream_date: "Stream Date",
+    stream_time: "Stream Time",
+    featured_products: "Featured Products",
+    stream_description: "Stream Description",
+    notify_followers: "Notify Followers",
+    auto_post_social: "Auto-post to Social",
+    
     // Enhanced product management
     edit_product: "Edit Product",
     back_to_catalog: "Back to Catalog",
@@ -163,6 +207,7 @@ const DICT = {
     nav_dashboard: "لوحة التحكم",
     nav_catalog: "المنتجات",
     nav_orders: "الطلبات",
+    nav_creator: "المبدع",
     nav_live: "البث",
     nav_ugc: "المحتوى",
 
@@ -261,6 +306,49 @@ const DICT = {
     ai_title_rewrite: "تحسين العنوان",
     ai_image_enhance: "تحسين الصور",
     ai_auto_translate: "ترجمة تلقائية",
+    
+    // Creator economy features
+    creator_title: "اقتصاد المبدعين",
+    creator_dashboard: "لوحة المبدع",
+    performance_analytics: "تحليلات الأداء",
+    commission_tracking: "تتبع العمولات",
+    livestream_management: "إدارة البث المباشر",
+    revenue_overview: "نظرة عامة على الإيرادات",
+    total_earnings: "إجمالي الأرباح",
+    this_month: "هذا الشهر",
+    last_month: "الشهر الماضي",
+    growth_rate: "معدل النمو",
+    commission_rate: "معدل العمولة",
+    followers_count: "المتابعون",
+    engagement_rate: "معدل التفاعل",
+    avg_order_value: "متوسط قيمة الطلب",
+    conversion_rate: "معدل التحويل",
+    content_views: "مشاهدات المحتوى",
+    revenue_trends: "اتجاهات الإيرادات",
+    top_products: "أفضل المنتجات أداءً",
+    audience_demographics: "الديموغرافيا للجمهور",
+    payment_schedule: "جدول المدفوعات",
+    next_payment: "الدفعة التالية",
+    payment_method: "طريقة الدفع",
+    earnings_breakdown: "تفصيل الأرباح",
+    product_commissions: "عمولات المنتجات",
+    referral_bonuses: "مكافآت الإحالة",
+    live_stream_tips: "نصائح البث المباشر",
+    performance_bonuses: "مكافآت الأداء",
+    scheduled_streams: "البث المجدول",
+    stream_analytics: "تحليلات البث",
+    peak_viewers: "ذروة المشاهدين",
+    stream_duration: "مدة البث",
+    revenue_per_stream: "الإيرادات لكل بث",
+    viewer_retention: "الاحتفاظ بالمشاهدين",
+    schedule_stream: "جدولة البث",
+    stream_title: "عنوان البث",
+    stream_date: "تاريخ البث",
+    stream_time: "وقت البث",
+    featured_products: "المنتجات المميزة",
+    stream_description: "وصف البث",
+    notify_followers: "إشعار المتابعين",
+    auto_post_social: "النشر التلقائي على وسائل التواصل",
     
     // Enhanced product management
     edit_product: "تحرير المنتج",
@@ -436,6 +524,7 @@ const routes = {
   "/orders": renderOrders,
   "/order": renderOrderDetail,
   "/returns": renderReturns,
+  "/creator": renderCreator,
   "/live": renderLive,
   "/ugc": renderUGC,
   "/analytics": renderAnalytics,
@@ -491,6 +580,455 @@ function setSheet(title, bodyHTML){
   qs("#sheetBody").innerHTML = bodyHTML;
   s.classList.add("show"); s.setAttribute("aria-hidden","false");
   window.__closeSheet = ()=>{ s.classList.remove("show"); s.setAttribute("aria-hidden","true"); };
+}
+
+function showScheduleStream(){
+  const products = state.catalog.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
+  setSheet(t("schedule_stream"), html(`
+    <form onsubmit="scheduleNewStream(event)" style="display:flex; flex-direction:column; gap:16px">
+      <label>
+        ${t("stream_title")}
+        <input type="text" name="title" placeholder="Enter stream title" required />
+      </label>
+      
+      <div class="grid cols-2" style="gap:12px">
+        <label>
+          ${t("stream_date")}
+          <input type="date" name="date" required />
+        </label>
+        <label>
+          ${t("stream_time")}
+          <input type="time" name="time" required />
+        </label>
+      </div>
+      
+      <label>
+        ${t("featured_products")}
+        <select name="products" multiple style="min-height:100px">
+          ${products}
+        </select>
+        <div class="muted small" style="margin-top:4px">Hold Ctrl/Cmd to select multiple products</div>
+      </label>
+      
+      <label>
+        ${t("stream_description")}
+        <textarea name="description" rows="3" placeholder="Describe what you'll cover in this stream"></textarea>
+      </label>
+      
+      <div style="display:flex; gap:8px">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer">
+          <input type="checkbox" name="notify" checked />
+          ${t("notify_followers")}
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer">
+          <input type="checkbox" name="autoPost" />
+          ${t("auto_post_social")}
+        </label>
+      </div>
+      
+      <div class="row" style="gap:8px; margin-top:8px">
+        <button type="submit" class="primary">${t("schedule_stream")}</button>
+        <button type="button" class="ghost" onclick="window.__closeSheet?.()">${t("cancel")}</button>
+      </div>
+    </form>
+  `));
+}
+
+function scheduleNewStream(event){
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const streamData = {
+    id: 'stream_' + Date.now(),
+    title: formData.get('title'),
+    date: formData.get('date'),
+    time: formData.get('time'),
+    description: formData.get('description'),
+    products: Array.from(formData.getAll('products')),
+    notifyFollowers: formData.get('notify') === 'on',
+    autoPost: formData.get('autoPost') === 'on',
+    status: 'scheduled'
+  };
+  
+  // Add to state (in a real app, this would sync with backend)
+  if (!state.scheduledStreams) state.scheduledStreams = [];
+  state.scheduledStreams.push(streamData);
+  saveState();
+  
+  window.__closeSheet?.();
+  // Refresh the creator dashboard
+  if (location.hash === '#/creator') renderCreator();
+}
+
+function showDetailedCommissions(){
+  const commissionData = {
+    currentMonth: {
+      productSales: 2850.75,
+      referralBonuses: 450.00,
+      livestreamTips: 320.50,
+      performanceBonuses: 680.25
+    },
+    byCategory: [
+      { category: "Beauty & Skincare", sales: 1240.50, commission: 186.08, rate: 15 },
+      { category: "Fashion", sales: 2850.00, commission: 427.50, rate: 15 },
+      { category: "Electronics", sales: 1890.25, commission: 226.83, rate: 12 },
+      { category: "Home & Living", sales: 620.75, commission: 124.15, rate: 20 }
+    ],
+    paymentHistory: [
+      { date: "2024-10-15", amount: 3960.50, method: "Bank Transfer", status: "Paid" },
+      { date: "2024-09-15", amount: 3120.25, method: "Bank Transfer", status: "Paid" },
+      { date: "2024-08-15", amount: 2890.75, method: "Bank Transfer", status: "Paid" }
+    ]
+  };
+
+  const totalThisMonth = Object.values(commissionData.currentMonth).reduce((a, b) => a + b, 0);
+
+  setSheet(t("commission_tracking"), html(`
+    <div style="display:flex; flex-direction:column; gap:20px">
+      <!-- Current Month Breakdown -->
+      <div>
+        <h4 style="margin:0 0 12px">${t("earnings_breakdown")} - ${t("this_month")}</h4>
+        <div style="background:var(--bg); border-radius:8px; padding:16px">
+          <div class="row between" style="margin-bottom:8px">
+            <span>${t("product_commissions")}</span>
+            <strong style="color:var(--good)">${fmtSAR(commissionData.currentMonth.productSales)}</strong>
+          </div>
+          <div class="row between" style="margin-bottom:8px">
+            <span>${t("referral_bonuses")}</span>
+            <strong style="color:var(--brand)">${fmtSAR(commissionData.currentMonth.referralBonuses)}</strong>
+          </div>
+          <div class="row between" style="margin-bottom:8px">
+            <span>${t("live_stream_tips")}</span>
+            <strong style="color:var(--warning)">${fmtSAR(commissionData.currentMonth.livestreamTips)}</strong>
+          </div>
+          <div class="row between" style="border-top:1px solid var(--border); padding-top:8px; margin-top:8px">
+            <span>${t("performance_bonuses")}</span>
+            <strong style="color:var(--accent)">${fmtSAR(commissionData.currentMonth.performanceBonuses)}</strong>
+          </div>
+          <div class="row between" style="border-top:2px solid var(--border); padding-top:12px; margin-top:12px; font-weight:700; font-size:1.1rem">
+            <span>Total ${t("this_month")}</span>
+            <span style="color:var(--good)">${fmtSAR(totalThisMonth)}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Commission by Category -->
+      <div>
+        <h4 style="margin:0 0 12px">Commission by Category</h4>
+        <div style="display:flex; flex-direction:column; gap:8px">
+          ${commissionData.byCategory.map(cat => `
+            <div style="background:var(--bg); border-radius:8px; padding:12px">
+              <div class="row between" style="margin-bottom:4px">
+                <span style="font-weight:600">${cat.category}</span>
+                <span style="font-weight:700; color:var(--good)">${fmtSAR(cat.commission)}</span>
+              </div>
+              <div class="row between" style="font-size:0.85rem; color:var(--muted)">
+                <span>${fmtSAR(cat.sales)} sales • ${cat.rate}% rate</span>
+                <span>${((cat.commission / cat.sales) * 100).toFixed(1)}% earned</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Payment History -->
+      <div>
+        <h4 style="margin:0 0 12px">Payment History</h4>
+        <div style="display:flex; flex-direction:column; gap:8px">
+          ${commissionData.paymentHistory.map(payment => `
+            <div class="row between" style="background:var(--bg); border-radius:8px; padding:12px">
+              <div>
+                <div style="font-weight:600">${payment.date}</div>
+                <div style="font-size:0.85rem; color:var(--muted)">${payment.method}</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-weight:700; color:var(--good)">${fmtSAR(payment.amount)}</div>
+                <div style="font-size:0.85rem; color:var(--good)">${payment.status}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Next Payment Info -->
+      <div style="background:var(--bg2); border-radius:8px; padding:16px; border:1px solid var(--border)">
+        <h4 style="margin:0 0 8px">${t("next_payment")}</h4>
+        <div class="row between" style="margin-bottom:4px">
+          <span>Estimated Amount</span>
+          <strong style="color:var(--brand)">${fmtSAR(totalThisMonth)}</strong>
+        </div>
+        <div class="row between" style="margin-bottom:4px">
+          <span>Payment Date</span>
+          <span>2024-11-15</span>
+        </div>
+        <div class="row between">
+          <span>${t("payment_method")}</span>
+          <span>Bank Transfer</span>
+        </div>
+      </div>
+    </div>
+  `));
+}
+
+function showStreamAnalytics(){
+  const analyticsData = {
+    totalStreams: 24,
+    totalRevenue: 18450.75,
+    avgViewers: 365,
+    avgDuration: 95, // minutes
+    topPerformingStreams: [
+      { title: "Friday Fashion Flash", date: "2024-11-01", viewers: 485, duration: 135, revenue: 1250.75 },
+      { title: "Sunday Skincare Secrets", date: "2024-10-27", viewers: 610, duration: 150, revenue: 1680.25 },
+      { title: "Tech Tuesday Reviews", date: "2024-10-29", viewers: 320, duration: 105, revenue: 890.50 },
+      { title: "Wednesday Wellness", date: "2024-10-23", viewers: 445, duration: 120, revenue: 1120.00 }
+    ],
+    audienceInsights: {
+      topCountries: [
+        { country: "Saudi Arabia", percentage: 78, flag: "🇸🇦" },
+        { country: "UAE", percentage: 12, flag: "🇦🇪" },
+        { country: "Kuwait", percentage: 6, flag: "🇰🇼" },
+        { country: "Others", percentage: 4, flag: "🌍" }
+      ],
+      ageGroups: [
+        { range: "18-24", percentage: 45 },
+        { range: "25-34", percentage: 35 },
+        { range: "35-44", percentage: 15 },
+        { range: "45+", percentage: 5 }
+      ],
+      peakTimes: [
+        { time: "19:00-21:00", engagement: "High" },
+        { time: "15:00-17:00", engagement: "Medium" },
+        { time: "21:00-23:00", engagement: "Medium" }
+      ]
+    }
+  };
+
+  setSheet(t("stream_analytics"), html(`
+    <div style="display:flex; flex-direction:column; gap:20px">
+      <!-- Overview Stats -->
+      <div>
+        <h4 style="margin:0 0 12px">Stream Performance Overview</h4>
+        <div class="grid cols-2" style="gap:12px">
+          <div style="background:var(--bg); border-radius:8px; padding:16px; text-align:center">
+            <div style="font-size:1.5rem; font-weight:700; color:var(--brand)">${analyticsData.totalStreams}</div>
+            <div class="muted small">Total Streams</div>
+          </div>
+          <div style="background:var(--bg); border-radius:8px; padding:16px; text-align:center">
+            <div style="font-size:1.5rem; font-weight:700; color:var(--good)">${fmtSAR(analyticsData.totalRevenue)}</div>
+            <div class="muted small">${t("total_earnings")}</div>
+          </div>
+          <div style="background:var(--bg); border-radius:8px; padding:16px; text-align:center">
+            <div style="font-size:1.5rem; font-weight:700; color:var(--accent)">${analyticsData.avgViewers}</div>
+            <div class="muted small">Avg Viewers</div>
+          </div>
+          <div style="background:var(--bg); border-radius:8px; padding:16px; text-align:center">
+            <div style="font-size:1.5rem; font-weight:700; color:var(--warning)">${analyticsData.avgDuration}m</div>
+            <div class="muted small">Avg Duration</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Performing Streams -->
+      <div>
+        <h4 style="margin:0 0 12px">Top Performing Streams</h4>
+        <div style="display:flex; flex-direction:column; gap:8px">
+          ${analyticsData.topPerformingStreams.map(stream => `
+            <div style="background:var(--bg); border-radius:8px; padding:12px">
+              <div class="row between" style="margin-bottom:4px">
+                <span style="font-weight:600">${stream.title}</span>
+                <span style="font-weight:700; color:var(--good)">${fmtSAR(stream.revenue)}</span>
+              </div>
+              <div class="row between" style="font-size:0.85rem; color:var(--muted)">
+                <span>${stream.date} • ${stream.duration}m</span>
+                <span>${stream.viewers} peak viewers</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Audience Demographics -->
+      <div>
+        <h4 style="margin:0 0 12px">${t("audience_demographics")}</h4>
+        <div class="grid cols-2" style="gap:16px">
+          <div>
+            <div style="font-weight:600; margin-bottom:8px">Top Countries</div>
+            ${analyticsData.audienceInsights.topCountries.map(country => `
+              <div class="row between" style="margin-bottom:6px">
+                <span style="display:flex; align-items:center; gap:6px">
+                  <span>${country.flag}</span>
+                  <span class="small">${country.country}</span>
+                </span>
+                <span class="small">${country.percentage}%</span>
+              </div>
+            `).join('')}
+          </div>
+          <div>
+            <div style="font-weight:600; margin-bottom:8px">Age Groups</div>
+            ${analyticsData.audienceInsights.ageGroups.map(group => `
+              <div class="row between" style="margin-bottom:6px">
+                <span class="small">${group.range}</span>
+                <span class="small">${group.percentage}%</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- Peak Times -->
+      <div>
+        <h4 style="margin:0 0 12px">Best Times to Stream</h4>
+        <div style="background:var(--bg); border-radius:8px; padding:12px">
+          ${analyticsData.audienceInsights.peakTimes.map(time => `
+            <div class="row between" style="margin-bottom:6px">
+              <span class="small">${time.time}</span>
+              <span class="small chip" style="background:${time.engagement === 'High' ? 'var(--good)' : 'var(--warning)'}; color:white; font-size:10px">
+                ${time.engagement}
+              </span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `));
+}
+
+function showDetailedPerformance(){
+  const performanceData = {
+    monthlyTrends: [
+      { month: "Oct 2024", revenue: 3960.50, followers: 11240, engagement: 7.8, orders: 89 },
+      { month: "Sep 2024", revenue: 3120.25, followers: 10450, engagement: 7.2, orders: 76 },
+      { month: "Aug 2024", revenue: 2890.75, followers: 9820, engagement: 6.9, orders: 68 },
+      { month: "Jul 2024", revenue: 2650.40, followers: 9100, engagement: 6.5, orders: 62 }
+    ],
+    contentPerformance: [
+      { type: "Live Streams", posts: 24, avgViews: 485, engagementRate: 8.4, revenue: 12450.00 },
+      { type: "Product Reviews", posts: 18, avgViews: 320, engagementRate: 12.1, revenue: 3200.50 },
+      { type: "Style Tips", posts: 45, avgViews: 180, engagementRate: 15.3, revenue: 1850.25 },
+      { type: "Tutorials", posts: 12, avgViews: 220, engagementRate: 11.8, revenue: 950.00 }
+    ],
+    topCategories: [
+      { category: "Beauty & Skincare", sales: 156, revenue: 4680.00, growth: "+23%" },
+      { category: "Fashion", sales: 203, revenue: 6090.00, growth: "+18%" },
+      { category: "Electronics", sales: 89, revenue: 2670.00, growth: "+12%" },
+      { category: "Home & Living", sales: 67, revenue: 2010.00, growth: "+8%" }
+    ],
+    audienceGrowth: {
+      newFollowers: 1605,
+      unfollowers: 235,
+      netGrowth: 1370,
+      growthRate: 12.2,
+      repeatCustomers: 68
+    }
+  };
+
+  setSheet("Creator Performance Report", html(`
+    <div style="display:flex; flex-direction:column; gap:24px">
+      <!-- Growth Overview -->
+      <div>
+        <h4 style="margin:0 0 16px">Growth Overview (Last 4 Months)</h4>
+        <div style="display:flex; flex-direction:column; gap:8px">
+          ${performanceData.monthlyTrends.map((month, index) => {
+            const isRecent = index === 0;
+            return `
+              <div style="background:var(--bg); border-radius:8px; padding:12px; ${isRecent ? 'border:2px solid var(--brand)' : ''}">
+                <div class="row between" style="margin-bottom:8px">
+                  <span style="font-weight:600">${month.month} ${isRecent ? '(Current)' : ''}</span>
+                  <span style="font-weight:700; color:var(--good)">${fmtSAR(month.revenue)}</span>
+                </div>
+                <div class="row between" style="font-size:0.85rem; color:var(--muted)">
+                  <span>${month.followers.toLocaleString()} followers</span>
+                  <span>${month.engagement}% engagement</span>
+                  <span>${month.orders} orders</span>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Content Performance -->
+      <div>
+        <h4 style="margin:0 0 16px">Content Performance by Type</h4>
+        <div style="display:flex; flex-direction:column; gap:8px">
+          ${performanceData.contentPerformance.map(content => `
+            <div style="background:var(--bg); border-radius:8px; padding:12px">
+              <div class="row between" style="margin-bottom:4px">
+                <span style="font-weight:600">${content.type}</span>
+                <span style="font-weight:700; color:var(--good)">${fmtSAR(content.revenue)}</span>
+              </div>
+              <div class="row between" style="font-size:0.85rem; color:var(--muted)">
+                <span>${content.posts} posts • ${content.avgViews} avg views</span>
+                <span>${content.engagementRate}% engagement</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Category Performance -->
+      <div>
+        <h4 style="margin:0 0 16px">Top Product Categories</h4>
+        <div style="display:flex; flex-direction:column; gap:8px">
+          ${performanceData.topCategories.map(category => `
+            <div style="background:var(--bg); border-radius:8px; padding:12px">
+              <div class="row between" style="margin-bottom:4px">
+                <span style="font-weight:600">${category.category}</span>
+                <span style="font-weight:700; color:var(--good)">${fmtSAR(category.revenue)}</span>
+              </div>
+              <div class="row between" style="font-size:0.85rem; color:var(--muted)">
+                <span>${category.sales} sales</span>
+                <span style="color:var(--good)">${category.growth}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Audience Insights -->
+      <div>
+        <h4 style="margin:0 0 16px">Audience Growth & Retention</h4>
+        <div style="background:var(--bg); border-radius:8px; padding:16px">
+          <div class="grid cols-2" style="gap:16px; margin-bottom:16px">
+            <div style="text-align:center">
+              <div style="font-size:1.5rem; font-weight:700; color:var(--good)">+${performanceData.audienceGrowth.newFollowers}</div>
+              <div class="muted small">New Followers</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:1.5rem; font-weight:700; color:var(--brand)">+${performanceData.audienceGrowth.growthRate}%</div>
+              <div class="muted small">Growth Rate</div>
+            </div>
+          </div>
+          <div class="row between" style="margin-bottom:8px; font-size:0.9rem">
+            <span>New Followers</span>
+            <span style="color:var(--good)">+${performanceData.audienceGrowth.newFollowers}</span>
+          </div>
+          <div class="row between" style="margin-bottom:8px; font-size:0.9rem">
+            <span>Unfollowers</span>
+            <span style="color:var(--warning)">-${performanceData.audienceGrowth.unfollowers}</span>
+          </div>
+          <div class="row between" style="margin-bottom:8px; font-size:0.9rem; border-top:1px solid var(--border); padding-top:8px">
+            <span style="font-weight:600">Net Growth</span>
+            <span style="font-weight:700; color:var(--good)">+${performanceData.audienceGrowth.netGrowth}</span>
+          </div>
+          <div class="row between" style="font-size:0.9rem">
+            <span>Repeat Customers</span>
+            <span style="color:var(--brand)">${performanceData.audienceGrowth.repeatCustomers}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optimization Recommendations -->
+      <div>
+        <h4 style="margin:0 0 16px">💡 Optimization Recommendations</h4>
+        <div style="background:var(--bg2); border-radius:8px; padding:16px; border:1px solid var(--border)">
+          <div style="margin-bottom:12px; color:var(--good)">✅ <strong>Beauty content performs 23% above average</strong> - Continue focusing on skincare tutorials</div>
+          <div style="margin-bottom:12px; color:var(--brand)">💡 <strong>Post during 7-9 PM</strong> - Your audience is most active during evening hours</div>
+          <div style="margin-bottom:12px; color:var(--warning)">⚠️ <strong>Electronics engagement is lower</strong> - Consider more interactive tech reviews</div>
+          <div style="color:var(--accent)">🎯 <strong>Live streams drive 3x revenue</strong> - Schedule 2-3 streams per week for optimal growth</div>
+        </div>
+      </div>
+    </div>
+  `));
 }
 
 /* ---------- Views ---------- */
@@ -882,6 +1420,198 @@ function renderReturns(){
   `);
 }
 
+function renderCreator(){
+  const v = qs("#view");
+  
+  // Generate realistic creator metrics
+  const creatorMetrics = {
+    totalEarnings: 28650.75,
+    thisMonth: 4820.25,
+    lastMonth: 3960.50,
+    growthRate: 21.7,
+    commissionRate: 15.5,
+    followers: 12845,
+    engagementRate: 8.4,
+    avgOrderValue: 285.50,
+    conversionRate: 3.2,
+    contentViews: 145820,
+    nextPayment: "2024-11-15",
+    paymentMethod: "Bank Transfer"
+  };
+
+  const topProducts = [
+    { name: "Premium Skincare Set", sales: 156, commission: 2340.00, rate: 20 },
+    { name: "Designer Handbag", sales: 89, commission: 1780.00, rate: 15 },
+    { name: "Wireless Earbuds", sales: 203, commission: 1520.25, rate: 12 },
+    { name: "Luxury Watch", sales: 34, commission: 1360.00, rate: 18 }
+  ];
+
+  const upcomingStreams = [
+    { title: "Weekend Beauty Haul", date: "2024-11-08", time: "19:00", products: 5 },
+    { title: "Tech Review Session", date: "2024-11-10", time: "15:30", products: 3 },
+    { title: "Fashion Styling Tips", date: "2024-11-12", time: "20:00", products: 8 }
+  ];
+
+  const recentStreams = [
+    { title: "Friday Fashion Flash", viewers: 485, duration: "2h 15m", revenue: 1250.75, date: "2024-11-01" },
+    { title: "Tech Tuesday", viewers: 320, duration: "1h 45m", revenue: 890.50, date: "2024-10-29" },
+    { title: "Sunday Skincare", viewers: 610, duration: "2h 30m", revenue: 1680.25, date: "2024-10-27" }
+  ];
+
+  v.innerHTML = html(`
+    <section class="panel">
+      <div class="row between" style="margin-bottom:24px">
+        <div>
+          <h1 style="margin:0">${t("creator_dashboard")}</h1>
+          <p class="muted" style="margin:4px 0 0">Monitor your creator performance and earnings</p>
+        </div>
+        <button class="primary" onclick="navigate('#/live')" style="display:flex;align-items:center;gap:8px">
+          <span>📺</span> ${t("live_go")}
+        </button>
+      </div>
+
+      <!-- Revenue Overview -->
+      <div class="grid cols-4" style="gap:16px; margin-bottom:24px">
+        <div class="metric-card" style="padding:20px; background:var(--bg2); border-radius:12px; border:1px solid var(--border)">
+          <div class="metric-value" style="font-size:2rem; font-weight:700; color:var(--good)">${fmtSAR(creatorMetrics.totalEarnings)}</div>
+          <div class="metric-label" style="color:var(--muted); margin-top:4px">${t("total_earnings")}</div>
+        </div>
+        <div class="metric-card" style="padding:20px; background:var(--bg2); border-radius:12px; border:1px solid var(--border)">
+          <div class="metric-value" style="font-size:2rem; font-weight:700; color:var(--brand)">${fmtSAR(creatorMetrics.thisMonth)}</div>
+          <div class="metric-label" style="color:var(--muted); margin-top:4px">${t("this_month")}</div>
+          <div class="metric-change" style="color:var(--good); font-size:0.85rem; margin-top:4px">
+            +${creatorMetrics.growthRate}% vs ${t("last_month")}
+          </div>
+        </div>
+        <div class="metric-card" style="padding:20px; background:var(--bg2); border-radius:12px; border:1px solid var(--border)">
+          <div class="metric-value" style="font-size:2rem; font-weight:700">${creatorMetrics.followers.toLocaleString()}</div>
+          <div class="metric-label" style="color:var(--muted); margin-top:4px">${t("followers_count")}</div>
+        </div>
+        <div class="metric-card" style="padding:20px; background:var(--bg2); border-radius:12px; border:1px solid var(--border)">
+          <div class="metric-value" style="font-size:2rem; font-weight:700">${creatorMetrics.engagementRate}%</div>
+          <div class="metric-label" style="color:var(--muted); margin-top:4px">${t("engagement_rate")}</div>
+        </div>
+      </div>
+
+      <!-- Commission & Performance -->
+      <div class="grid cols-2" style="gap:20px; margin-bottom:24px">
+        <!-- Commission Tracking -->
+        <div style="background:var(--bg2); border-radius:12px; padding:20px; border:1px solid var(--border)">
+          <div class="row between" style="margin-bottom:16px">
+            <h3 style="margin:0">${t("commission_tracking")}</h3>
+            <button class="small secondary" onclick="showDetailedCommissions()">View Details</button>
+          </div>
+          
+          <div class="row between" style="margin-bottom:12px; padding:12px; background:var(--bg); border-radius:8px">
+            <span>${t("commission_rate")}</span>
+            <strong style="color:var(--brand)">${creatorMetrics.commissionRate}%</strong>
+          </div>
+          
+          <div class="row between" style="margin-bottom:12px; padding:12px; background:var(--bg); border-radius:8px">
+            <span>${t("avg_order_value")}</span>
+            <strong>${fmtSAR(creatorMetrics.avgOrderValue)}</strong>
+          </div>
+          
+          <div class="row between" style="margin-bottom:16px; padding:12px; background:var(--bg); border-radius:8px">
+            <span>${t("conversion_rate")}</span>
+            <strong style="color:var(--good)">${creatorMetrics.conversionRate}%</strong>
+          </div>
+
+          <div style="border-top:1px solid var(--border); padding-top:16px">
+            <div class="row between" style="margin-bottom:8px">
+              <span class="muted">${t("next_payment")}</span>
+              <span class="muted">${creatorMetrics.nextPayment}</span>
+            </div>
+            <div class="row between">
+              <span class="muted">${t("payment_method")}</span>
+              <span class="muted">${creatorMetrics.paymentMethod}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Products -->
+        <div style="background:var(--bg2); border-radius:12px; padding:20px; border:1px solid var(--border)">
+          <h3 style="margin:0 0 16px">${t("top_products")}</h3>
+          
+          ${topProducts.map(product => `
+            <div class="row between" style="padding:12px; background:var(--bg); border-radius:8px; margin-bottom:8px">
+              <div style="flex:1">
+                <div style="font-weight:600; margin-bottom:4px">${product.name}</div>
+                <div class="muted small">${product.sales} sales • ${product.rate}% commission</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-weight:700; color:var(--good)">${fmtSAR(product.commission)}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Livestream Management -->
+      <div class="grid cols-2" style="gap:20px; margin-bottom:24px">
+        <!-- Scheduled Streams -->
+        <div style="background:var(--bg2); border-radius:12px; padding:20px; border:1px solid var(--border)">
+          <div class="row between" style="margin-bottom:16px">
+            <h3 style="margin:0">${t("scheduled_streams")}</h3>
+            <button class="small secondary" onclick="showScheduleStream()">${t("schedule_stream")}</button>
+          </div>
+          
+          ${upcomingStreams.map(stream => `
+            <div class="row between" style="padding:12px; background:var(--bg); border-radius:8px; margin-bottom:8px">
+              <div style="flex:1">
+                <div style="font-weight:600; margin-bottom:4px">${stream.title}</div>
+                <div class="muted small">${stream.date} at ${stream.time} • ${stream.products} products</div>
+              </div>
+              <button class="small ghost">Edit</button>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Stream Analytics -->
+        <div style="background:var(--bg2); border-radius:12px; padding:20px; border:1px solid var(--border)">
+          <h3 style="margin:0 0 16px">${t("stream_analytics")}</h3>
+          
+          ${recentStreams.map(stream => `
+            <div style="padding:12px; background:var(--bg); border-radius:8px; margin-bottom:8px">
+              <div class="row between" style="margin-bottom:8px">
+                <div style="font-weight:600">${stream.title}</div>
+                <div style="color:var(--good); font-weight:700">${fmtSAR(stream.revenue)}</div>
+              </div>
+              <div class="row between" style="font-size:0.85rem; color:var(--muted)">
+                <span>${stream.viewers} ${t("peak_viewers")} • ${stream.duration}</span>
+                <span>${stream.date}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Performance Insights -->
+      <div style="background:var(--bg2); border-radius:12px; padding:20px; border:1px solid var(--border)">
+        <div class="row between" style="margin-bottom:16px">
+          <h3 style="margin:0">${t("performance_analytics")}</h3>
+          <button class="small secondary" onclick="showDetailedPerformance()">View Report</button>
+        </div>
+        
+        <div class="grid cols-3" style="gap:16px">
+          <div style="text-align:center; padding:16px">
+            <div style="font-size:1.5rem; font-weight:700; color:var(--brand)">${creatorMetrics.contentViews.toLocaleString()}</div>
+            <div class="muted small">${t("content_views")}</div>
+          </div>
+          <div style="text-align:center; padding:16px">
+            <div style="font-size:1.5rem; font-weight:700; color:var(--good)">92%</div>
+            <div class="muted small">${t("viewer_retention")}</div>
+          </div>
+          <div style="text-align:center; padding:16px">
+            <div style="font-size:1.5rem; font-weight:700; color:var(--brand)">${fmtSAR(485.50)}</div>
+            <div class="muted small">${t("revenue_per_stream")}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `);
+}
+
 function renderLive(){
   const live = state.store.live;
   const currentViewers = live ? Math.floor(Math.random()*500)+200 : 0;
@@ -889,30 +1619,81 @@ function renderLive(){
   const featuredProductId = qs('#live_product')?.value || state.catalog[0]?.id;
   const featuredProduct = state.catalog.find(x=>x.id===featuredProductId);
   
+  // Enhanced analytics data
+  const streamStats = {
+    sessionRevenue: live ? Math.floor(Math.random()*2000)+500 : 0,
+    peakViewers: live ? currentViewers + Math.floor(Math.random()*100) : 0,
+    avgWatchTime: live ? (Math.random()*45+15).toFixed(1) : 0,
+    conversionRate: live ? (Math.random()*2+1.5).toFixed(1) : 0,
+    commentsPerMin: live ? Math.floor(Math.random()*50)+20 : 0,
+    sessionDuration: live ? Math.floor((Date.now() - (state.store.liveStartTime || Date.now())) / 60000) : 0
+  };
+  
   qs("#view").innerHTML = html(`
     <section class="panel">
       <div class="row between">
-        <strong>${t("live_title")}</strong>
-        <span class="chip ${live ? 'danger' : ''}">${live ? '🔴 LIVE' : 'Offline'}</span>
+        <div>
+          <strong>${t("live_title")}</strong>
+          ${live ? `<div class="muted small" style="margin-top:4px">Live for ${streamStats.sessionDuration} minutes</div>` : ''}
+        </div>
+        <div class="row" style="gap:8px">
+          ${!live ? `<button class="small ghost" onclick="showStreamAnalytics()">📊 Analytics</button>` : ''}
+          <span class="chip ${live ? 'danger' : ''}">${live ? '🔴 LIVE' : 'Offline'}</span>
+        </div>
       </div>
       
       ${live ? `
-        <!-- Live Session Stats -->
-        <div class="kpis" style="margin-top:16px">
-          <div class="kpi">
-            <div class="head">Current Viewers</div>
-            <div class="val">${currentViewers}</div>
-            <div class="sub">Peak: ${currentViewers + Math.floor(Math.random()*100)}</div>
+        <!-- Enhanced Live Session Stats -->
+        <div class="grid cols-3" style="gap:12px; margin-top:16px">
+          <div class="metric-card" style="padding:16px; background:var(--bg2); border-radius:8px">
+            <div style="font-size:1.5rem; font-weight:700; color:var(--brand)">${currentViewers}</div>
+            <div class="muted small">${t("current_viewers")}</div>
+            <div class="muted small">Peak: ${streamStats.peakViewers}</div>
           </div>
-          <div class="kpi">
-            <div class="head">Session Sales</div>
-            <div class="val">${fmtSAR(Math.floor(Math.random()*2000)+500)}</div>
-            <div class="sub">${Math.floor(Math.random()*15)+5} orders</div>
+          <div class="metric-card" style="padding:16px; background:var(--bg2); border-radius:8px">
+            <div style="font-size:1.5rem; font-weight:700; color:var(--good)">${fmtSAR(streamStats.sessionRevenue)}</div>
+            <div class="muted small">${t("session_sales")}</div>
+            <div class="muted small">${Math.floor(Math.random()*15)+5} orders</div>
           </div>
-          <div class="kpi">
-            <div class="head">Engagement</div>
-            <div class="val">${(Math.random()*5+3).toFixed(1)}%</div>
-            <div class="sub">${Math.floor(Math.random()*50)+20} comments/min</div>
+          <div class="metric-card" style="padding:16px; background:var(--bg2); border-radius:8px">
+            <div style="font-size:1.5rem; font-weight:700; color:var(--accent)">${streamStats.conversionRate}%</div>
+            <div class="muted small">${t("conversion_rate")}</div>
+            <div class="muted small">${streamStats.avgWatchTime}m avg watch</div>
+          </div>
+        </div>
+        
+        <!-- Audience Insights (Live) -->
+        <div style="background:var(--bg2); border-radius:8px; padding:16px; margin-top:16px">
+          <h4 style="margin:0 0 12px">Real-time Audience Insights</h4>
+          <div class="grid cols-2" style="gap:16px">
+            <div>
+              <div class="row between" style="margin-bottom:8px">
+                <span class="muted small">Saudi Arabia</span>
+                <span class="small">78%</span>
+              </div>
+              <div class="row between" style="margin-bottom:8px">
+                <span class="muted small">UAE</span>
+                <span class="small">12%</span>
+              </div>
+              <div class="row between">
+                <span class="muted small">Other</span>
+                <span class="small">10%</span>
+              </div>
+            </div>
+            <div>
+              <div class="row between" style="margin-bottom:8px">
+                <span class="muted small">Age 18-24</span>
+                <span class="small">45%</span>
+              </div>
+              <div class="row between" style="margin-bottom:8px">
+                <span class="muted small">Age 25-34</span>
+                <span class="small">35%</span>
+              </div>
+              <div class="row between">
+                <span class="muted small">Age 35+</span>
+                <span class="small">20%</span>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -922,6 +1703,7 @@ function renderLive(){
           <div class="row" style="gap:8px; margin-top:8px">
             <select id="live_product" onchange="updateFeaturedProduct()">${products}</select>
             <button class="secondary small" onclick="spotlightProduct()">Spotlight</button>
+            <button class="ghost small" onclick="addFlashDeal()">⚡ Flash Deal</button>
           </div>
           ${featuredProduct ? `
             <div class="row" style="gap:12px; margin-top:12px">
@@ -935,64 +1717,97 @@ function renderLive(){
           ` : ''}
         </div>
         
-        <!-- Live Controls -->
+        <!-- Enhanced Live Controls -->
         <div class="panel" style="margin-top:16px; background:var(--card)">
           <strong>Live Controls</strong>
           <div class="row" style="gap:8px; margin-top:8px">
-            <button class="ghost small" onclick="addViewerMessage()">📢 Send Message</button>
-            <button class="ghost small" onclick="toggleChat()">💬 Toggle Chat</button>
-            <button class="ghost small" onclick="shareSession()">📤 Share Link</button>
+            <button class="ghost small" onclick="addViewerMessage()">📢 Message</button>
+            <button class="ghost small" onclick="toggleChat()">💬 Chat</button>
+            <button class="ghost small" onclick="shareSession()">📤 Share</button>
+            <button class="ghost small" onclick="addPoll()">📊 Poll</button>
           </div>
           <div class="row" style="gap:8px; margin-top:8px">
-            <button class="ghost small" onclick="addDiscount()">🎫 Add Discount</button>
-            <button class="ghost small" onclick="inviteViewers()">👥 Invite Followers</button>
-            <button class="ghost small" onclick="recordHighlight()">⭐ Save Highlight</button>
+            <button class="ghost small" onclick="addDiscount()">🎫 Discount</button>
+            <button class="ghost small" onclick="inviteViewers()">👥 Invite</button>
+            <button class="ghost small" onclick="recordHighlight()">⭐ Highlight</button>
+            <button class="ghost small" onclick="showViewersList()">👀 Viewers</button>
           </div>
         </div>
         
         <!-- Recent Activity -->
         <div class="panel" style="margin-top:16px; background:var(--card)">
-          <strong>Recent Activity</strong>
+          <strong>Live Activity</strong>
           <div style="margin-top:8px; max-height:200px; overflow-y:auto">
-            <div class="muted small" style="margin-bottom:4px">👤 @sarah_k joined the stream</div>
-            <div class="muted small" style="margin-bottom:4px">🛒 @maya_user added CloudRunner Sneakers to cart</div>
+            <div class="muted small" style="margin-bottom:4px; color:var(--brand)">👤 @sarah_k joined the stream</div>
+            <div class="muted small" style="margin-bottom:4px; color:var(--good)">🛒 @maya_user added CloudRunner Sneakers to cart</div>
             <div class="muted small" style="margin-bottom:4px">💬 @fahad_sa: "Love the quality!"</div>
-            <div class="muted small" style="margin-bottom:4px">🎉 @lina_fit purchased Aura Skin Serum</div>
-            <div class="muted small" style="margin-bottom:4px">❤️ @style_hunter liked the stream</div>
+            <div class="muted small" style="margin-bottom:4px; color:var(--good)">🎉 @lina_fit purchased Aura Skin Serum</div>
+            <div class="muted small" style="margin-bottom:4px; color:var(--accent)">❤️ @style_hunter liked the stream</div>
+            <div class="muted small" style="margin-bottom:4px; color:var(--brand)">🔥 Flash deal activated: 20% off</div>
           </div>
         </div>
       ` : `
         <!-- Pre-Live Setup -->
         <div style="margin-top:16px">
-          <label>Featured Product</label>
-          <select id="live_product">${products}</select>
-          <p class="muted" style="margin-top:8px">${t("pick_product")}</p>
+          <!-- Quick Stream Setup -->
+          <div class="panel" style="background:var(--card); margin-bottom:16px">
+            <strong>Quick Setup</strong>
+            <div style="margin-top:12px">
+              <label>${t("stream_title")}
+                <input type="text" id="streamTitle" placeholder="Weekend Beauty Haul" value="Live Shopping Session">
+              </label>
+              <label style="margin-top:8px">Featured Product
+                <select id="live_product">${products}</select>
+              </label>
+              <p class="muted" style="margin-top:8px">${t("pick_product")}</p>
+            </div>
+          </div>
           
+          <!-- Stream Options -->
           <div class="panel" style="margin-top:16px; background:var(--card)">
-            <strong>Live Session Setup</strong>
+            <strong>Stream Options</strong>
             <div style="margin-top:8px">
               <label class="checkbox-option">
                 <input type="checkbox" id="autoNotify" checked>
                 <span>Notify followers when going live</span>
               </label>
               <label class="checkbox-option">
-                <input type="checkbox" id="recordSession">
+                <input type="checkbox" id="recordSession" checked>
                 <span>Record session for highlights</span>
               </label>
               <label class="checkbox-option">
                 <input type="checkbox" id="allowComments" checked>
                 <span>Allow viewer comments</span>
               </label>
+              <label class="checkbox-option">
+                <input type="checkbox" id="enableTips">
+                <span>Enable viewer tips</span>
+              </label>
             </div>
           </div>
           
+          <!-- Scheduled Streams Preview -->
           <div class="panel" style="margin-top:16px; background:var(--card)">
-            <strong>Tips for Success</strong>
+            <div class="row between" style="margin-bottom:12px">
+              <strong>Upcoming Streams</strong>
+              <button class="small secondary" onclick="navigate('#/creator')">Manage</button>
+            </div>
+            <div class="muted small">
+              • Weekend Beauty Haul - Nov 8 at 7:00 PM<br>
+              • Tech Review Session - Nov 10 at 3:30 PM<br>
+              • Fashion Styling Tips - Nov 12 at 8:00 PM
+            </div>
+          </div>
+          
+          <!-- Performance Tips -->
+          <div class="panel" style="margin-top:16px; background:var(--card)">
+            <strong>Performance Tips</strong>
             <div style="margin-top:8px; line-height:1.5">
-              <div class="muted small">• Test your connection before going live</div>
+              <div class="muted small">• Best times: 7-9 PM for 80% higher engagement</div>
               <div class="muted small">• Feature 2-3 products max per session</div>
-              <div class="muted small">• Engage with viewers in the chat</div>
-              <div class="muted small">• Prime time: 7-9 PM for best engagement</div>
+              <div class="muted small">• Use flash deals to boost urgency</div>
+              <div class="muted small">• Interact with viewers every 2-3 minutes</div>
+              <div class="muted small">• Test connection before going live</div>
             </div>
           </div>
         </div>
@@ -1000,8 +1815,8 @@ function renderLive(){
       
       <!-- Main Action Button -->
       <div style="margin-top:20px">
-        <button class="${live ? 'danger' : 'secondary'}" onclick="toggleLiveSession()" style="width:100%; font-weight:600">
-          ${live ? t("live_end") : t("live_go")}
+        <button class="${live ? 'danger' : 'primary'}" onclick="toggleLiveSession()" style="width:100%; font-weight:600; font-size:1.1rem; padding:16px">
+          ${live ? `🔴 ${t("live_end")}` : `📺 ${t("live_go")}`}
         </button>
       </div>
     </section>

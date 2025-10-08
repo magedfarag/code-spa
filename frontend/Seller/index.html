@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="dark">
-<head>
-  <meta charset="utf-8" />
+<head>  <!-- Bottom navigation -->
+  <nav class="bottom" aria-label="Primary">
+    <a href="#/dashboard" data-tab="dashboard"><span>🏠</span><span data-i18n="nav_dashboard">Dashboard</span></a>
+    <a href="#/catalog" data-tab="catalog"><span>📦</span><span data-i18n="nav_catalog">Catalog</span></a>
+    <a href="#/orders" data-tab="orders"><span>📮</span><span data-i18n="nav_orders">Orders</span><span class="badge" id="ordersBadge" aria-hidden="true">0</span></a>
+    <a href="#/creator" data-tab="creator"><span>🌟</span><span data-i18n="nav_creator">Creator</span></a>
+    <a href="#/live" data-tab="live"><span>📺</span><span data-i18n="nav_live">Live</span></a>
+    <a href="#/ugc" data-tab="ugc"><span>🎨</span><span data-i18n="nav_ugc">UGC</span><span class="badge" id="ugcBadge" aria-hidden="true">0</span></a>
+  </nav> charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" content="#0b0c10" id="metaThemeColor" />
