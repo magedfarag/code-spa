@@ -306,9 +306,9 @@ const I18N = {
 };
 const LS_LANG = "storez_admin_lang";
 function t(k){ const d=I18N[getLang()]||I18N.en; return d[k]??k; }
-function getLang(){ return localStorage.getItem(LS_LANG) || "en"; }
+function getLang(){ return localStorage.getItem(LS_LANG) || "ar"; }
 function setLang(lang){
-  const l=I18N[lang]?lang:"en";
+  const l=I18N[lang]?lang:"ar";
   localStorage.setItem(LS_LANG,l);
   document.documentElement.lang = l==="ar"?"ar-SA":"en";
   document.documentElement.dir  = l==="ar"?"rtl":"ltr";

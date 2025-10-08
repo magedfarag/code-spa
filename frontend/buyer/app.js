@@ -6,6 +6,7 @@
 import { setLang, getLang, t, tn, dirForLang, locale, fmtCurrency as currency, fmtDate } from "./i18n.js";
 import { state, loadState, saveState, resetState, actions, productById } from "./data.js";
 import { routes } from "./routes.js";
+import { aiEngine } from "./ai.js";
 
 /* ------------- tiny DOM helpers ------------- */
 const qs = (s, el = document) => el.querySelector(s);
@@ -52,7 +53,7 @@ function toggleDir() {
 
 /* ------------- KPIs & badges ------------- */
 function refreshBadges() {
-  const cartCount = state.cart.items.reduce((s, i) => s + i.qty, 0);
+  const cartCount = state.cart.reduce((s, i) => s + i.qty, 0);
   const wishCount = state.wishlist.length;
   const cartBadge = qs("#cartBadge");
   const wishBadge = qs("#wishlistBadge");
@@ -294,6 +295,9 @@ function boot() {
     }
   });
 
+  // initialize AI engine
+  aiEngine.initialize(state);
+
   // initial route
   route();
 }
@@ -302,5 +306,5 @@ document.addEventListener("DOMContentLoaded", boot);
 
 /* ------------- Dev handle for quick inspection ------------- */
 window.StoreZ = {
-  state, actions, navigate, goBack, t, tn, currency, fmtDate, productById
+  state, actions, navigate, goBack, t, tn, currency, fmtDate, productById, aiEngine
 };

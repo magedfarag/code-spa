@@ -1,179 +1,981 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-theme="dark">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
-  <title>StoreZ — Choose Role</title>
+  <title>StoreZ — منصة التجارة الاجتماعية</title>
   <style>
-    :root { color-scheme: light dark; }
+    :root { 
+      color-scheme: light dark;
+      --gradient-primary: linear-gradient(135deg, #16a085 0%, #00d4ff 100%);
+      --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-accent: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+      --shadow-lg: 0 8px 25px rgba(0,0,0,0.2);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
     html[data-theme="dark"]{
-      --bg:#0b0c10; --panel:#121319; --muted:#9aa0a6; --text:#f1f3f4;
-      --brand:#16a085; --brand-2:#00d4ff; --border:#2a2d3a; --card:#161823;
+      --bg: linear-gradient(135deg, #0b0c10 0%, #1a1a2e 100%);
+      --panel: rgba(18, 19, 25, 0.8);
+      --muted: #9aa0a6;
+      --text: #f1f3f4;
+      --brand: #16a085;
+      --brand-2: #00d4ff;
+      --border: rgba(42, 45, 58, 0.5);
+      --card: rgba(22, 24, 35, 0.9);
+      --glass: rgba(255, 255, 255, 0.05);
     }
+    
     html[data-theme="light"]{
-      --bg:#ffffff; --panel:#f7f8fa; --muted:#5f6368; --text:#101114;
-      --brand:#16a085; --brand-2:#00bcd4; --border:#e3e7ee; --card:#ffffff;
+      --bg: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      --panel: rgba(247, 248, 250, 0.8);
+      --muted: #5f6368;
+      --text: #101114;
+      --brand: #16a085;
+      --brand-2: #00bcd4;
+      --border: rgba(227, 231, 238, 0.5);
+      --card: rgba(255, 255, 255, 0.9);
+      --glass: rgba(255, 255, 255, 0.1);
     }
-    *{box-sizing:border-box}
-    html{background:var(--bg); color:var(--text)}
-    body{margin:0; font:15px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
-    a{color:inherit; text-decoration:none}
-    .wrap{max-width:1000px; margin:0 auto; padding:16px}
-    header{display:flex; align-items:center; gap:10px; padding:8px 0}
-    header .brand{font-weight:800; font-size:18px}
-    .panel{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:16px}
-    .grid{display:grid; gap:12px}
-    @media (min-width:720px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr))} }
-    .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:10px}
-    .muted{color:var(--muted)}
-    .row{display:flex; align-items:center; gap:8px}
-    .row.between{justify-content:space-between}
-    .actions{display:flex; gap:8px; margin-top:8px}
-    .btn{min-height:42px; padding:.6rem .9rem; border-radius:12px; border:1px solid transparent; cursor:pointer; background:var(--brand); color:#fff; font:inherit}
-    .btn.ghost{background:transparent; border:1px solid var(--border); color:inherit}
-    .chip{display:inline-flex; align-items:center; gap:6px; padding:.25rem .5rem; border-radius:999px; border:1px solid var(--border)}
-    select{min-height:42px; padding:.55rem .7rem; border-radius:12px; border:1px solid var(--border); background:transparent; color:inherit}
-    footer{margin-top:16px; color:var(--muted); font-size:12px}
-    .warn{border-color:#b96b00}
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    
+    body {
+      font: 15px/1.6 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      min-height: 100vh;
+      background: var(--bg);
+      background-attachment: fixed;
+    }
+    
+    /* Animated background particles */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--brand);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-30px) rotate(120deg); }
+      66% { transform: translateY(15px) rotate(240deg); }
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header Enhancement */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 0;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: var(--glass);
+      border-radius: 20px;
+      margin-bottom: 30px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--gradient-primary);
+    }
+    
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+    }
+    
+    .logo {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo svg {
+      filter: drop-shadow(0 4px 8px rgba(22, 160, 133, 0.3));
+      transition: var(--transition);
+    }
+    
+    .logo:hover svg {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .brand-text {
+      font-weight: 800;
+      font-size: 24px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      backdrop-filter: blur(5px);
+    }
+    
+    .controls {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-right: 20px;
+    }
+    
+    .control-select {
+      min-height: 38px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--glass);
+      color: inherit;
+      font-size: 13px;
+      backdrop-filter: blur(5px);
+      transition: var(--transition);
+    }
+    
+    .control-select:hover, .control-select:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.1);
+    }
+    
+    /* Main Content */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .hero-section {
+      text-align: center;
+      margin-bottom: 50px;
+      position: relative;
+    }
+    
+    .hero-title {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--brand);
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: var(--muted);
+    }
+    
+    /* Cards Grid */
+    .roles-section {
+      background: var(--panel);
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .roles-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient-primary);
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+    }
+    
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .roles-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+    
+    .role-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      position: relative;
+      transition: var(--transition);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+    }
+    
+    .role-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gradient-primary);
+      transform: scaleX(0);
+      transition: var(--transition);
+    }
+    
+    .role-card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .role-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--brand);
+    }
+    
+    .role-card.buyer::before { background: var(--gradient-primary); }
+    .role-card.seller::before { background: var(--gradient-secondary); }
+    .role-card.admin::before { background: var(--gradient-accent); }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .card-path {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      color: var(--muted);
+    }
+    
+    .card-description {
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    
+    .card-features {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    
+    .card-features li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    
+    .card-features li::before {
+      content: '✨';
+      font-size: 12px;
+    }
+    
+    .card-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: none;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      font-size: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: inherit;
+    }
+    
+    .btn-secondary:hover {
+      background: var(--glass);
+      border-color: var(--brand);
+    }
+    
+    /* Help Section */
+    .help-section {
+      margin-top: 40px;
+      padding: 24px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .help-summary {
+      font-weight: 600;
+      color: var(--brand);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .help-content {
+      margin-top: 16px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    
+    .help-code {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 13px;
+      margin-top: 12px;
+      overflow-x: auto;
+    }
+    
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 20px 0;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      
+      header {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px 16px;
+      }
+      
+      .controls {
+        margin-left: 0;
+        padding-right: 0;
+      }
+      
+      .hero-stats {
+        gap: 20px;
+      }
+      
+      .roles-section {
+        padding: 24px 20px;
+      }
+      
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      
+      .roles-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .card-actions {
+        flex-direction: column;
+      }
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-in {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+    
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
-        <defs>
-          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="var(--brand)" />
-            <stop offset="1" stop-color="var(--brand-2)" />
-          </linearGradient>
-        </defs>
-        <rect x="8" y="12" width="48" height="40" rx="12" fill="url(#g)"></rect>
-      </svg>
-      <span class="brand">StoreZ — Roles</span>
-      <span class="chip" id="protoChip" title="Best run over http://">Local</span>
-      <div class="row" style="margin-inline-start:auto">
-        <label class="sr-only" for="lang">Language</label>
-        <select id="lang" title="Language">
-          <option value="en" selected>English</option>
-          <option value="ar">العربية (السعودية)</option>
+  <!-- Background Animation -->
+  <div class="bg-animation" id="bgAnimation"></div>
+  
+  <div class="container">
+    <header class="animate-in">
+      <div class="brand-section">
+        <div class="logo">
+          <svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#16a085" />
+                <stop offset="1" stop-color="#00d4ff" />
+              </linearGradient>
+            </defs>
+            <rect x="8" y="12" width="48" height="40" rx="12" fill="url(#logoGradient)"></rect>
+            <circle cx="20" cy="24" r="3" fill="white" opacity="0.9"></circle>
+            <circle cx="44" cy="24" r="3" fill="white" opacity="0.9"></circle>
+            <path d="M24 36 Q32 42 40 36" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <div class="brand-text">StoreZ</div>
+        <div class="status-chip" id="statusChip">
+          <div style="width: 6px; height: 6px; border-radius: 50%; background: #00ff00;"></div>
+          <span>Local</span>
+        </div>
+      </div>
+      
+      <div class="controls">
+        <select id="lang" class="control-select" title="Language">
+          <option value="en">🇺🇸 English</option>
+          <option value="ar" selected>🇸🇦 العربية</option>
         </select>
-        <label class="sr-only" for="theme">Theme</label>
-        <select id="theme" title="Theme">
-          <option value="auto">Auto</option>
-          <option value="light">Light</option>
-          <option value="dark" selected>Dark</option>
+        <select id="theme" class="control-select" title="Theme">
+          <option value="auto">🌓 Auto</option>
+          <option value="light">☀️ Light</option>
+          <option value="dark" selected>🌙 Dark</option>
         </select>
       </div>
     </header>
 
-    <main class="panel">
-      <div class="row between">
-        <strong>Pick a role</strong>
-        <span class="muted">Each app lives in its own folder</span>
-      </div>
+    <main>
+      <section class="hero-section animate-in animate-delay-1">
+        <h1 class="hero-title">منصة التجارة الاجتماعية</h1>
+        <p class="hero-subtitle">
+          اكتشف مستقبل التجارة الاجتماعية مع منصتنا الشاملة التي تضم تجارب المشترين وأدوات البائعين وضوابط الإدارة في مكان واحد.
+        </p>
+        
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">3</span>
+            <span class="stat-label">تطبيقات</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">2</span>
+            <span class="stat-label">لغات</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">جاهز للجوال</span>
+          </div>
+        </div>
+      </section>
 
-      <div class="grid" style="margin-top:12px">
-        <!-- Buyer -->
-        <section class="card">
-          <div class="row between">
-            <strong>Buyer App</strong>
-            <span class="chip">/frontend/buyer</span>
+      <section class="roles-section animate-in animate-delay-2">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">اختر دورك</h2>
+            <p class="section-subtitle">كل تطبيق هو تجربة مستقلة ومتكاملة</p>
           </div>
-          <p class="muted">Mobile-first, social commerce browsing, cart, checkout, orders, messages, Arabic/English.</p>
-          <div class="actions">
-            <button class="btn" onclick="openApp('buyer')">Open Buyer</button>
-            <a class="btn ghost" href="./frontend/buyer/index.html" target="_blank" rel="noopener">Direct link</a>
-          </div>
-        </section>
+        </div>
 
-        <!-- Seller -->
-        <section class="card">
-          <div class="row between">
-            <strong>Seller Console</strong>
-            <span class="chip">/frontend/Seller</span>
+        <div class="roles-grid">
+          <!-- Buyer App -->
+          <div class="role-card buyer animate-in animate-delay-3">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">🛒 تجربة المشتري</h3>
+                <div class="card-path">📱 /frontend/buyer</div>
+              </div>
+            </div>
+            <p class="card-description">
+              منصة التجارة الاجتماعية المتقدمة للجوال مع التسوق الشخصي والخلاصات الاجتماعية والدفع السلس.
+            </p>
+            <ul class="card-features">
+              <li>خلاصة التجارة الاجتماعية مع المحتوى المُنشأ من المستخدمين</li>
+              <li>التوصيات المدعومة بالذكاء الاصطناعي</li>
+              <li>التسوق المباشر والبث المباشر</li>
+              <li>دعم متعدد اللغات (العربية/الإنجليزية)</li>
+              <li>بوابات الدفع السعودية</li>
+            </ul>
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="openApp('buyer')">
+                🚀 افتح تطبيق المشتري
+              </button>
+              <a class="btn btn-secondary" href="./frontend/buyer/index.html" target="_blank" rel="noopener">
+                🔗 رابط مباشر
+              </a>
+            </div>
           </div>
-          <p class="muted">Catalog, orders, live shopping, returns, analytics, AI add-ons, Arabic/English.</p>
-          <div class="actions">
-            <button class="btn" onclick="openApp('seller')">Open Seller</button>
-            <a class="btn ghost" href="./frontend/Seller/index.html" target="_blank" rel="noopener">Direct link</a>
-          </div>
-        </section>
 
-        <!-- Admin -->
-        <section class="card">
-          <div class="row between">
-            <strong>Admin Console</strong>
-            <span class="chip">/frontend/admin</span>
+          <!-- Seller Console -->
+          <div class="role-card seller animate-in animate-delay-3">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">📊 لوحة البائع</h3>
+                <div class="card-path">🏢 /frontend/Seller</div>
+              </div>
+            </div>
+            <p class="card-description">
+              لوحة تحكم شاملة للمنشئين والبائعين مع التحليلات وإدارة المخزون وأدوات التجارة المباشرة.
+            </p>
+            <ul class="card-features">
+              <li>إدارة كتالوج المنتجات</li>
+              <li>لوحة تحكم البث المباشر</li>
+              <li>تحليلات المبيعات والرؤى</li>
+              <li>أدوات اقتصاد المنشئين</li>
+              <li>إدارة الطلبات والمرتجعات</li>
+            </ul>
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="openApp('seller')">
+                💼 افتح لوحة البائع
+              </button>
+              <a class="btn btn-secondary" href="./frontend/Seller/index.html" target="_blank" rel="noopener">
+                🔗 رابط مباشر
+              </a>
+            </div>
           </div>
-          <p class="muted">Overview, moderation, platform orders, support, settings, feature flags, Arabic/English.</p>
-          <div class="actions">
-            <button class="btn" onclick="openApp('admin')">Open Admin</button>
-            <a class="btn ghost" href="./frontend/admin/index.html" target="_blank" rel="noopener">Direct link</a>
+
+          <!-- Admin Panel -->
+          <div class="role-card admin animate-in animate-delay-3">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">⚙️ لوحة الإدارة</h3>
+                <div class="card-path">🔧 /frontend/admin</div>
+              </div>
+            </div>
+            <p class="card-description">
+              إدارة المنصة مع إدارة المستخدمين ومراقبة المحتوى وتكوين النظام.
+            </p>
+            <ul class="card-features">
+              <li>نظرة عامة على المنصة والمقاييس</li>
+              <li>إدارة المستخدمين ومراقبة المحتوى</li>
+              <li>إعدادات النظام والتكوينات</li>
+              <li>إدارة تذاكر الدعم</li>
+              <li>ضوابط علامات الميزات</li>
+            </ul>
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="openApp('admin')">
+                🛡️ الوصول إلى لوحة الإدارة
+              </button>
+              <a class="btn btn-secondary" href="./frontend/admin/index.html" target="_blank" rel="noopener">
+                🔗 رابط مباشر
+              </a>
+            </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
-      <hr/>
-
-      <details class="warn">
-        <summary><strong>Having issues opening modules?</strong></summary>
-        <p class="muted">Run a local server so ES modules load correctly:</p>
-        <pre class="muted" aria-label="commands" style="white-space:pre-wrap">
-python -m http.server 5500   # then open http://localhost:5500/</pre>
+      <details class="help-section animate-in animate-delay-3">
+        <summary class="help-summary">
+          💡 هل تواجه مشكلة في تحميل الوحدات؟
+        </summary>
+        <div class="help-content">
+          <p>للحصول على أفضل تجربة، قم بتشغيل هذا المشروع على خادم HTTP محلي لضمان تحميل وحدات ES بشكل صحيح:</p>
+          <div class="help-code">
+            <div># استخدام Python</div>
+            <div>python -m http.server 8080</div>
+            <div><br></div>
+            <div># استخدام Node.js</div>
+            <div>npx http-server -p 8080</div>
+            <div><br></div>
+            <div># ثم افتح: http://localhost:8080</div>
+          </div>
+        </div>
       </details>
     </main>
 
-    <footer>
-      <span>&copy; StoreZ demo</span>
+    <footer class="animate-in animate-delay-3">
+      <p>&copy; 2025 StoreZ Demo — منصة التجارة الاجتماعية</p>
     </footer>
   </div>
 
   <script>
-    // Detect protocol for the chip
-    (function(){
-      const chip = document.getElementById('protoChip');
-      const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
-      chip.textContent = isHttp ? 'HTTP' : 'file://';
-      if (!isHttp) chip.classList.add('warn');
-    })();
-
-    // Apply theme on the landing page only
-    document.getElementById('theme').addEventListener('change', (e) => {
-      const v = e.target.value;
-      const applied = v === 'auto'
-        ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-        : v;
-      document.documentElement.setAttribute('data-theme', applied);
-      localStorage.setItem('storez_root_theme', v);
-    });
-    // Restore saved root theme
-    (function(){
-      const v = localStorage.getItem('storez_root_theme') || 'dark';
-      document.getElementById('theme').value = v;
-      const applied = v === 'auto'
-        ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-        : v;
-      document.documentElement.setAttribute('data-theme', applied);
-    })();
-
-    // Open role with language pre-set in its app storage
-    function openApp(role){
-      const lang = document.getElementById('lang').value || 'en';
-      try {
-        if (role === 'buyer') {
-          localStorage.setItem('storez_lang', lang); // buyer i18n key
-          window.open('./frontend/buyer/index.html', '_blank', 'noopener');
-        } else if (role === 'seller') {
-          localStorage.setItem('storez_seller_lang', lang); // seller i18n key
-          window.open('./frontend/Seller/index.html', '_blank', 'noopener');
-        } else if (role === 'admin') {
-          localStorage.setItem('storez_admin_lang', lang); // admin i18n key
-          window.open('./frontend/admin/index.html', '_blank', 'noopener');
-        }
-      } catch (e) {
-        alert('Could not open window. Please allow popups for this site.');
+    // Background animation particles
+    function createParticles() {
+      const container = document.getElementById('bgAnimation');
+      const particleCount = 20;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        container.appendChild(particle);
       }
+    }
+
+    // Protocol detection for status chip
+    function updateStatusChip() {
+      const chip = document.getElementById('statusChip');
+      const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
+      const statusText = chip.querySelector('span');
+      const statusDot = chip.querySelector('div');
+      
+      if (isHttp) {
+        statusText.textContent = 'HTTP Server';
+        statusDot.style.background = '#00ff00';
+        chip.style.borderColor = 'var(--brand)';
+      } else {
+        statusText.textContent = 'File System';
+        statusDot.style.background = '#ff9500';
+        chip.style.borderColor = '#b96b00';
+      }
+    }
+
+    // Theme management
+    function initTheme() {
+      const themeSelect = document.getElementById('theme');
+      const savedTheme = localStorage.getItem('storez_root_theme') || 'dark';
+      
+      themeSelect.value = savedTheme;
+      applyTheme(savedTheme);
+      
+      themeSelect.addEventListener('change', (e) => {
+        const theme = e.target.value;
+        applyTheme(theme);
+        localStorage.setItem('storez_root_theme', theme);
+      });
+    }
+
+    function applyTheme(theme) {
+      const applied = theme === 'auto'
+        ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : theme;
+      document.documentElement.setAttribute('data-theme', applied);
+    }
+
+    // Language management
+    function initLanguage() {
+      const langSelect = document.getElementById('lang');
+      const savedLang = localStorage.getItem('storez_root_lang') || 'ar';
+      
+      langSelect.value = savedLang;
+      
+      langSelect.addEventListener('change', (e) => {
+        const lang = e.target.value;
+        localStorage.setItem('storez_root_lang', lang);
+        
+        // Update document direction for RTL
+        if (lang === 'ar') {
+          document.documentElement.setAttribute('dir', 'rtl');
+          document.documentElement.setAttribute('lang', 'ar');
+        } else {
+          document.documentElement.setAttribute('dir', 'ltr');
+          document.documentElement.setAttribute('lang', 'en');
+        }
+      });
+    }
+
+    // Enhanced app opening with better error handling
+    function openApp(role) {
+      const lang = document.getElementById('lang').value || 'ar';
+      const urls = {
+        buyer: './frontend/buyer/index.html',
+        seller: './frontend/Seller/index.html', 
+        admin: './frontend/admin/index.html'
+      };
+      
+      const storageKeys = {
+        buyer: 'storez_lang',
+        seller: 'storez_seller_lang',
+        admin: 'storez_admin_lang'
+      };
+      
+      try {
+        // Set language preference for the specific app
+        localStorage.setItem(storageKeys[role], lang);
+        
+        // Open the app in a new tab
+        const newWindow = window.open(urls[role], '_blank', 'noopener,noreferrer');
+        
+        if (!newWindow) {
+          // Fallback if popup was blocked
+          showAppLaunchModal(role, urls[role]);
+        } else {
+          // Add visual feedback
+          showLaunchFeedback(role);
+        }
+      } catch (error) {
+        console.error('Error opening app:', error);
+        showAppLaunchModal(role, urls[role]);
+      }
+    }
+
+    // Show launch feedback
+    function showLaunchFeedback(role) {
+      const card = document.querySelector(`.role-card.${role}`);
+      if (card) {
+        card.style.transform = 'scale(0.98)';
+        card.style.opacity = '0.8';
+        
+        setTimeout(() => {
+          card.style.transform = '';
+          card.style.opacity = '';
+        }, 200);
+      }
+    }
+
+    // Fallback modal for blocked popups
+    function showAppLaunchModal(role, url) {
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+      `;
+      
+      modal.innerHTML = `
+        <div style="
+          background: var(--panel);
+          border: 1px solid var(--border);
+          border-radius: 20px;
+          padding: 30px;
+          max-width: 400px;
+          text-align: center;
+          box-shadow: var(--shadow-lg);
+        ">
+          <h3 style="margin-bottom: 16px; color: var(--brand);">🚀 Launch ${role.charAt(0).toUpperCase() + role.slice(1)} App</h3>
+          <p style="margin-bottom: 24px; color: var(--muted);">
+            Please allow popups for this site, or click the link below to open the app manually.
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center;">
+            <a href="${url}" target="_blank" rel="noopener" class="btn btn-primary" onclick="this.parentElement.parentElement.parentElement.remove()">
+              Open ${role.charAt(0).toUpperCase() + role.slice(1)} App
+            </a>
+            <button class="btn btn-secondary" onclick="this.parentElement.parentElement.parentElement.remove()">
+              Cancel
+            </button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      // Remove modal when clicking outside
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+    }
+
+    // Animate elements on scroll
+    function initScrollAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.animate-in').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+      });
+    }
+
+    // Keyboard shortcuts
+    function initKeyboardShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey || e.metaKey) {
+          switch(e.key) {
+            case '1':
+              e.preventDefault();
+              openApp('buyer');
+              break;
+            case '2':
+              e.preventDefault();
+              openApp('seller');
+              break;
+            case '3':
+              e.preventDefault();
+              openApp('admin');
+              break;
+          }
+        }
+      });
+    }
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+      updateStatusChip();
+      initTheme();
+      initLanguage();
+      initScrollAnimations();
+      initKeyboardShortcuts();
+      
+      // Add loading animation delay for staggered effect
+      document.querySelectorAll('.animate-in').forEach((el, index) => {
+        el.style.animationDelay = (index * 0.1) + 's';
+      });
+      
+      // Add tooltips for keyboard shortcuts
+      document.querySelector('.role-card.buyer').title = 'Keyboard shortcut: Ctrl/Cmd + 1';
+      document.querySelector('.role-card.seller').title = 'Keyboard shortcut: Ctrl/Cmd + 2';
+      document.querySelector('.role-card.admin').title = 'Keyboard shortcut: Ctrl/Cmd + 3';
+    });
+
+    // Handle window resize for responsive animations
+    window.addEventListener('resize', () => {
+      // Recalculate particle positions if needed
+      if (window.innerWidth < 768) {
+        document.querySelector('.bg-animation').style.display = 'none';
+      } else {
+        document.querySelector('.bg-animation').style.display = 'block';
+      }
+    });
+
+    // Auto dark/light mode detection
+    if (window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      mediaQuery.addEventListener('change', () => {
+        const currentTheme = document.getElementById('theme').value;
+        if (currentTheme === 'auto') {
+          applyTheme('auto');
+        }
+      });
     }
   </script>
 </body>

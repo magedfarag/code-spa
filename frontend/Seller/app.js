@@ -310,7 +310,7 @@ function setLang(lang) {
   localStorage.setItem(LANG_KEY, L);
   return L;
 }
-function getLang() { return localStorage.getItem(LANG_KEY) || "en"; }
+function getLang() { return localStorage.getItem(LANG_KEY) || "ar"; }
 function getLocale() { return getLang() === "ar" ? "ar-SA" : "en"; }
 function t(k) { const L = getLang(); return (DICT[L][k] ?? DICT.en[k] ?? k); }
 

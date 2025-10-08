@@ -5,6 +5,7 @@
 */
 import { uns, state, actions, productById, creatorById, cartTotal, getProductField } from "./data.js";
 import { t, tn, getLang, formatTimeAgo, fmtSAR } from "./i18n.js";
+import { aiEngine } from "./ai.js";
 
 /* ---------- tiny DOM helpers ---------- */
 const h = (html) => html.trim();
@@ -447,6 +448,152 @@ const fmt = (n) => new Intl.NumberFormat(
 
 const creatorName = (cid) => (creatorById(cid)?.name || "Creator");
 
+/* ---------- AI-Enhanced UI Components ---------- */
+
+function CardWithAI(p) {
+  const discount = p.listPrice ? `<span class="strike">${fmt(p.listPrice)}</span>` : "";
+  const saved = state.wishlist.includes(p.id);
+  const liked = state.user.likedProducts && state.user.likedProducts.includes(p.id);
+  const productName = getProductField(p, 'name');
+  const productCat = getProductField(p, 'cat');
+  
+  // AI recommendation reason
+  const aiReason = p.reason || "";
+  const aiScore = p.aiScore ? Math.round(p.aiScore) : 0;
+  const isTrending = p.trending || false;
+  
+  return h(`
+  <article class="card" aria-label="${productName}" data-ai-score="${aiScore}">
+    <a class="media" href="#/pdp/${p.id}" aria-label="${productName}" 
+       onclick="window.__trackAIClick && window.__trackAIClick('${p.id}', 'product', '${aiReason}')">
+      <img src="${uns(p.img, 900)}" alt="${productName}" />
+      ${isTrending ? `
+        <div class="badge trending" style="position:absolute; top:8px; right:8px; background:var(--brand-2); color:white; padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">
+          🔥 ${t("trending")}
+        </div>
+      ` : ''}
+      ${aiReason ? `
+        <div class="ai-reason" style="position:absolute; bottom:8px; left:8px; background:rgba(0,0,0,0.8); color:white; padding:4px 8px; border-radius:12px; font-size:10px;">
+          🤖 ${aiReason}
+        </div>
+      ` : ''}
+    </a>
+    <div class="body">
+      <div class="row between">
+        <a href="#/pdp/${p.id}" onclick="window.__trackAIClick && window.__trackAIClick('${p.id}', 'product', '${aiReason}')">
+          <strong>${productName}</strong>
+        </a>
+        <button class="icon-btn ${saved ? "active" : ""}" data-action="toggle-wish" data-id="${p.id}" aria-pressed="${saved}" title="${saved ? t("unsave_item") : t("save_item")}">${saved ? "♥" : "♡"}</button>
+      </div>
+      <div class="row between">
+        <div class="row" style="gap:6px">
+          <span class="price">${fmt(p.price)}</span>
+          ${discount}
+        </div>
+        <button class="chip" onclick="window.__trackCategoryClick('${productCat}'); window.StoreZ.navigate('#/category/${encodeURIComponent(productCat)}')" title="Browse ${productCat}">${productCat}</button>
+      </div>
+      <div class="muted">${t("by_creator")} <a href="#/creator/${p.creatorId}" style="color:var(--brand)">${creatorName(p.creatorId)}</a> · ${stars(p.rating)}</div>
+      
+      <!-- Social actions -->
+      <div class="row between" style="margin-top:8px; font-size:12px">
+        <div class="row" style="gap:8px">
+          <button class="ghost small ${liked ? "active" : ""}" data-action="toggle-like" data-id="${p.id}" 
+                  style="display:flex;align-items:center;gap:4px;padding:4px 8px">
+            ${liked ? "👍" : "👍"} ${t("like")}
+          </button>
+          <button class="ghost small" data-action="share-product" data-id="${p.id}"
+                  style="display:flex;align-items:center;gap:4px;padding:4px 8px">
+            📤 ${t("share")}
+          </button>
+        </div>
+        <span class="muted">${Math.floor(Math.random() * 50) + 10} ${t("likes")}</span>
+      </div>
+      
+      <div class="row" style="gap:8px; margin-top:8px">
+        <button class="secondary" data-action="add-to-cart" data-id="${p.id}">${t("add_to_cart")}</button>
+        <button class="ghost" data-action="buy-now" data-id="${p.id}">${t("buy_now")}</button>
+      </div>
+    </div>
+  </article>`);
+}
+
+function CardSmall(p, showTrending = false) {
+  const productName = getProductField(p, 'name');
+  const isTrending = p.trending || showTrending;
+  
+  return h(`
+  <article class="card-small" style="text-align:center; padding:8px; border-radius:12px; background:var(--panel)">
+    <a href="#/pdp/${p.id}" onclick="window.__trackAIClick && window.__trackAIClick('${p.id}', 'trending', 'trending_section')" style="text-decoration:none">
+      <div style="position:relative; margin-bottom:8px">
+        <img src="${uns(p.img, 400)}" alt="${productName}" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px"/>
+        ${isTrending ? `
+          <div style="position:absolute; top:4px; right:4px; background:var(--brand-2); color:white; padding:2px 4px; border-radius:6px; font-size:9px; font-weight:bold;">
+            🔥
+          </div>
+        ` : ''}
+      </div>
+      <div style="font-size:12px; font-weight:bold; margin-bottom:4px; line-height:1.2">${productName}</div>
+      <div style="color:var(--brand); font-weight:bold; font-size:14px">${fmt(p.price)}</div>
+    </a>
+  </article>`);
+}
+
+function CreatorCard(creator) {
+  return h(`
+  <article class="card creator-card" style="border:2px solid var(--brand-2); background:linear-gradient(135deg, var(--panel), var(--bg))">
+    <div style="text-align:center; padding:16px">
+      <a href="#/creator/${creator.id}" onclick="window.__trackAIClick && window.__trackAIClick('${creator.id}', 'creator', 'ai_recommended')" style="text-decoration:none">
+        <div style="position:relative; display:inline-block; margin-bottom:12px">
+          <img src="https://images.unsplash.com/photo-${creator.id === 'c1' ? '1494790108755-2616b612b9e3' : creator.id === 'c2' ? '1507003211169-0a1dd7228f2d' : '1438761681033-6461ffad8d80'}?auto=format&fit=crop&w=120&q=70" 
+               alt="${creator.name}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:3px solid var(--brand-2)"/>
+          ${creator.live ? `
+            <div style="position:absolute; bottom:0; right:0; width:18px; height:18px; background:var(--danger); border:2px solid white; border-radius:50%; display:flex; align-items:center; justify-content:center">
+              <div style="width:6px; height:6px; background:white; border-radius:50%"></div>
+            </div>
+          ` : ''}
+        </div>
+        <div style="font-weight:bold; margin-bottom:4px">${creator.name}</div>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:8px">${creator.handle}</div>
+        <div style="font-size:11px; color:var(--muted); margin-bottom:8px">${(creator.followers / 1000).toFixed(0)}K ${t("followers")}</div>
+        <div style="font-size:10px; background:var(--brand-2); color:white; padding:2px 6px; border-radius:8px; display:inline-block">
+          🤖 ${t("ai_recommended")}
+        </div>
+        ${creator.live ? `
+          <div style="margin-top:8px">
+            <span style="background:var(--danger); color:white; padding:2px 6px; border-radius:6px; font-size:10px; font-weight:bold">
+              🔴 ${t("live_now")}
+            </span>
+          </div>
+        ` : ''}
+      </a>
+    </div>
+  </article>`);
+}
+
+function renderAIInsights() {
+  const insights = aiEngine.getUserInsights();
+  
+  // Only show if user has some interaction history
+  if (insights.activityStats.totalViews < 5) return '';
+  
+  const topCategory = insights.topCategories[0];
+  const sessionCount = insights.activityStats.sessionCount;
+  
+  return `
+    <div style="margin-top:24px; padding:16px; background:linear-gradient(135deg, var(--brand-2), var(--brand)); border-radius:12px; color:white">
+      <div class="row between" style="margin-bottom:8px">
+        <strong>🤖 ${t("ai_insights")}</strong>
+        <button class="ghost small" onclick="window.__showFullInsights && window.__showFullInsights()" style="color:white; border-color:rgba(255,255,255,0.3)">
+          ${t("view_all")}
+        </button>
+      </div>
+      <div style="font-size:14px; opacity:0.9">
+        ${topCategory ? t("top_category_insight", { category: topCategory.category, sessions: sessionCount }) : t("getting_to_know_you")}
+      </div>
+    </div>
+  `;
+}
+
 /* ---------- route handlers ---------- */
 
 function landing(ctx) {
@@ -731,10 +878,17 @@ function onboarding(ctx) {
 }
 
 function home(ctx) {
-  const feed = state.products.slice(0, 6);
+  // Get AI-powered personalized recommendations
+  const personalizedFeed = aiEngine.getPersonalizedRecommendations(state.products, state.creators, 12);
+  const trendingProducts = aiEngine.getTrendingProducts(state.products, 6);
   const categories = [...new Set(state.products.map(p => getProductField(p, 'cat')))];
-  state.metrics.impressions += feed.length;
+  
+  // Track page view for AI
+  aiEngine.trackView('home', 'page', { timestamp: Date.now() });
+  
+  state.metrics.impressions += personalizedFeed.length;
   ctx.refresh();
+  
   ctx.el.innerHTML = h(`
     <section class="panel">
       <!-- Quick category access -->
@@ -745,21 +899,51 @@ function home(ctx) {
         </div>
         <div class="row" style="gap:8px; flex-wrap:wrap">
           ${categories.map(cat => `
-            <button class="chip" onclick="window.StoreZ.navigate('#/category/${encodeURIComponent(cat)}')">
+            <button class="chip" onclick="window.__trackCategoryClick('${cat}'); window.StoreZ.navigate('#/category/${encodeURIComponent(cat)}')">
               ${cat}
             </button>
           `).join("")}
         </div>
       </div>
       
-      <!-- For you feed -->
-      <div class="row between">
+      <!-- Trending section -->
+      ${trendingProducts.length > 0 ? `
+        <div style="margin-bottom:24px">
+          <div class="row between" style="margin-bottom:8px">
+            <strong>${t("trending")} ✨</strong>
+            <span class="chip" style="background:var(--brand-2); color:white; font-size:11px">
+              ${t("ai_curated")}
+            </span>
+          </div>
+          <div class="grid cards" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px">
+            ${trendingProducts.map(product => CardSmall(product, true)).join("")}
+          </div>
+        </div>
+      ` : ''}
+      
+      <!-- Personalized For You feed -->
+      <div class="row between" style="margin-bottom:8px">
         <strong>${t("for_you")}</strong>
-        <a class="chip" href="#/discover">${t("explore_more")}</a>
+        <div class="row" style="gap:8px; align-items:center">
+          <span class="chip" style="background:var(--good); color:white; font-size:11px">
+            🤖 ${t("ai_powered")}
+          </span>
+          <a class="chip" href="#/discover">${t("explore_more")}</a>
+        </div>
       </div>
+      
       <div class="grid cards" style="margin-top:12px">
-        ${feed.map(Card).join("")}
+        ${personalizedFeed.map(item => {
+          if (item.type === 'creator') {
+            return CreatorCard(item);
+          } else {
+            return CardWithAI(item);
+          }
+        }).join("")}
       </div>
+      
+      <!-- AI Insights (if user has interaction history) -->
+      ${renderAIInsights()}
     </section>
   `);
 }
@@ -803,22 +987,109 @@ function discover(ctx) {
   const categories = [...new Set(state.products.map(p => getProductField(p, 'cat')))];
   const creators = state.creators;
   const trendingTags = ["#trending", "#newdrop", "#sustainable", "#limited", "#popular"];
-  const list = state.products.slice();
+  
+  // Get AI-powered search suggestions and trending searches
+  const aiSearchData = aiEngine.getSearchSuggestions();
+  const trendingSearches = aiSearchData.trending.slice(0, 5);
+  const personalizedSuggestions = aiSearchData.personalized.slice(0, 3);
+  
+  // Get initial results with AI personalization
+  const baseProducts = state.products.slice();
+  const personalizedProducts = aiEngine.getPersonalizedRecommendations().slice(0, 8);
+  const list = personalizedProducts.length > 0 ? personalizedProducts : baseProducts;
   
   ctx.el.innerHTML = h(`
     <section class="panel">
-      <!-- Search with filters -->
-      <div class="row" style="gap:8px; margin-bottom:16px">
-        <input id="q" placeholder="${t("discover_ph")}" style="flex:1" 
-               oninput="window.__discoverSearch && window.__discoverSearch(this.value)" />
-        <button class="secondary small" onclick="window.__toggleFilters && window.__toggleFilters()">
-          ${t("filters")}
-        </button>
+      <!-- Enhanced Search with AI -->
+      <div class="search-container" style="margin-bottom:16px">
+        <div class="row" style="gap:8px">
+          <div style="flex:1; position:relative">
+            <input id="q" placeholder="${t("discover_ph")}" style="width:100%; padding-right:40px" 
+                   oninput="window.__aiSearchInput && window.__aiSearchInput(this.value)"
+                   onfocus="window.__showSearchSuggestions && window.__showSearchSuggestions()"
+                   onblur="window.__hideSearchSuggestions && window.__hideSearchSuggestions()" />
+            <button onclick="window.__clearSearch && window.__clearSearch()" 
+                    style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted)">
+              ✕
+            </button>
+            
+            <!-- AI Search Suggestions Dropdown -->
+            <div id="searchSuggestions" class="search-suggestions" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--panel); border:1px solid var(--border); border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); z-index:100; max-height:300px; overflow-y:auto">
+              
+              ${personalizedSuggestions.length > 0 ? `
+                <div class="suggestion-section">
+                  <div class="suggestion-header">${t("suggested_for_you")} 🤖</div>
+                  ${personalizedSuggestions.map(term => `
+                    <div class="suggestion-item" onclick="window.__selectSuggestion && window.__selectSuggestion('${term}')">
+                      <span class="suggestion-icon">🔍</span>
+                      <span class="suggestion-text">${term}</span>
+                      <span class="suggestion-type">AI</span>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+              
+              ${trendingSearches.length > 0 ? `
+                <div class="suggestion-section">
+                  <div class="suggestion-header">${t("trending_searches")} 📈</div>
+                  ${trendingSearches.map(term => `
+                    <div class="suggestion-item" onclick="window.__selectSuggestion && window.__selectSuggestion('${term}')">
+                      <span class="suggestion-icon">🔥</span>
+                      <span class="suggestion-text">${term}</span>
+                      <span class="suggestion-type">${t("trending")}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+              
+              <div class="suggestion-section">
+                <div class="suggestion-header">${t("browse_categories")}</div>
+                ${categories.slice(0, 4).map(cat => `
+                  <div class="suggestion-item" onclick="window.__selectCategory && window.__selectCategory('${cat}')">
+                    <span class="suggestion-icon">📂</span>
+                    <span class="suggestion-text">${cat}</span>
+                    <span class="suggestion-type">${t("category")}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+          
+          <button class="secondary small" onclick="window.__toggleFilters && window.__toggleFilters()">
+            ${t("filters")}
+          </button>
+          <button class="brand small" onclick="window.__showAISearchInsights && window.__showAISearchInsights()" title="${t("ai_search_insights")}">
+            🤖 AI
+          </button>
+        </div>
+        
+        <!-- Recent searches -->
+        <div id="recentSearches" class="recent-searches" style="margin-top:8px; display:none">
+          <div class="row" style="gap:6px; flex-wrap:wrap; align-items:center">
+            <span class="muted small">${t("recent")}:</span>
+            ${aiSearchData.recent.slice(0, 4).map(term => `
+              <button class="chip mini" onclick="window.__selectSuggestion && window.__selectSuggestion('${term}')">
+                ${term}
+              </button>
+            `).join('')}
+          </div>
+        </div>
       </div>
       
-      <!-- Trending tags -->
+      <!-- AI Search Results Summary -->
+      <div id="aiSearchSummary" style="display:none; background:linear-gradient(135deg, var(--brand-2), var(--brand)); color:white; padding:12px; border-radius:8px; margin-bottom:16px">
+        <div class="row between" style="align-items:center">
+          <div>
+            <div style="font-weight:500; margin-bottom:4px">${t("ai_enhanced_results")} 🤖</div>
+            <div class="small" id="aiSummaryText"></div>
+          </div>
+          <button onclick="this.parentElement.parentElement.style.display='none'" style="background:rgba(255,255,255,0.2); border:none; color:white; border-radius:4px; padding:4px 8px">✕</button>
+        </div>
+      </div>
+      
+      <!-- Smart trending tags with AI -->
       <div style="margin-bottom:16px">
-        <h3 style="margin-bottom:8px">${t("trending_now")}</h3>
+        <h3 style="margin-bottom:8px">${t("trending_now")} 🔥</h3>
         <div class="row" style="gap:8px; flex-wrap:wrap">
           ${trendingTags.map(tag => `
             <button class="chip" onclick="window.__searchTag && window.__searchTag('${tag.slice(1)}')" 
@@ -826,31 +1097,60 @@ function discover(ctx) {
               ${tag}
             </button>
           `).join("")}
-        </div>
-      </div>
-      
-      <!-- Quick category access -->
-      <div style="margin-bottom:16px">
-        <h3 style="margin-bottom:8px">${t("browse_categories")}</h3>
-        <div class="row" style="gap:8px; flex-wrap:wrap">
-          ${categories.map(cat => `
-            <button class="chip" onclick="window.StoreZ.navigate('#/category/${encodeURIComponent(cat)}')">
-              ${cat}
+          
+          <!-- AI recommended tags -->
+          ${aiSearchData.recommendedTags.slice(0, 3).map(tag => `
+            <button class="chip" onclick="window.__searchTag && window.__searchTag('${tag}')" 
+                    style="background:linear-gradient(45deg, var(--brand), var(--brand-2)); color:white; position:relative">
+              ${tag}
+              <span style="position:absolute; top:-4px; right:-4px; background:gold; color:black; border-radius:50%; width:16px; height:16px; font-size:10px; display:flex; align-items:center; justify-content:center">AI</span>
             </button>
           `).join("")}
         </div>
       </div>
       
-      <!-- Filter panel (hidden by default) -->
+      <!-- Enhanced category access with AI insights -->
+      <div style="margin-bottom:16px">
+        <h3 style="margin-bottom:8px">${t("browse_categories")}</h3>
+        <div class="row" style="gap:8px; flex-wrap:wrap">
+          ${categories.map(cat => {
+            const isPersonalized = aiEngine.getCategoryScore(cat) > 0.3;
+            return `
+              <button class="chip ${isPersonalized ? 'ai-recommended' : ''}" 
+                      onclick="window.__trackCategoryClick('${cat}'); window.StoreZ.navigate('#/category/${encodeURIComponent(cat)}')"
+                      style="${isPersonalized ? 'background:linear-gradient(45deg, var(--brand-3), var(--brand-2)); color:white' : ''}">
+                ${cat}
+                ${isPersonalized ? ' ⭐' : ''}
+              </button>
+            `;
+          }).join("")}
+        </div>
+      </div>
+      
+      <!-- Filter panel (hidden by default) with AI enhancements -->
       <div id="filterPanel" class="panel" style="display:none; margin-bottom:16px; background:var(--panel);">
-        <h4>${t("filters")}</h4>
+        <div class="row between" style="align-items:center; margin-bottom:12px">
+          <h4>${t("filters")}</h4>
+          <button class="ghost small" onclick="window.__getAIFilterSuggestions && window.__getAIFilterSuggestions()" style="color:var(--brand)">
+            🤖 ${t("ai_suggestions")}
+          </button>
+        </div>
         
-        <!-- Price range -->
+        <!-- AI filter insights -->
+        <div id="aiFilterInsights" style="display:none; background:var(--brand-3); padding:8px; border-radius:6px; margin-bottom:12px; font-size:14px">
+          <div style="font-weight:500; margin-bottom:4px">💡 ${t("ai_filter_suggestion")}</div>
+          <div id="aiFilterText"></div>
+        </div>
+        
+        <!-- Price range with AI suggestions -->
         <div class="row between" style="margin-bottom:12px">
           <span>${t("price_range")}</span>
-          <div class="row" style="gap:8px">
+          <div class="row" style="gap:8px; align-items:center">
             <input type="number" id="minPrice" placeholder="Min" style="width:80px" />
             <input type="number" id="maxPrice" placeholder="Max" style="width:80px" />
+            <button class="ghost tiny" onclick="window.__setAIRecommendedPriceRange && window.__setAIRecommendedPriceRange()" title="${t("ai_price_suggestion")}">
+              🤖
+            </button>
           </div>
         </div>
         
@@ -868,24 +1168,29 @@ function discover(ctx) {
         <div style="margin-bottom:12px">
           <span>${t("creator")}</span>
           <div class="row" style="gap:8px; flex-wrap:wrap; margin-top:8px">
-            ${creators.map(c => `
-              <label class="chip">
-                <input type="checkbox" data-creator="${c.id}" style="margin-inline-end:6px">
-                ${c.name}
-              </label>
-            `).join("")}
+            ${creators.map(c => {
+              const isRecommended = aiEngine.getCreatorScore(c.id) > 0.3;
+              return `
+                <label class="chip ${isRecommended ? 'ai-recommended' : ''}" style="${isRecommended ? 'background:linear-gradient(45deg, var(--brand-3), var(--brand-2)); color:white' : ''}">
+                  <input type="checkbox" data-creator="${c.id}" style="margin-inline-end:6px">
+                  ${c.name} ${isRecommended ? '⭐' : ''}
+                </label>
+              `;
+            }).join("")}
           </div>
         </div>
         
-        <!-- Sort options -->
+        <!-- Sort options with AI -->
         <div class="row between" style="margin-bottom:12px">
           <span>${t("sort_by")}</span>
           <select id="sortBy">
+            <option value="ai_personalized">${t("ai_personalized")} 🤖</option>
             <option value="relevance">${t("relevance")}</option>
             <option value="price_low">${t("price_low_high")}</option>
             <option value="price_high">${t("price_high_low")}</option>
             <option value="rating">${t("highest_rated")}</option>
             <option value="newest">${t("newest")}</option>
+            <option value="trending">${t("trending")} 🔥</option>
           </select>
         </div>
         
@@ -903,32 +1208,48 @@ function discover(ctx) {
         ${tn("results_count",{n:list.length})}
       </div>
       <div id="discoverResults" class="grid cards">
-        ${list.map(Card).join("")}
+        ${list.map(p => CardWithAI(p, aiEngine.getRecommendationReason(p.id))).join("")}
       </div>
     </section>
   `);
   
-  // Enhanced discover functionality
+  // Enhanced discover functionality with AI
   let currentFilters = {
     query: "",
     minPrice: null,
     maxPrice: null,
     rating: null,
     creators: [],
-    sortBy: "relevance"
+    sortBy: "ai_personalized"
   };
+  
+  let searchTimeout;
+  let isShowingSuggestions = false;
   
   function filterAndSortProducts() {
     let results = state.products.slice();
     
-    // Text search
+    // AI-Enhanced Text search
     if (currentFilters.query) {
       const query = currentFilters.query.toLowerCase();
+      
+      // Track search
+      aiEngine.trackSearch(query);
+      
+      // Basic text matching
       results = results.filter(p => 
         getProductField(p, 'name').toLowerCase().includes(query) ||
         getProductField(p, 'cat').toLowerCase().includes(query) ||
-        creatorName(p.creatorId).toLowerCase().includes(query)
+        creatorName(p.creatorId).toLowerCase().includes(query) ||
+        (p.tags && p.tags.some(tag => tag.toLowerCase().includes(query)))
       );
+      
+      // AI semantic search boost
+      if (results.length === 0 && query.length > 3) {
+        // If no direct matches, try AI-powered semantic search
+        const semanticResults = aiEngine.getSemanticSearchResults(query);
+        results = semanticResults.slice(0, 10);
+      }
     }
     
     // Price range
@@ -949,8 +1270,12 @@ function discover(ctx) {
       results = results.filter(p => currentFilters.creators.includes(p.creatorId));
     }
     
-    // Sort
+    // AI-Enhanced Sort
     switch (currentFilters.sortBy) {
+      case "ai_personalized":
+        // AI-powered personalized ranking
+        results = aiEngine.rankSearchResults(results, currentFilters.query);
+        break;
       case "price_low":
         results.sort((a, b) => a.price - b.price);
         break;
@@ -963,6 +1288,10 @@ function discover(ctx) {
       case "newest":
         results.reverse(); // Assuming products array is in chronological order
         break;
+      case "trending":
+        // AI-powered trending score
+        results.sort((a, b) => aiEngine.getTrendingScore(b.id) - aiEngine.getTrendingScore(a.id));
+        break;
       default: // relevance - keep original order
         break;
     }
@@ -974,20 +1303,150 @@ function discover(ctx) {
     const results = filterAndSortProducts();
     const host = document.getElementById("discoverResults");
     const rc = document.getElementById("resCount");
+    const aiSummary = document.getElementById("aiSearchSummary");
+    const aiSummaryText = document.getElementById("aiSummaryText");
     
     if (host) {
       host.innerHTML = results.length ? 
-        results.map(Card).join("") : 
+        results.map(p => CardWithAI(p, aiEngine.getRecommendationReason(p.id))).join("") : 
         `<div class="panel center muted">${t("no_products_found")}</div>`;
     }
     if (rc) {
       rc.textContent = tn("results_count", { n: results.length });
     }
+    
+    // Show AI insights for search results
+    if (currentFilters.query && results.length > 0 && aiSummary && aiSummaryText) {
+      const insights = aiEngine.getSearchInsights(currentFilters.query, results);
+      aiSummaryText.textContent = insights;
+      aiSummary.style.display = 'block';
+    } else if (aiSummary) {
+      aiSummary.style.display = 'none';
+    }
   }
   
+  // Enhanced AI-powered search functions
+  window.__aiSearchInput = (term) => {
+    clearTimeout(searchTimeout);
+    
+    const recentSearches = document.getElementById("recentSearches");
+    if (recentSearches && term.length === 0) {
+      recentSearches.style.display = 'block';
+    } else if (recentSearches) {
+      recentSearches.style.display = 'none';
+    }
+    
+    searchTimeout = setTimeout(() => {
+      currentFilters.query = term || "";
+      updateResults();
+      
+      // Auto-show suggestions for certain queries
+      if (term.length >= 2) {
+        window.__showSearchSuggestions();
+      }
+    }, 300);
+  };
+
   window.__discoverSearch = (term) => {
     currentFilters.query = term || "";
     updateResults();
+  };
+
+  window.__selectSuggestion = (term) => {
+    const searchInput = document.getElementById("q");
+    if (searchInput) {
+      searchInput.value = term;
+      currentFilters.query = term;
+      aiEngine.trackSearch(term);
+      updateResults();
+      window.__hideSearchSuggestions();
+    }
+  };
+  
+  window.__selectCategory = (category) => {
+    window.__trackCategoryClick(category);
+    window.StoreZ.navigate(`#/category/${encodeURIComponent(category)}`);
+    window.__hideSearchSuggestions();
+  };
+  
+  window.__showSearchSuggestions = () => {
+    const suggestions = document.getElementById("searchSuggestions");
+    if (suggestions && !isShowingSuggestions) {
+      isShowingSuggestions = true;
+      suggestions.style.display = 'block';
+      
+      // Hide after 5 seconds of inactivity
+      setTimeout(() => {
+        if (isShowingSuggestions) window.__hideSearchSuggestions();
+      }, 5000);
+    }
+  };
+  
+  window.__hideSearchSuggestions = () => {
+    setTimeout(() => {
+      const suggestions = document.getElementById("searchSuggestions");
+      if (suggestions) {
+        suggestions.style.display = 'none';
+        isShowingSuggestions = false;
+      }
+    }, 150); // Small delay to allow clicks
+  };
+  
+  window.__clearSearch = () => {
+    const searchInput = document.getElementById("q");
+    if (searchInput) {
+      searchInput.value = '';
+      currentFilters.query = '';
+      updateResults();
+      window.__hideSearchSuggestions();
+    }
+  };
+  
+  window.__showAISearchInsights = () => {
+    const searchData = aiEngine.getSearchAnalytics();
+    const insights = `
+      <div style="padding:20px">
+        <h2>🔍 ${t("search_insights")}</h2>
+        
+        <div style="margin:16px 0">
+          <h4>${t("your_search_patterns")}</h4>
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:8px">
+            <div style="text-align:center; padding:12px; background:var(--bg-2); border-radius:6px">
+              <div style="font-size:24px; font-weight:bold; color:var(--brand)">${searchData.totalSearches}</div>
+              <div class="muted small">${t("total_searches")}</div>
+            </div>
+            <div style="text-align:center; padding:12px; background:var(--bg-2); border-radius:6px">
+              <div style="font-size:24px; font-weight:bold; color:var(--brand-2)">${searchData.avgResultClicks}</div>
+              <div class="muted small">${t("avg_clicks_per_search")}</div>
+            </div>
+          </div>
+        </div>
+        
+        <div style="margin:16px 0">
+          <h4>${t("top_search_terms")}</h4>
+          ${searchData.topSearches.map(search => `
+            <div class="row between" style="margin:4px 0; padding:8px; background:var(--bg-2); border-radius:6px">
+              <span>${search.term}</span>
+              <span class="chip">${search.count} ${t("searches")}</span>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div style="margin:16px 0">
+          <h4>${t("search_recommendations")}</h4>
+          <div class="row" style="gap:8px; flex-wrap:wrap">
+            ${aiEngine.getSearchSuggestions().personalized.slice(0, 6).map(term => `
+              <button class="chip" onclick="window.__selectSuggestion('${term}'); window.__hideSheet()">
+                ${term}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+        
+        <button class="ghost" onclick="window.__hideSheet()" style="width:100%; margin-top:20px">${t("close")}</button>
+      </div>
+    `;
+    showSheet(insights);
   };
   
   window.__searchTag = (tag) => {
@@ -995,10 +1454,11 @@ function discover(ctx) {
     if (searchInput) {
       searchInput.value = tag;
       currentFilters.query = tag;
+      aiEngine.trackSearch(tag);
       updateResults();
     }
   };
-  
+
   window.__toggleFilters = () => {
     const panel = document.getElementById("filterPanel");
     if (panel) {
@@ -1006,45 +1466,89 @@ function discover(ctx) {
     }
   };
   
+  window.__getAIFilterSuggestions = () => {
+    const insights = document.getElementById("aiFilterInsights");
+    const text = document.getElementById("aiFilterText");
+    
+    if (insights && text) {
+      const suggestions = aiEngine.getFilterSuggestions(currentFilters.query);
+      text.textContent = suggestions;
+      insights.style.display = 'block';
+      
+      // Auto-hide after 8 seconds
+      setTimeout(() => {
+        insights.style.display = 'none';
+      }, 8000);
+    }
+  };
+  
+  window.__setAIRecommendedPriceRange = () => {
+    const priceRange = aiEngine.getRecommendedPriceRange();
+    const minPrice = document.getElementById("minPrice");
+    const maxPrice = document.getElementById("maxPrice");
+    
+    if (minPrice && maxPrice) {
+      minPrice.value = priceRange.min;
+      maxPrice.value = priceRange.max;
+      
+      // Show feedback
+      const feedback = document.createElement('div');
+      feedback.style.cssText = 'position:absolute; background:var(--brand); color:white; padding:4px 8px; border-radius:4px; font-size:12px; z-index:1000';
+      feedback.textContent = t("ai_price_applied");
+      minPrice.parentElement.appendChild(feedback);
+      
+      setTimeout(() => feedback.remove(), 2000);
+    }
+  };
+
   window.__applyFilters = () => {
     // Get filter values
     currentFilters.minPrice = parseFloat(document.getElementById("minPrice")?.value) || null;
     currentFilters.maxPrice = parseFloat(document.getElementById("maxPrice")?.value) || null;
     currentFilters.rating = document.getElementById("ratingFilter")?.value || null;
-    currentFilters.sortBy = document.getElementById("sortBy")?.value || "relevance";
+    currentFilters.sortBy = document.getElementById("sortBy")?.value || "ai_personalized";
     
     // Get selected creators
     const creatorCheckboxes = document.querySelectorAll('[data-creator]:checked');
     currentFilters.creators = Array.from(creatorCheckboxes).map(cb => cb.getAttribute('data-creator'));
     
+    // Track filter usage for AI learning
+    aiEngine.trackFilterUsage(currentFilters);
+    
     updateResults();
   };
-  
+
   window.__clearFilters = () => {
     // Reset filter values
-    currentFilters = { query: currentFilters.query, minPrice: null, maxPrice: null, rating: null, creators: [], sortBy: "relevance" };
+    currentFilters = { 
+      query: currentFilters.query, 
+      minPrice: null, 
+      maxPrice: null, 
+      rating: null, 
+      creators: [], 
+      sortBy: "ai_personalized" 
+    };
     
     // Reset form elements
     const elements = ["minPrice", "maxPrice", "ratingFilter", "sortBy"];
     elements.forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.value = "";
+      if (el) el.value = id === "sortBy" ? "ai_personalized" : "";
     });
     
-    // Uncheck creator filters
+    // Uncheck creator checkboxes
     document.querySelectorAll('[data-creator]').forEach(cb => cb.checked = false);
     
     updateResults();
   };
   
-  // Cleanup old filter function
-  window.__filterDiscover = (term) => {
-    const res = state.products.filter(p => (p.name + p.cat).toLowerCase().includes((term||"").toLowerCase()));
-    const host = document.getElementById("discoverResults");
-    const rc = document.getElementById("resCount");
-    if (host) host.innerHTML = res.map(Card).join("") || `<div class="panel center muted">${t("no_messages")}</div>`;
-    if (rc) rc.textContent = tn("results_count", { n: res.length });
-  };
+  // Initialize AI-enhanced search
+  setTimeout(() => {
+    const recentSearches = document.getElementById("recentSearches");
+    if (recentSearches && aiEngine.getSearchSuggestions().recent.length > 0) {
+      recentSearches.style.display = 'block';
+    }
+  }, 500);
 }
 
 function pdp(ctx, id) {
@@ -1441,7 +1945,7 @@ function creator(ctx, id) {
 }
 
 function cart(ctx) {
-  const items = state.cart.items.slice();
+  const items = state.cart.slice();
   const rows = items.map(it => {
     const p = productById(it.id);
     return `
@@ -1478,7 +1982,7 @@ function cart(ctx) {
 }
 
 function checkout(ctx) {
-  const items = state.cart.items.slice();
+  const items = state.cart.slice();
   if (!items.length) {
     ctx.el.innerHTML = h(`
       <section class="panel center">
@@ -1679,71 +2183,247 @@ function checkout(ctx) {
   }
   
   else if ((step === 3 && !state.user.guest) || (step === 4 && state.user.guest)) {
-    // Step 3/4: Payment Method
+    // Step 3/4: Saudi Payment Methods
     const cards = state.user.paymentMethods || [];
-    const walletLabel = (localStorage.getItem("storez_lang") || "en") === "ar" ? "مدى" : (window.ApplePaySession ? "Apple Pay" : "Digital Wallet");
+    const userLang = getLang();
     
     stepContent = `
       <div class="step-content">
         <h3>${t("payment_method")}</h3>
+        <p class="muted small">${t("select_payment_method")}</p>
         
-        <div style="margin-top:16px;">
-          <!-- Digital Wallet Option -->
-          <div class="payment-option" style="padding:16px; border:2px solid var(--brand); border-radius:8px; margin-bottom:12px; cursor:pointer; background:var(--brand-bg);"
-               onclick="window.__selectPayment('wallet')">
-            <div class="row between">
-              <div class="row" style="align-items:center; gap:12px;">
-                <div style="width:40px; height:40px; background:var(--brand); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white;">
-                  💳
+        <div style="margin-top:20px;">
+          <!-- Saudi Digital Payment Options -->
+          <div class="payment-section">
+            <h4 style="margin-bottom:12px;">${t("digital_payments")} 💳</h4>
+            
+            <!-- Mada Pay (Saudi's national payment system) -->
+            <div class="payment-option mada-pay" style="padding:16px; border:2px solid #00A651; border-radius:12px; margin-bottom:12px; cursor:pointer; background:linear-gradient(135deg, #00A651, #4CAF50); color:white; position:relative; overflow:hidden;"
+                 onclick="window.__selectPayment('mada')">
+              <div class="payment-bg" style="position:absolute; top:0; right:0; width:100px; height:100px; background:url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"40\" fill=\"rgba(255,255,255,0.1)\"/></svg>'); background-size:cover;"></div>
+              <div class="row between" style="position:relative; z-index:1;">
+                <div class="row" style="align-items:center; gap:12px;">
+                  <div style="width:48px; height:48px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#00A651; font-size:14px;">
+                    مدى
+                  </div>
+                  <div>
+                    <strong>${t("mada_pay")}</strong>
+                    <div class="small" style="opacity:0.9;">${t("mada_desc")}</div>
+                    <div class="tiny" style="opacity:0.7; margin-top:2px;">⚡ ${t("instant_payment")} • 🔒 ${t("secure")}</div>
+                  </div>
                 </div>
-                <div>
-                  <strong>${walletLabel}</strong>
-                  <div class="muted small">${t("wallet_desc")}</div>
-                </div>
+                <input type="radio" name="payment" value="mada" checked style="transform:scale(1.2);">
               </div>
-              <input type="radio" name="payment" value="wallet" checked>
+            </div>
+            
+            <!-- Apple Pay (if available) -->
+            ${window.ApplePaySession ? `
+            <div class="payment-option apple-pay" style="padding:16px; border:2px solid #000; border-radius:12px; margin-bottom:12px; cursor:pointer; background:linear-gradient(135deg, #000, #333); color:white;"
+                 onclick="window.__selectPayment('applepay')">
+              <div class="row between">
+                <div class="row" style="align-items:center; gap:12px;">
+                  <div style="width:48px; height:48px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:24px;">
+                    🍎
+                  </div>
+                  <div>
+                    <strong>Apple Pay</strong>
+                    <div class="small" style="opacity:0.9;">${t("applepay_desc")}</div>
+                    <div class="tiny" style="opacity:0.7; margin-top:2px;">📱 ${t("touch_id")} • 🔒 ${t("secure")}</div>
+                  </div>
+                </div>
+                <input type="radio" name="payment" value="applepay">
+              </div>
+            </div>
+            ` : ''}
+            
+            <!-- STC Pay -->
+            <div class="payment-option stc-pay" style="padding:16px; border:2px solid #8E44AD; border-radius:12px; margin-bottom:12px; cursor:pointer; background:linear-gradient(135deg, #8E44AD, #9B59B6); color:white;"
+                 onclick="window.__selectPayment('stcpay')">
+              <div class="row between">
+                <div class="row" style="align-items:center; gap:12px;">
+                  <div style="width:48px; height:48px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#8E44AD; font-size:12px;">
+                    STC
+                  </div>
+                  <div>
+                    <strong>STC Pay</strong>
+                    <div class="small" style="opacity:0.9;">${t("stcpay_desc")}</div>
+                    <div class="tiny" style="opacity:0.7; margin-top:2px;">📱 ${t("mobile_wallet")} • 💸 ${t("cashback")}</div>
+                  </div>
+                </div>
+                <input type="radio" name="payment" value="stcpay">
+              </div>
+            </div>
+            
+            <!-- Urpay -->
+            <div class="payment-option urpay" style="padding:16px; border:2px solid #FF6B35; border-radius:12px; margin-bottom:12px; cursor:pointer; background:linear-gradient(135deg, #FF6B35, #FF8C42); color:white;"
+                 onclick="window.__selectPayment('urpay')">
+              <div class="row between">
+                <div class="row" style="align-items:center; gap:12px;">
+                  <div style="width:48px; height:48px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#FF6B35; font-size:12px;">
+                    urpay
+                  </div>
+                  <div>
+                    <strong>urpay</strong>
+                    <div class="small" style="opacity:0.9;">${t("urpay_desc")}</div>
+                    <div class="tiny" style="opacity:0.7; margin-top:2px;">🎁 ${t("rewards")} • ⚡ ${t("fast_payment")}</div>
+                  </div>
+                </div>
+                <input type="radio" name="payment" value="urpay">
+              </div>
             </div>
           </div>
           
-          ${cards.length > 0 ? `
-            <!-- Saved Cards -->
-            <h4 style="margin-top:20px;">${t("saved_cards")}</h4>
-            ${cards.map((card, i) => `
-              <div class="payment-option" style="padding:12px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px; cursor:pointer;"
-                   onclick="window.__selectPayment('card-${i}')">
-                <div class="row between">
-                  <div class="row" style="align-items:center; gap:12px;">
-                    <div style="width:32px; height:20px; background:${card.type === 'visa' ? '#1a1f71' : card.type === 'mastercard' ? '#eb001b' : '#006fcf'}; border-radius:4px; display:flex; align-items:center; justify-content:center; color:white; font-size:10px; font-weight:bold;">
-                      ${card.type.toUpperCase()}
+          <!-- Credit/Debit Cards -->
+          <div class="payment-section" style="margin-top:24px;">
+            <h4 style="margin-bottom:12px;">${t("credit_debit_cards")} 💳</h4>
+            
+            ${cards.length > 0 ? `
+              <!-- Saved Cards -->
+              ${cards.map((card, i) => `
+                <div class="payment-option saved-card" style="padding:14px; border:1px solid var(--border); border-radius:12px; margin-bottom:8px; cursor:pointer; transition:all 0.2s ease;"
+                     onclick="window.__selectPayment('card-${i}')">
+                  <div class="row between">
+                    <div class="row" style="align-items:center; gap:12px;">
+                      <div class="card-icon" style="width:40px; height:28px; background:${card.type === 'visa' ? 'linear-gradient(135deg, #1a1f71, #4c6ef5)' : card.type === 'mastercard' ? 'linear-gradient(135deg, #eb001b, #ff6b35)' : card.type === 'mada' ? 'linear-gradient(135deg, #00A651, #4CAF50)' : 'linear-gradient(135deg, #006fcf, #0099ff)'}; border-radius:6px; display:flex; align-items:center; justify-content:center; color:white; font-size:8px; font-weight:bold; text-transform:uppercase;">
+                        ${card.type === 'mada' ? 'مدى' : card.type}
+                      </div>
+                      <div>
+                        <strong>•••• •••• •••• ${card.last4}</strong>
+                        <div class="muted small">${card.name} • ${t("expires")} ${card.expiry}</div>
+                      </div>
                     </div>
-                    <div>
-                      <strong>•••• •••• •••• ${card.last4}</strong>
-                      <div class="muted small">${card.expiry}</div>
+                    <div class="row" style="align-items:center; gap:8px;">
+                      ${card.isDefault ? `<span class="chip tiny success">${t("default")}</span>` : ''}
+                      <input type="radio" name="payment" value="card-${i}">
                     </div>
                   </div>
-                  <input type="radio" name="payment" value="card-${i}">
+                </div>
+              `).join('')}
+            ` : ''}
+            
+            <!-- Add New Card -->
+            <button class="ghost payment-add-btn" type="button" onclick="window.__toggleNewCard()" style="width:100%; padding:14px; border:2px dashed var(--border); border-radius:12px; margin-top:8px; transition:all 0.2s ease;">
+              <div class="row center" style="gap:8px;">
+                <span style="font-size:20px;">+</span>
+                <span>${t("add_new_card")}</span>
+              </div>
+            </button>
+            
+            <div id="newCardForm" style="display:none; margin-top:16px; padding:20px; border:1px solid var(--border); border-radius:12px; background:var(--panel);">
+              <h4 style="margin-bottom:16px;">${t("add_payment_method")}</h4>
+              
+              <!-- Card Type Selection -->
+              <div style="margin-bottom:16px;">
+                <label class="small muted" style="margin-bottom:8px; display:block;">${t("card_type")}</label>
+                <div class="row" style="gap:8px; flex-wrap:wrap;">
+                  <label class="card-type-option" style="padding:8px 12px; border:2px solid var(--border); border-radius:8px; cursor:pointer; transition:all 0.2s ease;">
+                    <input type="radio" name="cardType" value="mada" checked style="margin-right:8px;">
+                    <span style="font-weight:bold; color:#00A651;">مدى Mada</span>
+                  </label>
+                  <label class="card-type-option" style="padding:8px 12px; border:2px solid var(--border); border-radius:8px; cursor:pointer; transition:all 0.2s ease;">
+                    <input type="radio" name="cardType" value="visa" style="margin-right:8px;">
+                    <span style="font-weight:bold; color:#1a1f71;">Visa</span>
+                  </label>
+                  <label class="card-type-option" style="padding:8px 12px; border:2px solid var(--border); border-radius:8px; cursor:pointer; transition:all 0.2s ease;">
+                    <input type="radio" name="cardType" value="mastercard" style="margin-right:8px;">
+                    <span style="font-weight:bold; color:#eb001b;">Mastercard</span>
+                  </label>
                 </div>
               </div>
-            `).join('')}
-          ` : ''}
-          
-          <!-- Add New Card -->
-          <button class="ghost" type="button" onclick="window.__toggleNewCard()" style="margin-top:12px;">
-            + ${t("add_payment_method")}
-          </button>
-          
-          <div id="newCardForm" style="display:none; margin-top:16px; padding:16px; border:1px dashed var(--border); border-radius:8px;">
-            <h4>${t("new_card")}</h4>
-            <div style="margin-top:12px;">
-              <label>${t("card_number")} *
-                <input type="text" id="card_number" placeholder="1234 5678 9012 3456" maxlength="19" style="margin-top:4px;" required>
-              </label>
               
-              <div class="row" style="gap:12px; margin-top:12px;">
-                <label style="flex:1;">${t("expiry_date")} *
-                  <input type="text" id="card_expiry" placeholder="MM/YY" maxlength="5" style="margin-top:4px;" required>
-                </label>
-                <label style="flex:1;">${t("cvv")} *
+              <div style="margin-bottom:16px;">
+                <label class="small muted">${t("card_number")} *</label>
+                <input type="text" id="card_number" placeholder="1234 5678 9012 3456" maxlength="19" 
+                       style="margin-top:4px; padding:12px; border:2px solid var(--border); border-radius:8px; font-size:16px; letter-spacing:1px;" 
+                       oninput="window.__formatCardNumber(this)" required>
+                <div class="tiny muted" style="margin-top:4px;">${t("card_number_secure")}</div>
+              </div>
+              
+              <div class="row" style="gap:12px; margin-bottom:16px;">
+                <div style="flex:1;">
+                  <label class="small muted">${t("expiry_date")} *</label>
+                  <input type="text" id="card_expiry" placeholder="MM/YY" maxlength="5" 
+                         style="margin-top:4px; padding:12px; border:2px solid var(--border); border-radius:8px; font-size:16px;" 
+                         oninput="window.__formatExpiry(this)" required>
+                </div>
+                <div style="flex:1;">
+                  <label class="small muted">${t("cvv")} *</label>
+                  <input type="password" id="card_cvv" placeholder="123" maxlength="4" 
+                         style="margin-top:4px; padding:12px; border:2px solid var(--border); border-radius:8px; font-size:16px;" required>
+                </div>
+              </div>
+              
+              <div style="margin-bottom:16px;">
+                <label class="small muted">${t("cardholder_name")} *</label>
+                <input type="text" id="card_name" placeholder="${t("name_on_card")}" 
+                       style="margin-top:4px; padding:12px; border:2px solid var(--border); border-radius:8px;" required>
+              </div>
+              
+              <div class="row" style="gap:8px; align-items:center; margin-bottom:16px;">
+                <input type="checkbox" id="card_save">
+                <label for="card_save" class="small">${t("save_card_future")}</label>
+              </div>
+              
+              <div class="row" style="gap:8px;">
+                <button type="button" class="ghost" onclick="window.__hideNewCard()" style="flex:1;">${t("cancel")}</button>
+                <button type="button" class="brand" onclick="window.__saveNewCard()" style="flex:1;">${t("save_card")}</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Buy Now Pay Later -->
+          <div class="payment-section" style="margin-top:24px;">
+            <h4 style="margin-bottom:12px;">${t("buy_now_pay_later")} 📈</h4>
+            
+            <!-- Tabby -->
+            <div class="payment-option bnpl-option" style="padding:16px; border:2px solid #3ECBBC; border-radius:12px; margin-bottom:12px; cursor:pointer; background:linear-gradient(135deg, #3ECBBC, #4ECDC4); color:white;"
+                 onclick="window.__selectPayment('tabby')">
+              <div class="row between">
+                <div class="row" style="align-items:center; gap:12px;">
+                  <div style="width:48px; height:48px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#3ECBBC; font-size:12px;">
+                    tabby
+                  </div>
+                  <div>
+                    <strong>Tabby</strong>
+                    <div class="small" style="opacity:0.9;">${t("tabby_desc")}</div>
+                    <div class="tiny" style="opacity:0.7; margin-top:2px;">💰 ${t("split_4_payments")} • 0% ${t("interest")}</div>
+                  </div>
+                </div>
+                <input type="radio" name="payment" value="tabby">
+              </div>
+            </div>
+            
+            <!-- Tamara -->
+            <div class="payment-option bnpl-option" style="padding:16px; border:2px solid #39C7AD; border-radius:12px; margin-bottom:12px; cursor:pointer; background:linear-gradient(135deg, #39C7AD, #4DD0B1); color:white;"
+                 onclick="window.__selectPayment('tamara')">
+              <div class="row between">
+                <div class="row" style="align-items:center; gap:12px;">
+                  <div style="width:48px; height:48px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#39C7AD; font-size:10px;">
+                    tamara
+                  </div>
+                  <div>
+                    <strong>Tamara</strong>
+                    <div class="small" style="opacity:0.9;">${t("tamara_desc")}</div>
+                    <div class="tiny" style="opacity:0.7; margin-top:2px;">📅 ${t("flexible_payment")} • ✨ ${t("instant_approval")}</div>
+                  </div>
+                </div>
+                <input type="radio" name="payment" value="tamara">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Security Notice -->
+          <div style="margin-top:24px; padding:16px; background:var(--success-bg); border:1px solid var(--success); border-radius:12px; border-left:4px solid var(--success);">
+            <div class="row" style="align-items:center; gap:12px;">
+              <span style="font-size:24px;">🔒</span>
+              <div>
+                <strong style="color:var(--success);">${t("secure_payment")}</strong>
+                <div class="small muted">${t("security_notice")}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
                   <input type="text" id="card_cvv" placeholder="123" maxlength="4" style="margin-top:4px;" required>
                 </label>
               </div>
@@ -1998,7 +2678,7 @@ window.__proceedCheckout = (currentStep) => {
 };
 
 window.__completeOrder = () => {
-  const items = state.cart.items.slice();
+  const items = state.cart.slice();
   if (!items.length) {
     alert(t("cart_empty"));
     return;
@@ -2036,7 +2716,7 @@ window.__completeOrder = () => {
     }, 1500);
   }
 };
-}
+
 
 function orders(ctx) {
   if (state.user.guest) {
@@ -3241,237 +3921,295 @@ function referrals(ctx) {
 }
 
 function live(ctx, id) {
-  const c = creatorById(id) || state.creators.find(x => x.live) || state.creators[0];
-  const featuredProducts = state.products.filter(p => p.creatorId === c.id).slice(0, 3);
-  const viewerCount = 1200 + Math.floor(Math.random() * 500);
-  const currentProduct = featuredProducts[0];
+  // If specific stream ID provided, show the live stream viewer
+  if (id && id !== 'index') {
+    return liveStream(ctx, id);
+  }
+  
+  // Otherwise show live commerce hub with all streams
+  const activeStreams = state.live?.activeStreams || [];
+  const upcomingStreams = state.live?.upcomingStreams || [];
+  const featuredStreams = state.live?.featuredStreams || [];
+  
+  // Get current Saudi time for scheduling
+  const saudiTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Riyadh' });
+  const currentHour = new Date(saudiTime).getHours();
+  const greeting = currentHour < 12 ? t("good_morning") : currentHour < 17 ? t("good_afternoon") : t("good_evening");
   
   ctx.el.innerHTML = h(`
-    <section class="panel" style="max-width:100%; padding:0">
-      <!-- Live video area -->
-      <div style="position:relative; background:linear-gradient(135deg, #2a2655, #0e3d57); aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; color:white">
-        <!-- Simulated video background -->
-        <img src="${uns(currentProduct.img, 1200)}" alt="Live stream" 
-             style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.3" />
-        
-        <!-- Live status and controls -->
-        <div style="position:absolute; top:16px; left:16px; right:16px; display:flex; justify-content:space-between; align-items:flex-start">
-          <div class="row" style="gap:8px">
-            <span class="chip" style="background:var(--danger,#ff4444); color:white; animation:pulse 2s infinite">
-              ● LIVE
-            </span>
-            <span class="chip" style="background:rgba(0,0,0,0.5); color:white">
-              👁 ${viewerCount.toLocaleString()} ${t("viewers")}
-            </span>
+    <section class="panel">
+      <header>
+        <h2>${t("live_commerce")} 🔴</h2>
+        <p class="muted">${greeting}! ${t("discover_live_shows")}</p>
+      </header>
+      
+      <!-- Active Live Streams -->
+      ${activeStreams.length > 0 ? `
+        <div style="margin-bottom:24px">
+          <div class="row between" style="margin-bottom:12px">
+            <h3>${t("live_now")} (${activeStreams.length})</h3>
+            <span class="chip pulse" style="background:var(--danger,#ff4444); color:white">● LIVE</span>
           </div>
           
-          <div class="row" style="gap:8px">
-            <button class="icon-btn" onclick="window.__toggleMute && window.__toggleMute()" 
-                    style="background:rgba(0,0,0,0.5); color:white">
-              🔊
-            </button>
-            <button class="icon-btn" onclick="window.StoreZ.goBack()" 
-                    style="background:rgba(0,0,0,0.5); color:white">
-              ✕
-            </button>
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px">
+            ${activeStreams.map(stream => {
+              const creator = creatorById(stream.creatorId);
+              const streamProducts = stream.products.map(pid => productById(pid)).filter(Boolean);
+              const duration = Math.floor((Date.now() - stream.startTime) / 60000);
+              
+              return `
+                <div class="panel hover" onclick="window.StoreZ.navigate('#/live/${stream.id}')" 
+                     style="cursor:pointer; position:relative; overflow:hidden">
+                  <div style="position:relative">
+                    <img src="${stream.thumbnail}" alt="${stream.title}" 
+                         style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px" />
+                    
+                    <!-- Live overlay -->
+                    <div style="position:absolute; top:8px; left:8px; right:8px; display:flex; justify-content:space-between">
+                      <span class="chip" style="background:var(--danger,#ff4444); color:white; font-size:12px">
+                        ● LIVE
+                      </span>
+                      <span class="chip" style="background:rgba(0,0,0,0.7); color:white; font-size:12px">
+                        👁 ${stream.viewers.toLocaleString()}
+                      </span>
+                    </div>
+                    
+                    <!-- Duration overlay -->
+                    <div style="position:absolute; bottom:8px; right:8px">
+                      <span class="chip" style="background:rgba(0,0,0,0.7); color:white; font-size:12px">
+                        ${duration}m
+                      </span>
+                    </div>
+                    
+                    <!-- Play button -->
+                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); 
+                               width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,0.9); 
+                               display:flex; align-items:center; justify-content:center; font-size:20px">
+                      ▶️
+                    </div>
+                  </div>
+                  
+                  <div style="padding:12px">
+                    <strong style="display:block; margin-bottom:4px">${stream.title}</strong>
+                    <div class="row" style="gap:8px; margin-bottom:8px">
+                      <div style="width:24px;height:24px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px">
+                        ${creator?.name?.[0] || '?'}
+                      </div>
+                      <span style="color:var(--brand)">${stream.creator}</span>
+                    </div>
+                    
+                    <!-- Stream tags -->
+                    <div class="row" style="gap:4px; margin-bottom:8px">
+                      ${stream.tags.map(tag => `<span class="chip small" style="font-size:11px">${tag}</span>`).join('')}
+                    </div>
+                    
+                    <!-- Flash deals if any -->
+                    ${stream.flashDeals?.length > 0 ? `
+                      <div style="background:var(--brand-2); color:white; padding:8px; border-radius:6px; font-size:12px">
+                        🔥 ${stream.flashDeals.length} ${t("flash_deals_active")}
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('')}
           </div>
         </div>
-        
-        <!-- Creator info overlay -->
-        <div style="position:absolute; bottom:16px; left:16px">
-          <div class="row" style="gap:8px; color:white">
-            <div style="width:40px;height:40px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:bold">
-              ${c.name[0]}
-            </div>
-            <div>
-              <strong>${c.name}</strong>
-              <div style="opacity:0.8">${c.handle}</div>
-            </div>
+      ` : ''}
+      
+      <!-- Upcoming Streams -->
+      ${upcomingStreams.length > 0 ? `
+        <div style="margin-bottom:24px">
+          <h3 style="margin-bottom:12px">${t("upcoming_streams")}</h3>
+          
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px">
+            ${upcomingStreams.map(stream => {
+              const creator = creatorById(stream.creatorId);
+              const timeUntil = Math.floor((stream.scheduledTime - Date.now()) / 60000);
+              const saudiScheduleTime = new Date(stream.scheduledTime).toLocaleString('en-US', { 
+                timeZone: 'Asia/Riyadh', 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: true 
+              });
+              
+              return `
+                <div class="panel hover" onclick="window.__setStreamReminder('${stream.id}')" 
+                     style="cursor:pointer; opacity:0.9">
+                  <div style="position:relative">
+                    <img src="${stream.thumbnail}" alt="${stream.title}" 
+                         style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; filter:brightness(0.8)" />
+                    
+                    <!-- Scheduled overlay -->
+                    <div style="position:absolute; top:8px; left:8px; right:8px; display:flex; justify-content:space-between">
+                      <span class="chip" style="background:var(--brand); color:white; font-size:12px">
+                        📅 ${t("scheduled")}
+                      </span>
+                      <span class="chip" style="background:rgba(0,0,0,0.7); color:white; font-size:12px">
+                        ${timeUntil > 60 ? Math.floor(timeUntil/60) + 'h' : timeUntil + 'm'}
+                      </span>
+                    </div>
+                    
+                    <!-- Schedule time -->
+                    <div style="position:absolute; bottom:8px; left:8px; right:8px; text-align:center">
+                      <span class="chip" style="background:rgba(0,0,0,0.8); color:white; font-size:12px">
+                        🕐 ${saudiScheduleTime} ${t("saudi_time")}
+                      </span>
+                    </div>
+                    
+                    <!-- Bell icon -->
+                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); 
+                               width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,0.9); 
+                               display:flex; align-items:center; justify-content:center; font-size:20px">
+                      🔔
+                    </div>
+                  </div>
+                  
+                  <div style="padding:12px">
+                    <strong style="display:block; margin-bottom:4px">${stream.title}</strong>
+                    <div class="row" style="gap:8px; margin-bottom:8px">
+                      <div style="width:24px;height:24px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px">
+                        ${creator?.name?.[0] || '?'}
+                      </div>
+                      <span style="color:var(--brand)">${stream.creator}</span>
+                    </div>
+                    
+                    <p style="font-size:14px; color:var(--muted); margin-bottom:8px">${stream.description}</p>
+                    
+                    <div class="row between">
+                      <span style="font-size:12px; color:var(--muted)">${stream.estimatedDuration} ${t("minutes")}</span>
+                      <span style="font-size:12px; color:var(--brand)">${stream.reminders} ${t("reminders_set")}</span>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
           </div>
         </div>
-        
-        <!-- Large play button simulation -->
-        <div style="width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:32px">
-          ▶️
+      ` : ''}
+      
+      <!-- Featured Stream Series -->
+      ${featuredStreams.length > 0 ? `
+        <div style="margin-bottom:24px">
+          <h3 style="margin-bottom:12px">${t("featured_series")}</h3>
+          
+          ${featuredStreams.map(stream => {
+            const creator = creatorById(stream.creatorId);
+            const nextDate = new Date(stream.nextEpisode).toLocaleDateString('en-US', { 
+              timeZone: 'Asia/Riyadh',
+              weekday: 'long',
+              month: 'short',
+              day: 'numeric'
+            });
+            
+            return `
+              <div class="panel" style="background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:white; margin-bottom:16px">
+                <div class="row" style="gap:16px">
+                  <div style="flex:1">
+                    <div class="row" style="gap:8px; margin-bottom:8px">
+                      <span class="chip" style="background:rgba(255,255,255,0.2); color:white; font-size:12px">
+                        ⭐ ${t("featured_series")}
+                      </span>
+                      <span class="chip" style="background:rgba(255,255,255,0.2); color:white; font-size:12px">
+                        ${stream.episodeCount} ${t("episodes")}
+                      </span>
+                    </div>
+                    
+                    <h4 style="margin-bottom:8px">${stream.title}</h4>
+                    
+                    <div class="row" style="gap:8px; margin-bottom:12px">
+                      <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-weight:bold">
+                        ${creator?.name?.[0] || '?'}
+                      </div>
+                      <div>
+                        <div style="font-weight:bold">${stream.creator}</div>
+                        <div style="opacity:0.8; font-size:12px">${stream.subscribers.toLocaleString()} ${t("subscribers")}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="row between">
+                      <span style="opacity:0.9">${t("next_episode")}: ${nextDate}</span>
+                      <button class="ghost" style="border-color:white; color:white" 
+                              onclick="window.__subscribeToSeries('${stream.id}')">
+                        ${t("subscribe")}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      ` : ''}
+      
+      <!-- Live Shopping Stats -->
+      <div class="panel" style="background:var(--panel); text-align:center; margin-bottom:16px">
+        <h4 style="margin-bottom:12px">${t("live_shopping_today")}</h4>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:16px">
+          <div>
+            <div style="font-size:24px; font-weight:bold; color:var(--brand)">${activeStreams.reduce((sum, s) => sum + s.viewers, 0).toLocaleString()}</div>
+            <div style="font-size:12px; color:var(--muted)">${t("total_viewers")}</div>
+          </div>
+          <div>
+            <div style="font-size:24px; font-weight:bold; color:var(--brand)">${activeStreams.length + upcomingStreams.length}</div>
+            <div style="font-size:12px; color:var(--muted)">${t("streams_today")}</div>
+          </div>
+          <div>
+            <div style="font-size:24px; font-weight:bold; color:var(--brand)">${activeStreams.reduce((sum, s) => sum + (s.flashDeals?.length || 0), 0)}</div>
+            <div style="font-size:12px; color:var(--muted)">${t("active_deals")}</div>
+          </div>
         </div>
       </div>
       
-      <!-- Live shopping interface -->
-      <div style="padding:16px">
-        <!-- Chat and products toggle -->
-        <div class="row" style="gap:8px; margin-bottom:16px">
-          <button id="chatTab" class="chip active" onclick="window.__switchLiveTab && window.__switchLiveTab('chat')" 
-                  style="flex:1; background:var(--brand); color:white">
-            💬 ${t("chat")} (${Math.floor(Math.random() * 50) + 20})
-          </button>
-          <button id="productsTab" class="chip" onclick="window.__switchLiveTab && window.__switchLiveTab('products')" 
-                  style="flex:1">
-            🛍️ ${t("products")} (${featuredProducts.length})
-          </button>
-        </div>
-        
-        <!-- Chat view -->
-        <div id="chatView" class="live-content">
-          <div style="max-height:200px; overflow-y:auto; border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:12px; background:var(--panel)">
-            <div class="live-message">
-              <strong style="color:var(--brand)">@maya_shopper:</strong> <span>Love these sneakers! 😍</span>
-            </div>
-            <div class="live-message">
-              <strong style="color:var(--brand-2)">@style_hunter:</strong> <span>How's the sizing?</span>
-            </div>
-            <div class="live-message">
-              <strong style="color:var(--brand)">${c.handle}:</strong> <span>True to size! Very comfortable 👟</span>
-            </div>
-            <div class="live-message">
-              <strong style="color:var(--brand-2)">@sneaker_head:</strong> <span>Just ordered! Thanks ${c.name}! 🔥</span>
-            </div>
-            <div class="live-message">
-              <strong style="color:var(--brand)">@fitness_fan:</strong> <span>Perfect for running!</span>
-            </div>
-          </div>
-          
-          <!-- Chat input -->
-          <div class="row" style="gap:8px">
-            <input id="liveMessage" placeholder="${t("type_message")}" style="flex:1" />
-            <button class="secondary" onclick="window.__sendLiveMessage && window.__sendLiveMessage()">
-              ${t("send")}
-            </button>
-          </div>
-        </div>
-        
-        <!-- Products view -->
-        <div id="productsView" class="live-content" style="display:none">
-          <!-- Featured product -->
-          <div class="panel" style="background:var(--brand-2); color:white; margin-bottom:16px; position:relative">
-            <div style="position:absolute; top:8px; right:8px">
-              <span class="chip" style="background:var(--danger,#ff4444); color:white">
-                🔥 ${t("featured_now")}
-              </span>
-            </div>
-            <div class="row" style="gap:12px">
-              <img src="${uns(currentProduct.img, 200)}" alt="${getProductField(currentProduct, 'name')}" 
-                   style="width:80px; height:80px; border-radius:12px; object-fit:cover" />
-              <div style="flex:1">
-                <strong style="display:block">${getProductField(currentProduct, 'name')}</strong>
-                <div style="opacity:0.9">${getProductField(currentProduct, 'cat')}</div>
-                <div style="font-size:18px; font-weight:bold; margin-top:4px">
-                  ${fmt(currentProduct.price)}
-                  ${currentProduct.listPrice ? `<span style="text-decoration:line-through; opacity:0.7; margin-left:8px">${fmt(currentProduct.listPrice)}</span>` : ''}
-                </div>
-              </div>
-            </div>
-            <div class="row" style="gap:8px; margin-top:12px">
-              <button class="ghost" style="flex:1; border-color:white; color:white" 
-                      data-action="add-to-cart" data-id="${currentProduct.id}">
-                ${t("add_to_cart")}
-              </button>
-              <button class="secondary" style="flex:1; background:white; color:var(--brand-2)" 
-                      data-action="buy-now" data-id="${currentProduct.id}">
-                ${t("buy_now")}
-              </button>
-            </div>
-          </div>
-          
-          <!-- Other products -->
-          <div>
-            <h4>${t("more_from")} ${c.name}</h4>
-            <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px; margin-top:8px">
-              ${featuredProducts.slice(1).map(p => `
-                <div class="panel" style="padding:8px">
-                  <img src="${uns(p.img, 200)}" alt="${getProductField(p, 'name')}" 
-                       style="width:100%; aspect-ratio:1; border-radius:8px; object-fit:cover; margin-bottom:8px" />
-                  <strong style="font-size:14px; display:block">${getProductField(p, 'name')}</strong>
-                  <div style="color:var(--brand); font-weight:bold">${fmt(p.price)}</div>
-                  <button class="ghost small" data-action="add-to-cart" data-id="${p.id}" 
-                          style="width:100%; margin-top:8px">
-                    ${t("add_to_cart")}
-                  </button>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        </div>
-        
-        <!-- Live shopping actions -->
-        <div class="row" style="gap:8px; margin-top:16px; padding-top:16px; border-top:1px solid var(--border)">
-          <button class="ghost" onclick="window.__shareLive && window.__shareLive('${c.id}')" style="flex:1">
-            📤 ${t("share_live")}
-          </button>
-          <button class="ghost" onclick="window.__setReminder && window.__setReminder('${c.id}')" style="flex:1">
-            🔔 ${t("set_reminder")}
-          </button>
-          <button class="ghost" onclick="window.__reportLive && window.__reportLive('${c.id}')" style="flex:1">
-            🚨 ${t("report")}
-          </button>
-        </div>
+      <!-- Quick Actions -->
+      <div class="row" style="gap:8px">
+        <button class="secondary" onclick="window.__browseLiveCreators()" style="flex:1">
+          � ${t("browse_creators")}
+        </button>
+        <button class="secondary" onclick="window.__goLiveGuide()" style="flex:1">
+          � ${t("go_live_guide")}
+        </button>
+        <button class="secondary" onclick="window.StoreZ.navigate('#/notifications')" style="flex:1">
+          � ${t("live_notifications")}
+        </button>
       </div>
     </section>
   `);
-  
-  // Auto-scroll chat to bottom
-  setTimeout(() => {
-    const chatContainer = document.querySelector('#chatView > div');
-    if (chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-  }, 100);
-  
-  // Simulate live chat updates
-  window.__liveUpdateInterval = setInterval(() => {
-    if (document.getElementById('chatView')?.style.display !== 'none') {
-      const messages = [
-        "Amazing quality! 🔥",
-        "Just added to cart!",
-        "Love this brand ❤️",
-        "How's the delivery time?",
-        "Perfect for my style!",
-        "Thanks for the demo!",
-        "Ordering now! 🛒"
-      ];
-      const users = ["@style_lover", "@trend_setter", "@shop_smart", "@fashion_forward", "@deal_hunter"];
-      
-      const chatContainer = document.querySelector('#chatView > div');
-      if (chatContainer) {
-        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-        const randomUser = users[Math.floor(Math.random() * users.length)];
-        
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'live-message';
-        messageDiv.innerHTML = `<strong style="color:var(--brand-2)">${randomUser}:</strong> <span>${randomMessage}</span>`;
-        
-        chatContainer.appendChild(messageDiv);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-        
-        // Keep only last 10 messages
-        while (chatContainer.children.length > 10) {
-          chatContainer.removeChild(chatContainer.firstChild);
-        }
-      }
-    }
-  }, 3000 + Math.random() * 2000); // Random interval 3-5 seconds
-}
 
 // Live shopping interaction functions
 window.__switchLiveTab = (tab) => {
   // Update tab appearance
-  document.getElementById('chatTab').classList.toggle('active', tab === 'chat');
-  document.getElementById('productsTab').classList.toggle('active', tab === 'products');
+  document.getElementById('chatTab')?.classList.toggle('active', tab === 'chat');
+  document.getElementById('productsTab')?.classList.toggle('active', tab === 'products');
+  document.getElementById('dealTab')?.classList.toggle('active', tab === 'deals');
   
   if (tab === 'chat') {
     document.getElementById('chatTab').style.background = 'var(--brand)';
     document.getElementById('chatTab').style.color = 'white';
     document.getElementById('productsTab').style.background = '';
     document.getElementById('productsTab').style.color = '';
-  } else {
+    document.getElementById('dealTab').style.background = '';
+    document.getElementById('dealTab').style.color = '';
+  } else if (tab === 'products') {
     document.getElementById('productsTab').style.background = 'var(--brand)';
     document.getElementById('productsTab').style.color = 'white';
     document.getElementById('chatTab').style.background = '';
     document.getElementById('chatTab').style.color = '';
+    document.getElementById('dealTab').style.background = '';
+    document.getElementById('dealTab').style.color = '';
+  } else if (tab === 'deals') {
+    document.getElementById('dealTab').style.background = 'var(--brand)';
+    document.getElementById('dealTab').style.color = 'white';
+    document.getElementById('chatTab').style.background = '';
+    document.getElementById('chatTab').style.color = '';
+    document.getElementById('productsTab').style.background = '';
+    document.getElementById('productsTab').style.color = '';
   }
   
   // Show/hide content
   document.getElementById('chatView').style.display = tab === 'chat' ? 'block' : 'none';
   document.getElementById('productsView').style.display = tab === 'products' ? 'block' : 'none';
+  document.getElementById('dealView').style.display = tab === 'deals' ? 'block' : 'none';
 };
 
 window.__sendLiveMessage = () => {
@@ -3499,6 +4237,25 @@ window.__sendLiveMessage = () => {
   }
 };
 
+window.__sendQuickReaction = (emoji = '❤️') => {
+  if (state.user.guest) {
+    if (confirm(t("sign_up_to_react"))) {
+      navigate("#/auth");
+    }
+    return;
+  }
+  
+  const chatContainer = document.querySelector('#chatView > div');
+  if (chatContainer) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'live-message';
+    messageDiv.innerHTML = `<strong style="color:var(--brand)">@${state.user.name.toLowerCase()}:</strong> <span>${emoji}</span>`;
+    
+    chatContainer.appendChild(messageDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+};
+
 window.__toggleMute = () => {
   const btn = event.target;
   const isMuted = btn.textContent === '🔇';
@@ -3506,12 +4263,28 @@ window.__toggleMute = () => {
   btn.title = isMuted ? t("unmute") : t("mute");
 };
 
-window.__shareLive = (creatorId) => {
-  const creator = creatorById(creatorId);
+window.__toggleFullscreen = () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+};
+
+window.__togglePlayback = () => {
+  const btn = document.getElementById('playButton');
+  if (btn) {
+    const isPlaying = btn.textContent === '⏸️';
+    btn.textContent = isPlaying ? '▶️' : '⏸️';
+    btn.style.opacity = isPlaying ? '0.9' : '0.5';
+  }
+};
+
+window.__shareLive = (streamId) => {
   const shareData = {
-    title: `${creator.name} is live on StoreZ!`,
-    text: `Watch ${creator.name} showcase amazing products live!`,
-    url: `${location.origin}${location.pathname}#/live/${creatorId}`
+    title: `🔴 Live on StoreZ!`,
+    text: `Watch amazing products live on StoreZ!`,
+    url: `${location.origin}${location.pathname}#/live/${streamId}`
   };
   
   if (navigator.share) {
@@ -3523,7 +4296,21 @@ window.__shareLive = (creatorId) => {
   }
 };
 
-window.__setReminder = (creatorId) => {
+window.__followCreator = (creatorId) => {
+  if (state.user.guest) {
+    if (confirm(t("sign_up_to_follow"))) {
+      navigate("#/auth");
+    }
+    return;
+  }
+  
+  const creator = creatorById(creatorId);
+  if (creator) {
+    alert(`${t("following")} ${creator.name}! 🎉`);
+  }
+};
+
+window.__setStreamReminder = (streamId) => {
   if (state.user.guest) {
     if (confirm(t("sign_up_for_reminders"))) {
       navigate("#/auth");
@@ -3531,11 +4318,35 @@ window.__setReminder = (creatorId) => {
     return;
   }
   
-  // Simulate setting reminder
-  alert(t("reminder_set"));
+  const stream = state.live?.upcomingStreams?.find(s => s.id === streamId);
+  if (stream) {
+    alert(`${t("reminder_set")} ${stream.title}! 🔔`);
+  }
 };
 
-window.__reportLive = (creatorId) => {
+window.__subscribeToSeries = (seriesId) => {
+  if (state.user.guest) {
+    if (confirm(t("sign_up_to_subscribe"))) {
+      navigate("#/auth");
+    }
+    return;
+  }
+  
+  const series = state.live?.featuredStreams?.find(s => s.id === seriesId);
+  if (series) {
+    alert(`${t("subscribed_to")} ${series.title}! 📺`);
+  }
+};
+
+window.__browseLiveCreators = () => {
+  navigate("#/discover?tab=creators&filter=live");
+};
+
+window.__goLiveGuide = () => {
+  alert(t("go_live_guide_info"));
+};
+
+window.__reportLive = (streamId) => {
   if (state.user.guest) {
     if (confirm(t("sign_up_to_report"))) {
       navigate("#/auth");
@@ -3550,7 +4361,7 @@ window.__reportLive = (creatorId) => {
     alert(t("report_submitted"));
   }
 };
-}
+
 
 /* ---------- route table ---------- */
 export const routes = {
@@ -3805,62 +4616,98 @@ function analytics(ctx) {
 // UGC Feed route for social content
 function ugcfeed(ctx) {
   const filter = new URLSearchParams(location.hash.split('?')[1] || '').get('filter') || 'all';
+  const ugcPosts = state.ugcFeed || [];
+  const trending = ugcPosts.filter(p => p.likes > 80);
+  const withProducts = ugcPosts.filter(p => p.taggedProducts?.length > 0);
+  
+  // Get featured creators and their latest posts
+  const featuredCreators = state.creators.filter(c => c.verified || c.followers > 100000);
   
   ctx.el.innerHTML = h(`
     <section class="ugc-feed">
+      <!-- Header with create button -->
       <div class="feed-header">
-        <h2>${t("social_feed")}</h2>
+        <h2>${t("ugc_feed")} 📱</h2>
         <button class="create-btn" onclick="window.__createUGCPost()">
           <span class="icon">📷</span>
           ${t("create_post")}
         </button>
       </div>
 
+      <!-- Featured creators section -->
+      ${featuredCreators.length > 0 ? `
+        <div style="margin-bottom:24px">
+          <h3 style="margin-bottom:12px">${t("top_creators")} ⭐</h3>
+          <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:8px">
+            ${featuredCreators.slice(0, 5).map(creator => {
+              const creatorPosts = ugcPosts.filter(p => p.creatorId === creator.id);
+              const latestPost = creatorPosts[0];
+              
+              return `
+                <div class="panel" onclick="window.__viewCreatorProfile('${creator.id}')" 
+                     style="min-width:120px; text-align:center; cursor:pointer; background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:white">
+                  <div style="position:relative; margin-bottom:8px">
+                    <img src="${creator.avatar}" alt="${creator.name}" 
+                         style="width:60px; height:60px; border-radius:50%; border:3px solid rgba(255,255,255,0.3)" />
+                    ${creator.verified ? '<div style="position:absolute; bottom:-2px; right:8px; background:white; border-radius:50%; padding:2px">✅</div>' : ''}
+                  </div>
+                  <strong style="font-size:14px; display:block">${creator.name}</strong>
+                  <small style="opacity:0.8">${formatNumber(creator.followers)} ${t("followers")}</small>
+                  ${latestPost ? `<div style="font-size:12px; margin-top:4px; opacity:0.7">${getTimeAgo(latestPost.timestamp)}</div>` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Filter buttons -->
       <div class="feed-filters">
-        <button class="filter-btn ${filter === 'all' ? 'active' : ''}" onclick="window.StoreZ.navigate('#/ugcfeed?filter=all')">
-          ${t("all_posts")}
-        </button>
-        <button class="filter-btn ${filter === 'following' ? 'active' : ''}" onclick="window.StoreZ.navigate('#/ugcfeed?filter=following')">
-          ${t("following")}
-        </button>
-        <button class="filter-btn ${filter === 'trending' ? 'active' : ''}" onclick="window.StoreZ.navigate('#/ugcfeed?filter=trending')">
-          ${t("trending")}
-        </button>
-        <button class="filter-btn ${filter === 'products' ? 'active' : ''}" onclick="window.StoreZ.navigate('#/ugcfeed?filter=products')">
-          ${t("with_products")}
-        </button>
+        <button class="filter-btn ${filter === 'all' ? 'active' : ''}" 
+                onclick="window.location.hash = '#/ugcfeed?filter=all'">${t("all_posts")}</button>
+        <button class="filter-btn ${filter === 'following' ? 'active' : ''}" 
+                onclick="window.location.hash = '#/ugcfeed?filter=following'">${t("following_posts")}</button>
+        <button class="filter-btn ${filter === 'trending' ? 'active' : ''}" 
+                onclick="window.location.hash = '#/ugcfeed?filter=trending'">${t("trending_posts")}</button>
+        <button class="filter-btn ${filter === 'products' ? 'active' : ''}" 
+                onclick="window.location.hash = '#/ugcfeed?filter=products'">${t("tagged_products")}</button>
       </div>
 
+      <!-- Posts feed -->
       <div class="posts-container">
-        ${(state.ugcFeed || [])
-          .filter(post => {
-            if (filter === 'following') return state.user.followedCreators?.includes(post.creatorId);
-            if (filter === 'trending') return post.likes > 50;
-            if (filter === 'products') return post.taggedProducts?.length > 0;
-            return true;
-          })
-          .map(post => `
-            <div class="post-card" data-post-id="${post.id}">
+        ${(filter === 'all' ? ugcPosts : 
+          filter === 'trending' ? trending :
+          filter === 'products' ? withProducts :
+          ugcPosts.filter(p => state.user.following?.includes(p.creatorId))
+        ).map(post => {
+          const creator = state.ugcCreators?.find(c => c.id === post.creatorId);
+          
+          return `
+            <div class="post-card">
+              <!-- Post header -->
               <div class="post-header">
-                <div class="creator-info">
-                  <img src="${post.creatorAvatar}" alt="${post.creator}" class="creator-avatar">
+                <div class="creator-info" onclick="window.__viewCreatorProfile('${post.creatorId}')">
+                  <img src="${post.creatorAvatar}" alt="${post.creator}" class="creator-avatar" />
                   <div>
                     <strong class="creator-name">${post.creator}</strong>
-                    <div class="post-time">${formatTimeAgo(post.timestamp)}</div>
+                    ${creator?.verified ? ' ✅' : ''}
+                    <div class="post-time">${getTimeAgo(post.timestamp)}</div>
                   </div>
                 </div>
                 <button class="post-menu" onclick="window.__showPostMenu('${post.id}')">⋯</button>
               </div>
-
-              <div class="post-media" onclick="window.__viewPost('${post.id}')">
-                <img src="${post.image}" alt="${post.caption}" loading="lazy">
-                ${post.type === 'video' ? '<div class="play-button">▶️</div>' : ''}
+              
+              <!-- Post media -->
+              <div class="post-media" onclick="window.__viewPostDetail('${post.id}')">
+                <img src="${post.image}" alt="${post.caption}" />
+                ${post.type === 'video' ? '<div class="play-button">▶</div>' : ''}
               </div>
-
+              
+              <!-- Post actions -->
               <div class="post-actions">
                 <button class="action-btn ${post.liked ? 'liked' : ''}" onclick="window.__toggleLike('${post.id}')">
                   <span class="icon">${post.liked ? '❤️' : '🤍'}</span>
-                  <span class="count">${post.likes}</span>
+                  <span class="count" style="color:${post.liked ? 'var(--danger,#ff4444)' : 'var(--text)'}">${post.likes}</span>
                 </button>
                 <button class="action-btn" onclick="window.__showComments('${post.id}')">
                   <span class="icon">💬</span>
@@ -3868,27 +4715,26 @@ function ugcfeed(ctx) {
                 </button>
                 <button class="action-btn" onclick="window.__sharePost('${post.id}')">
                   <span class="icon">📤</span>
+                  <span class="count">${post.shares || 0}</span>
                 </button>
-                <button class="action-btn ${post.saved ? 'saved' : ''}" onclick="window.__toggleSave('${post.id}')">
+                <button class="action-btn ${post.saved ? 'saved' : ''}" onclick="window.__toggleSave('${post.id}')" style="margin-left:auto">
                   <span class="icon">${post.saved ? '🔖' : '📄'}</span>
                 </button>
               </div>
-
+              
+              <!-- Post content -->
               <div class="post-content">
-                <div class="post-caption">
-                  <strong>${post.creator}</strong>
-                  ${post.caption}
-                </div>
+                <div class="post-caption">${post.caption}</div>
                 
-                ${post.taggedProducts && post.taggedProducts.length > 0 ? `
+                ${post.taggedProducts?.length > 0 ? `
                   <div class="tagged-products">
                     <strong>${t("tagged_products")}:</strong>
                     <div class="product-tags">
                       ${post.taggedProducts.map(productId => {
-                        const product = state.products.find(p => p.id === productId);
+                        const product = productById(productId);
                         return product ? `
                           <a href="#/pdp/${productId}" class="product-tag">
-                            <img src="${product.image}" alt="${getProductField(product, 'name')}" class="product-thumb">
+                            <img src="${uns(product.img, 200)}" alt="${getProductField(product, 'name')}" class="product-thumb">
                             <span>${getProductField(product, 'name')}</span>
                             <span class="price">${fmtSAR(product.price)}</span>
                           </a>
@@ -3899,14 +4745,22 @@ function ugcfeed(ctx) {
                 ` : ''}
               </div>
             </div>
-          `).join('')}
+          `;
+        }).join('')}
         
         ${(state.ugcFeed || []).length === 0 ? `
           <div class="empty-feed">
             <div class="empty-icon">📷</div>
-            <h3>${t("no_posts_yet")}</h3>
-            <p>${t("be_first_to_share")}</p>
+            <h3>${t("no_posts_yet") || "No posts yet"}</h3>
+            <p>${t("be_first_to_share") || "Be the first to share something amazing!"}</p>
             <button class="secondary" onclick="window.__createUGCPost()">${t("create_post")}</button>
+          </div>
+        ` : ''}
+        
+        <!-- Load more button -->
+        ${(state.ugcFeed || []).length > 0 ? `
+          <div style="text-align:center; margin-top:24px">
+            <button class="secondary" onclick="window.__loadMorePosts()">${t("load_more")}</button>
           </div>
         ` : ''}
       </div>
@@ -3927,14 +4781,14 @@ function ugcfeed(ctx) {
       .post-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
       
       .post-header { display: flex; justify-content: space-between; align-items: center; padding: 16px; }
-      .creator-info { display: flex; align-items: center; gap: 12px; }
+      .creator-info { display: flex; align-items: center; gap: 12px; cursor: pointer; }
       .creator-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
       .creator-name { display: block; margin: 0; }
       .post-time { font-size: 12px; color: var(--text-muted); }
       .post-menu { background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px; }
       
-      .post-media { position: relative; background: #f5f5f5; }
-      .post-media img { width: 100%; max-height: 500px; object-fit: cover; cursor: pointer; }
+      .post-media { position: relative; background: #f5f5f5; cursor: pointer; }
+      .post-media img { width: 100%; max-height: 500px; object-fit: cover; }
       .play-button { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
       
       .post-actions { display: flex; gap: 16px; padding: 16px; }
@@ -4101,6 +4955,319 @@ function createpost(ctx) {
       }
     </style>
   `);
+}
+
+// UGC interaction functions
+window.__viewCreatorProfile = (creatorId) => {
+  navigate(`#/creator/${creatorId}`);
+};
+
+window.__viewPostDetail = (postId) => {
+  const post = state.ugcFeed?.find(p => p.id === postId);
+  if (!post) return;
+  
+  showSheet(h(`
+    <div class="panel" style="max-width:500px; margin:0 auto">
+      <div class="row between" style="margin-bottom:16px">
+        <h3>${t("post_details")}</h3>
+        <button onclick="window.__hideSheet()" style="background:none; border:none; font-size:24px; cursor:pointer">✕</button>
+      </div>
+      
+      <div style="text-align:center; margin-bottom:16px">
+        <img src="${post.image}" alt="${post.caption}" 
+             style="width:100%; max-width:400px; border-radius:12px" />
+      </div>
+      
+      <div class="row" style="gap:12px; margin-bottom:16px">
+        <img src="${post.creatorAvatar}" alt="${post.creator}" 
+             style="width:40px; height:40px; border-radius:50%" />
+        <div style="flex:1">
+          <strong>${post.creator}</strong>
+          <p style="margin:8px 0">${post.caption}</p>
+          <div style="font-size:12px; color:var(--muted)">${getTimeAgo(post.timestamp)}</div>
+        </div>
+      </div>
+      
+      ${post.taggedProducts?.length > 0 ? `
+        <div style="margin-bottom:16px">
+          <h4>${t("tagged_products")}</h4>
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px; margin-top:8px">
+            ${post.taggedProducts.map(pid => {
+              const product = productById(pid);
+              return product ? `
+                <div class="panel" onclick="window.__hideSheet(); window.StoreZ.navigate('#/pdp/${product.id}')" 
+                     style="padding:8px; cursor:pointer">
+                  <img src="${uns(product.img, 200)}" alt="${getProductField(product, 'name')}" 
+                       style="width:100%; aspect-ratio:1; border-radius:8px; object-fit:cover; margin-bottom:8px" />
+                  <strong style="font-size:14px">${getProductField(product, 'name')}</strong>
+                  <div style="color:var(--brand); font-weight:bold">${fmtSAR(product.price)}</div>
+                </div>
+              ` : '';
+            }).join('')}
+          </div>
+        </div>
+      ` : ''}
+      
+      <div class="row" style="gap:12px">
+        <button class="secondary" onclick="window.__sharePost('${post.id}')" style="flex:1">
+          📤 ${t("share")}
+        </button>
+        <button class="primary" onclick="window.__hideSheet(); window.__showComments('${post.id}')" style="flex:1">
+          💬 ${t("comments")} (${post.comments})
+        </button>
+      </div>
+    </div>
+  `));
+};
+
+window.__showPostMenu = (postId) => {
+  const post = state.ugcFeed?.find(p => p.id === postId);
+  if (!post) return;
+  
+  const isOwnPost = post.creatorId === state.user.id;
+  
+  showSheet(h(`
+    <div class="panel" style="max-width:400px; margin:0 auto">
+      <h3 style="margin-bottom:16px">${t("post_options")}</h3>
+      
+      <div style="display:flex; flex-direction:column; gap:8px">
+        ${isOwnPost ? `
+          <button class="ghost" onclick="window.__editPost('${postId}')" style="justify-content:flex-start; padding:12px">
+            ✏️ ${t("edit_post")}
+          </button>
+          <button class="ghost" onclick="window.__deletePost('${postId}')" style="justify-content:flex-start; padding:12px; color:var(--danger,#ff4444)">
+            🗑️ ${t("delete_post")}
+          </button>
+        ` : `
+          <button class="ghost" onclick="window.__reportPost('${postId}')" style="justify-content:flex-start; padding:12px">
+            🚨 ${t("report_post")}
+          </button>
+          <button class="ghost" onclick="window.__followCreator('${post.creatorId}')" style="justify-content:flex-start; padding:12px">
+            ➕ ${t("follow")} ${post.creator}
+          </button>
+        `}
+        <button class="ghost" onclick="window.__sharePost('${postId}')" style="justify-content:flex-start; padding:12px">
+          📤 ${t("share_post")}
+        </button>
+        <button class="ghost" onclick="window.__hideSheet()" style="justify-content:flex-start; padding:12px">
+          ✕ ${t("cancel")}
+        </button>
+      </div>
+    </div>
+  `));
+};
+
+window.__toggleLike = (postId) => {
+  const post = state.ugcFeed?.find(p => p.id === postId);
+  if (!post) return;
+  
+  if (state.user.guest) {
+    if (confirm(t("sign_up_to_like"))) {
+      navigate("#/auth");
+    }
+    return;
+  }
+  
+  post.liked = !post.liked;
+  post.likes += post.liked ? 1 : -1;
+  
+  // Update the UI
+  const likeBtn = document.querySelector(`[onclick="window.__toggleLike('${postId}')"]`);
+  if (likeBtn) {
+    const icon = likeBtn.querySelector('span:first-child');
+    const count = likeBtn.querySelector('span:last-child');
+    if (icon) icon.textContent = post.liked ? '❤️' : '🤍';
+    if (count) {
+      count.textContent = post.likes;
+      count.style.color = post.liked ? 'var(--danger,#ff4444)' : 'var(--text)';
+    }
+  }
+  
+  // Save updated state to localStorage
+  actions.saveState();
+};
+
+window.__toggleSave = (postId) => {
+  const post = state.ugcFeed?.find(p => p.id === postId);
+  if (!post) return;
+  
+  if (state.user.guest) {
+    if (confirm(t("sign_up_to_save"))) {
+      navigate("#/auth");
+    }
+    return;
+  }
+  
+  post.saved = !post.saved;
+  
+  // Update the UI
+  const saveBtn = document.querySelector(`[onclick="window.__toggleSave('${postId}')"]`);
+  if (saveBtn) {
+    saveBtn.textContent = post.saved ? '🔖' : '📄';
+  }
+  
+  actions.saveState();
+  alert(post.saved ? t("post_saved") : t("post_unsaved"));
+};
+
+window.__sharePost = (postId) => {
+  const post = state.ugcFeed?.find(p => p.id === postId);
+  if (!post) return;
+  
+  const shareData = {
+    title: `${post.creator} on StoreZ`,
+    text: post.caption.substring(0, 100) + (post.caption.length > 100 ? '...' : ''),
+    url: `${location.origin}${location.pathname}#/ugcfeed?post=${postId}`
+  };
+  
+  if (navigator.share) {
+    navigator.share(shareData);
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareData.url).then(() => {
+      alert(t("link_copied"));
+    });
+  }
+  
+  post.shares = (post.shares || 0) + 1;
+  actions.saveState();
+};
+
+window.__showComments = (postId) => {
+  // Simulate comments for demo
+  const comments = [
+    { user: "@style_lover", text: "Love this! 😍", time: "2h" },
+    { user: "@fashion_fan", text: "Where did you get this?", time: "1h" },
+    { user: "@trend_setter", text: "Amazing style! 🔥", time: "45m" },
+    { user: "@saudi_shopper", text: "يوصل السعودية؟", time: "30m" },
+    { user: "@fitness_guru", text: "Great workout outfit!", time: "15m" }
+  ];
+  
+  showSheet(h(`
+    <div class="panel" style="max-width:500px; margin:0 auto">
+      <div class="row between" style="margin-bottom:16px">
+        <h3>${t("comments")}</h3>
+        <button onclick="window.__hideSheet()" style="background:none; border:none; font-size:24px; cursor:pointer">✕</button>
+      </div>
+      
+      <div style="max-height:300px; overflow-y:auto; margin-bottom:16px">
+        ${comments.map(comment => `
+          <div class="row" style="gap:12px; margin-bottom:12px">
+            <div style="width:32px; height:32px; border-radius:50%; background:var(--brand); display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:14px">
+              ${comment.user[1].toUpperCase()}
+            </div>
+            <div style="flex:1">
+              <div><strong>${comment.user}</strong> <span style="color:var(--muted); font-size:12px">${comment.time}</span></div>
+              <div>${comment.text}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      
+      <div class="row" style="gap:8px">
+        <input placeholder="${t("add_comment")}" style="flex:1" />
+        <button class="primary">${t("post")}</button>
+      </div>
+    </div>
+  `));
+};
+
+window.__createUGCPost = () => {
+  navigate("#/createpost");
+};
+
+window.__loadMorePosts = () => {
+  // Simulate loading more posts
+  alert(t("no_more_posts"));
+};
+
+window.__editPost = (postId) => {
+  window.__hideSheet();
+  alert(t("edit_post_feature_coming_soon"));
+};
+
+window.__deletePost = (postId) => {
+  if (confirm(t("confirm_delete_post"))) {
+    const postIndex = state.ugcFeed?.findIndex(p => p.id === postId);
+    if (postIndex !== -1) {
+      state.ugcFeed.splice(postIndex, 1);
+      actions.saveState();
+      window.__hideSheet();
+      navigate("#/ugcfeed");
+      alert(t("post_deleted"));
+    }
+  }
+};
+
+window.__reportPost = (postId) => {
+  window.__hideSheet();
+  
+  const reasons = [
+    t("inappropriate_content"),
+    t("spam"), 
+    t("harassment"),
+    t("fake_products"),
+    t("copyright_violation"),
+    t("other")
+  ];
+  
+  const reason = prompt(t("report_reason") + "\\n\\n" + reasons.map((r, i) => `${i+1}. ${r}`).join("\\n"));
+  
+  if (reason) {
+    alert(t("report_submitted"));
+  }
+};
+
+window.__followCreator = (creatorId) => {
+  if (state.user.guest) {
+    if (confirm(t("sign_up_to_follow"))) {
+      navigate("#/auth");
+    }
+    return;
+  }
+  
+  const creator = state.ugcCreators?.find(c => c.id === creatorId);
+  if (!creator) return;
+  
+  if (!state.user.following) state.user.following = [];
+  
+  const isFollowing = state.user.following.includes(creatorId);
+  
+  if (isFollowing) {
+    state.user.following = state.user.following.filter(id => id !== creatorId);
+    creator.followers -= 1;
+    alert(t("unfollowed") + " " + creator.name);
+  } else {
+    state.user.following.push(creatorId);
+    creator.followers += 1;
+    alert(t("following") + " " + creator.name);
+  }
+  
+  actions.saveState();
+};
+
+// Time formatting helpers
+function getTimeAgo(timestamp) {
+  const now = new Date();
+  const past = new Date(timestamp);
+  const diffMs = now - past;
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  
+  if (diffMins < 1) return t("just_now");
+  if (diffMins < 60) return `${diffMins}${t("m")}`;
+  if (diffHours < 24) return `${diffHours}${t("h")}`;
+  if (diffDays < 7) return `${diffDays}${t("d")}`;
+  
+  return getLang() === "ar" 
+    ? past.toLocaleDateString("ar-SA")
+    : past.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+function formatNumber(num) {
+  if (num >= 1000000) return (num/1000000).toFixed(1) + (getLang() === "ar" ? "م" : "M");
+  if (num >= 1000) return (num/1000).toFixed(1) + (getLang() === "ar" ? "ك" : "K");
+  return num.toString();
 }
 
 // Cleanup function for live shopping
@@ -5108,6 +6275,363 @@ function orderConfirmation(ctx, orderId) {
   `);
 }
 
+// Individual live stream viewer
+function liveStream(ctx, streamId) {
+  const stream = state.live?.activeStreams?.find(s => s.id === streamId) || 
+                 state.live?.activeStreams?.[0] ||
+                 { id: streamId, title: "Live Stream", creator: "@creator", viewers: 1247 };
+                 
+  const creator = creatorById(stream.creatorId) || state.creators[0];
+  const streamProducts = (stream.products || []).map(pid => productById(pid)).filter(Boolean);
+  const currentProduct = streamProducts[0] || state.products[0];
+  const duration = stream.startTime ? Math.floor((Date.now() - stream.startTime) / 60000) : 45;
+  
+  ctx.el.innerHTML = h(`
+    <section class="panel" style="max-width:100%; padding:0">
+      <!-- Live video area -->
+      <div style="position:relative; background:linear-gradient(135deg, #2a2655, #0e3d57); aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; color:white">
+        <!-- Simulated video background -->
+        <img src="${stream.thumbnail || uns(currentProduct.img, 1200)}" alt="Live stream" 
+             style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.4" />
+        
+        <!-- Live status and controls -->
+        <div style="position:absolute; top:16px; left:16px; right:16px; display:flex; justify-content:space-between; align-items:flex-start">
+          <div class="row" style="gap:8px">
+            <span class="chip pulse" style="background:var(--danger,#ff4444); color:white">
+              ● LIVE
+            </span>
+            <span class="chip" style="background:rgba(0,0,0,0.6); color:white">
+              👁 ${stream.viewers?.toLocaleString() || '1,247'} ${t("viewers")}
+            </span>
+            <span class="chip" style="background:rgba(0,0,0,0.6); color:white; font-size:12px">
+              ${duration}m
+            </span>
+          </div>
+          
+          <div class="row" style="gap:8px">
+            <button class="icon-btn" onclick="window.__toggleMute && window.__toggleMute()" 
+                    style="background:rgba(0,0,0,0.6); color:white" title="${t("mute")}">
+              🔊
+            </button>
+            <button class="icon-btn" onclick="window.__toggleFullscreen && window.__toggleFullscreen()" 
+                    style="background:rgba(0,0,0,0.6); color:white" title="${t("fullscreen")}">
+              ⛶
+            </button>
+            <button class="icon-btn" onclick="window.StoreZ.navigate('#/live')" 
+                    style="background:rgba(0,0,0,0.6); color:white" title="${t("close")}">
+              ✕
+            </button>
+          </div>
+        </div>
+        
+        <!-- Creator info overlay -->
+        <div style="position:absolute; bottom:16px; left:16px">
+          <div class="row" style="gap:8px; color:white">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:bold">
+              ${creator.name[0]}
+            </div>
+            <div>
+              <strong style="font-size:16px">${creator.name}</strong>
+              <div style="opacity:0.9">${stream.creator}</div>
+              <div style="font-size:12px; opacity:0.8">${stream.title}</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Flash deal alert -->
+        ${stream.flashDeals?.length > 0 ? `
+          <div style="position:absolute; top:50%; right:16px; transform:translateY(-50%)">
+            <div class="panel" style="background:var(--danger,#ff4444); color:white; padding:8px; border-radius:8px; animation:pulse 2s infinite">
+              <div style="font-size:12px; font-weight:bold">🔥 FLASH DEAL</div>
+              <div style="font-size:11px">${Math.floor((stream.flashDeals[0].endTime - Date.now()) / 60000)}m left</div>
+            </div>
+          </div>
+        ` : ''}
+        
+        <!-- Large play button simulation -->
+        <div id="playButton" style="width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center; font-size:32px; cursor:pointer" 
+             onclick="window.__togglePlayback && window.__togglePlayback()">
+          ▶️
+        </div>
+      </div>
+      
+      <!-- Live shopping interface -->
+      <div style="padding:16px">
+        <!-- Flash deals notification -->
+        ${stream.flashDeals?.length > 0 ? `
+          <div class="panel" style="background:linear-gradient(135deg, var(--danger,#ff4444), #ff6b6b); color:white; margin-bottom:16px; position:relative">
+            <div style="position:absolute; top:8px; right:8px">
+              <span class="chip" style="background:rgba(255,255,255,0.2); color:white; font-size:11px">
+                🔥 ${stream.flashDeals.length} ${t("deals")}
+              </span>
+            </div>
+            
+            <h4 style="margin-bottom:8px">${t("flash_deals_active")}!</h4>
+            <div style="font-size:14px; opacity:0.9; margin-bottom:12px">${t("limited_time_offers")}</div>
+            
+            <div class="row" style="gap:8px; overflow-x:auto">
+              ${stream.flashDeals.map(deal => {
+                const product = productById(deal.productId);
+                const timeLeft = Math.floor((deal.endTime - Date.now()) / 60000);
+                
+                return `
+                  <div class="panel" style="background:rgba(255,255,255,0.15); color:white; min-width:120px; text-align:center">
+                    <div style="font-size:12px; margin-bottom:4px">${getProductField(product, 'name').substring(0, 15)}...</div>
+                    <div style="font-size:16px; font-weight:bold">${fmtSAR(deal.salePrice)}</div>
+                    <div style="font-size:11px; text-decoration:line-through; opacity:0.8">${fmtSAR(deal.originalPrice)}</div>
+                    <div style="font-size:10px; margin-top:4px">${timeLeft}m left</div>
+                    <button class="ghost small" style="border-color:white; color:white; margin-top:4px; font-size:10px" 
+                            data-action="flash-buy" data-id="${product.id}">
+                      ${t("grab_deal")}
+                    </button>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        ` : ''}
+        
+        <!-- Chat and products toggle -->
+        <div class="row" style="gap:8px; margin-bottom:16px">
+          <button id="chatTab" class="chip active" onclick="window.__switchLiveTab && window.__switchLiveTab('chat')" 
+                  style="flex:1; background:var(--brand); color:white">
+            💬 ${t("chat")} (${Math.floor(Math.random() * 50) + 20})
+          </button>
+          <button id="productsTab" class="chip" onclick="window.__switchLiveTab && window.__switchLiveTab('products')" 
+                  style="flex:1">
+            🛍️ ${t("products")} (${streamProducts.length})
+          </button>
+          <button id="dealTab" class="chip" onclick="window.__switchLiveTab && window.__switchLiveTab('deals')" 
+                  style="flex:1">
+            🔥 ${t("deals")} (${stream.flashDeals?.length || 0})
+          </button>
+        </div>
+        
+        <!-- Chat view -->
+        <div id="chatView" class="live-content">
+          <div style="max-height:240px; overflow-y:auto; border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:12px; background:var(--panel)">
+            <div class="live-message">
+              <strong style="color:var(--brand)">@maya_shopper:</strong> <span>Love these products! 😍</span>
+            </div>
+            <div class="live-message">
+              <strong style="color:var(--brand-2)">@style_hunter:</strong> <span>How's the quality?</span>
+            </div>
+            <div class="live-message">
+              <strong style="color:var(--brand)">${stream.creator}:</strong> <span>Excellent quality! Very comfortable 👟</span>
+            </div>
+            <div class="live-message">
+              <strong style="color:var(--brand-2)">@deal_hunter:</strong> <span>Just ordered! Thanks ${creator.name}! 🔥</span>
+            </div>
+            <div class="live-message">
+              <strong style="color:var(--brand)">@saudi_shopper:</strong> <span>Perfect timing! Needed this</span>
+            </div>
+            <div class="live-message">
+              <strong style="color:var(--brand-2)">@fashion_lover:</strong> <span>shipping to Riyadh?</span>
+            </div>
+            <div class="live-message">
+              <strong style="color:var(--brand)">${stream.creator}:</strong> <span>Yes! Free shipping to all Saudi cities 🚚</span>
+            </div>
+          </div>
+          
+          <!-- Chat input -->
+          <div class="row" style="gap:8px">
+            <input id="liveMessage" placeholder="${t("type_message")}" style="flex:1" />
+            <button class="secondary" onclick="window.__sendLiveMessage && window.__sendLiveMessage()">
+              ${t("send")}
+            </button>
+            <button class="ghost" onclick="window.__sendQuickReaction && window.__sendQuickReaction()" title="${t("quick_reaction")}">
+              ❤️
+            </button>
+          </div>
+          
+          <!-- Quick reactions -->
+          <div class="row" style="gap:4px; margin-top:8px; justify-content:center">
+            <button class="chip small" onclick="window.__sendQuickReaction && window.__sendQuickReaction('🔥')" style="font-size:14px">🔥</button>
+            <button class="chip small" onclick="window.__sendQuickReaction && window.__sendQuickReaction('❤️')" style="font-size:14px">❤️</button>
+            <button class="chip small" onclick="window.__sendQuickReaction && window.__sendQuickReaction('👏')" style="font-size:14px">👏</button>
+            <button class="chip small" onclick="window.__sendQuickReaction && window.__sendQuickReaction('😍')" style="font-size:14px">😍</button>
+            <button class="chip small" onclick="window.__sendQuickReaction && window.__sendQuickReaction('🛒')" style="font-size:14px">🛒</button>
+          </div>
+        </div>
+        
+        <!-- Products view -->
+        <div id="productsView" class="live-content" style="display:none">
+          ${currentProduct ? `
+            <!-- Featured product -->
+            <div class="panel" style="background:var(--brand-2); color:white; margin-bottom:16px; position:relative">
+              <div style="position:absolute; top:8px; right:8px">
+                <span class="chip" style="background:var(--danger,#ff4444); color:white">
+                  🔥 ${t("featured_now")}
+                </span>
+              </div>
+              <div class="row" style="gap:12px">
+                <img src="${uns(currentProduct.img, 200)}" alt="${getProductField(currentProduct, 'name')}" 
+                     style="width:80px; height:80px; border-radius:12px; object-fit:cover" />
+                <div style="flex:1">
+                  <strong style="display:block">${getProductField(currentProduct, 'name')}</strong>
+                  <div style="opacity:0.9">${getProductField(currentProduct, 'cat')}</div>
+                  <div style="font-size:18px; font-weight:bold; margin-top:4px">
+                    ${fmtSAR(currentProduct.price)}
+                    ${currentProduct.listPrice ? `<span style="text-decoration:line-through; opacity:0.7; margin-left:8px">${fmtSAR(currentProduct.listPrice)}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="gap:8px; margin-top:12px">
+                <button class="ghost" style="flex:1; border-color:white; color:white" 
+                        data-action="add-to-cart" data-id="${currentProduct.id}">
+                  ${t("add_to_cart")}
+                </button>
+                <button class="secondary" style="flex:1; background:white; color:var(--brand-2)" 
+                        data-action="buy-now" data-id="${currentProduct.id}">
+                  ${t("buy_now")}
+                </button>
+              </div>
+            </div>
+          ` : ''}
+          
+          <!-- Other products -->
+          ${streamProducts.length > 1 ? `
+            <div>
+              <h4>${t("more_from")} ${creator.name}</h4>
+              <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px; margin-top:8px">
+                ${streamProducts.slice(1).map(p => `
+                  <div class="panel" style="padding:8px">
+                    <img src="${uns(p.img, 200)}" alt="${getProductField(p, 'name')}" 
+                         style="width:100%; aspect-ratio:1; border-radius:8px; object-fit:cover; margin-bottom:8px" />
+                    <strong style="font-size:14px; display:block">${getProductField(p, 'name')}</strong>
+                    <div style="color:var(--brand); font-weight:bold">${fmtSAR(p.price)}</div>
+                    <button class="ghost small" data-action="add-to-cart" data-id="${p.id}" 
+                            style="width:100%; margin-top:8px">
+                      ${t("add_to_cart")}
+                    </button>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+        
+        <!-- Deals view -->
+        <div id="dealView" class="live-content" style="display:none">
+          ${stream.flashDeals?.length > 0 ? `
+            <h4 style="margin-bottom:12px">${t("flash_deals_ending_soon")}</h4>
+            ${stream.flashDeals.map(deal => {
+              const product = productById(deal.productId);
+              const timeLeft = Math.floor((deal.endTime - Date.now()) / 60000);
+              const savings = deal.originalPrice - deal.salePrice;
+              const discount = Math.round((savings / deal.originalPrice) * 100);
+              
+              return `
+                <div class="panel" style="margin-bottom:12px; position:relative">
+                  <div style="position:absolute; top:8px; right:8px">
+                    <span class="chip" style="background:var(--danger,#ff4444); color:white; font-size:11px">
+                      ${timeLeft}m left
+                    </span>
+                  </div>
+                  
+                  <div class="row" style="gap:12px">
+                    <img src="${uns(product.img, 200)}" alt="${getProductField(product, 'name')}" 
+                         style="width:60px; height:60px; border-radius:8px; object-fit:cover" />
+                    <div style="flex:1">
+                      <strong style="display:block; margin-bottom:4px">${getProductField(product, 'name')}</strong>
+                      <div style="font-size:14px; color:var(--muted); margin-bottom:4px">${getProductField(product, 'cat')}</div>
+                      
+                      <div class="row" style="gap:8px; align-items:center">
+                        <span style="font-size:18px; font-weight:bold; color:var(--danger,#ff4444)">${fmtSAR(deal.salePrice)}</span>
+                        <span style="text-decoration:line-through; color:var(--muted)">${fmtSAR(deal.originalPrice)}</span>
+                        <span class="chip small" style="background:var(--success,#22c55e); color:white">-${discount}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="row" style="gap:8px; margin-top:12px">
+                    <button class="ghost" style="flex:1" data-action="add-to-cart" data-id="${product.id}">
+                      ${t("add_to_cart")}
+                    </button>
+                    <button class="primary" style="flex:2" data-action="flash-buy" data-id="${product.id}">
+                      🔥 ${t("grab_deal")} - ${fmtSAR(deal.salePrice)}
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          ` : `
+            <div style="text-align:center; padding:32px; color:var(--muted)">
+              <div style="font-size:48px; margin-bottom:16px">🔥</div>
+              <h4 style="margin-bottom:8px">${t("no_active_deals")}</h4>
+              <p>${t("stay_tuned_for_deals")}</p>
+            </div>
+          `}
+        </div>
+        
+        <!-- Live shopping actions -->
+        <div class="row" style="gap:8px; margin-top:16px; padding-top:16px; border-top:1px solid var(--border)">
+          <button class="ghost" onclick="window.__shareLive && window.__shareLive('${streamId}')" style="flex:1">
+            📤 ${t("share")}
+          </button>
+          <button class="ghost" onclick="window.__followCreator && window.__followCreator('${creator.id}')" style="flex:1">
+            ➕ ${t("follow")}
+          </button>
+          <button class="ghost" onclick="window.__reportLive && window.__reportLive('${streamId}')" style="flex:1">
+            🚨 ${t("report")}
+          </button>
+        </div>
+      </div>
+    </section>
+  `);
+  
+  // Auto-scroll chat to bottom
+  setTimeout(() => {
+    const chatContainer = document.querySelector('#chatView > div');
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  }, 100);
+  
+  // Simulate live chat updates
+  if (window.__liveUpdateInterval) {
+    clearInterval(window.__liveUpdateInterval);
+  }
+  
+  window.__liveUpdateInterval = setInterval(() => {
+    if (document.getElementById('chatView')?.style.display !== 'none') {
+      const messages = [
+        "Amazing quality! 🔥",
+        "Just added to cart!",
+        "Love this brand ❤️",
+        "How's the delivery time?",
+        "Perfect for my style!",
+        "Thanks for the demo!",
+        "Ordering now! 🛒",
+        "السعر ممتاز! 👌", // Arabic: Great price!
+        "شحن مجاني؟", // Arabic: Free shipping?
+        "جودة رائعة", // Arabic: Excellent quality
+        "تم الطلب! شكراً",  // Arabic: Ordered! Thanks
+        "يوصل الرياض؟" // Arabic: Delivers to Riyadh?
+      ];
+      const users = ["@style_lover", "@trend_setter", "@shop_smart", "@fashion_forward", "@deal_hunter", "@saudi_buyer", "@riyadh_fashion"];
+      
+      const chatContainer = document.querySelector('#chatView > div');
+      if (chatContainer) {
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+        const randomUser = users[Math.floor(Math.random() * users.length)];
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'live-message';
+        messageDiv.innerHTML = `<strong style="color:var(--brand-2)">${randomUser}:</strong> <span>${randomMessage}</span>`;
+        
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        // Keep only last 12 messages
+        while (chatContainer.children.length > 12) {
+          chatContainer.removeChild(chatContainer.firstChild);
+        }
+      }
+    }
+  }, 3000 + Math.random() * 3000); // Random interval 3-6 seconds
+}
+
 // Order confirmation helper function
 window.__shareOrder = (orderId) => {
   const order = state.orders.find(o => o.id === orderId);
@@ -5126,4 +6650,85 @@ window.__shareOrder = (orderId) => {
       alert(t("link_copied"));
     });
   }
+};
+
+/* ---------- AI Tracking Functions ---------- */
+
+window.__trackAIClick = (itemId, itemType, reason) => {
+  console.log(`🤖 AI Click: ${itemType} ${itemId} - ${reason}`);
+  aiEngine.trackClick(itemId, itemType, { 
+    reason, 
+    timestamp: Date.now(),
+    source: 'ai_recommendation'
+  });
+};
+
+window.__trackCategoryClick = (category) => {
+  console.log(`🏷️ Category Click: ${category}`);
+  aiEngine.trackClick(category, 'category', { 
+    timestamp: Date.now(),
+    source: 'category_navigation'
+  });
+};
+
+window.__showFullInsights = () => {
+  const insights = aiEngine.getUserInsights();
+  
+  const insightsHTML = `
+    <div style="padding:20px;">
+      <h2>🤖 ${t("your_ai_insights")}</h2>
+      
+      <div style="margin:16px 0;">
+        <h4>${t("top_categories")}</h4>
+        ${insights.topCategories.map(cat => `
+          <div class="row between" style="margin:4px 0; padding:8px; background:var(--bg-2); border-radius:6px">
+            <span>${cat.category}</span>
+            <span class="chip">${cat.score} ${t("interactions")}</span>
+          </div>
+        `).join('')}
+      </div>
+      
+      <div style="margin:16px 0;">
+        <h4>${t("activity_summary")}</h4>
+        <div class="grid" style="grid-template-columns:1fr 1fr; gap:8px">
+          <div style="text-align:center; padding:12px; background:var(--bg-2); border-radius:6px">
+            <div style="font-size:24px; font-weight:bold; color:var(--brand)">${insights.activityStats.totalViews}</div>
+            <div class="muted small">${t("products_viewed")}</div>
+          </div>
+          <div style="text-align:center; padding:12px; background:var(--bg-2); border-radius:6px">
+            <div style="font-size:24px; font-weight:bold; color:var(--brand-2)">${insights.activityStats.sessionCount}</div>
+            <div class="muted small">${t("shopping_sessions")}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div style="margin:16px 0;">
+        <h4>${t("price_preference")}</h4>
+        <div style="padding:12px; background:var(--bg-2); border-radius:6px">
+          ${fmt(insights.priceRange.min)} - ${fmt(insights.priceRange.max)}
+        </div>
+      </div>
+      
+      <div class="row" style="gap:12px; margin-top:20px">
+        <button class="ghost" onclick="window.__hideSheet()" style="flex:1">${t("close")}</button>
+        <button class="secondary" onclick="window.__resetAIData()" style="flex:1">${t("reset_ai_data")}</button>
+      </div>
+    </div>
+  `;
+  
+  showSheet(insightsHTML);
+};
+
+window.__resetAIData = () => {
+  if (!confirm(t("confirm_reset_ai_data"))) return;
+  
+  localStorage.removeItem("storez_ai_data_v1");
+  aiEngine.data = aiEngine.getDefaultAIData();
+  aiEngine.saveAIData();
+  
+  window.__hideSheet();
+  alert(t("ai_data_reset_success"));
+  
+  // Refresh the current page
+  window.location.reload();
 };

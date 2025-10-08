@@ -1,12 +1,147 @@
-/* data.js — state, persistence, sample catalog, and action  products: [
-    P("p1", "CloudRunner Sneakers", "Footwear", 329, 399, "c1", "1519744792095  messages: [
-    { 
-      id: "m  ],
-  messages: [
-    { id: "m1", with: "@linafit", thread: [{ from: "@linafit", text: "New drop tonight! Tap "Live" from my profile 👀", ts: Date.now() - 3600e3 }] }
+/* data.js — state, persistence, sample catalog, and actions */
+
+/* ---------- localStorage key ---------- */
+const LS_STATE_KEY = "storez_spa_state_v2";
+
+/* ---------- unsplash helper ---------- */
+export const uns = (id, w = 900) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
+
+/* ---------- product helper ---------- */
+function P(id, name, cat, price, listPrice = null, creatorId = null, img = null, nameAr = null, catAr = null) {
+  return {
+    id, 
+    price, 
+    listPrice, 
+    creatorId,
+    img,
+    rating: 4.2 + Math.random() * 0.6,
+    name: { en: name, ar: nameAr || name },
+    cat: { en: cat, ar: catAr || cat },
+    tags: ["#trending", "#new", "#popular"]
+  };
+}
+
+// Helper to get localized product field
+export function getProductField(product, field, lang = null) {
+  const currentLang = lang || localStorage.getItem("storez_lang") || "en";
+  if (typeof product[field] === 'object' && product[field] !== null) {
+    return product[field][currentLang] || product[field].en;
+  }
+  return product[field];
+}
+
+/* ---------- initial state ---------- */
+export const state = {
+  prefs: {
+    lang: "en",
+    theme: "auto",
+    rtlOverride: null,
+    sponsor: false,
+    notif: { orders: true, live: true, marketing: false, consent: true }
+  },
+  user: { 
+    id: "u1", 
+    name: "Maya", 
+    email: "",
+    authed: false, 
+    guest: false, 
+    credits: 45, 
+    referrals: 2,
+    authMethod: "",
+    interests: [],
+    preferences: { marketing: false, orders: true, live: false },
+    followedCreators: [],
+    likedProducts: [],
+    stats: { productViews: 0, timeSpent: 0, sessionsCount: 0 }
+  },
+  
+  products: [
+    P("p1", "CloudRunner Sneakers", "Footwear", 329, 399, "c1", "1519744792095-ee0c2909d518", "حذاء الجري السحابي", "أحذية"),
+    P("p2", "Sunset Hoodie", "Apparel", 149, 189, "c2", "1515879218367-8466d910aaa4", "هودي الغروب", "ملابس"),
+    P("p3", "Mystic Diffuser", "Home", 89, 119, "c3", "1515378791036-0648a3ef77b2", "موزع عطر صوفي", "منزل"),
+    P("p4", "Travel Mug", "Accessories", 45, 65, "c2", "1521572267360-ee0c2909d518", "كوب السفر", "إكسسوارات"),
+    P("p5", "Plant Pot Set", "Home", 199, 249, "c3", "1519744792095-ee0c2909d518", "طقم أصص النباتات", "منزل"),
+    P("p6", "Active Leggings", "Apparel", 149, 189, "c1", "1521572267360-ee0c2909d518", "ليجنز رياضي", "ملابس"),
+    P("p7", "Blue Light Glasses", "Accessories", 99, 129, "c3", "1515879218367-8466d910aaa4", "نظارات الضوء الأزرق", "إكسسوارات"),
+    P("p8", "Detox Clay Mask", "Beauty", 79, null, "c3", "1515378791036-0648a3ef77b2", "ماسك الطين المنظف", "جمال")
   ],
 
-  // UGC Feed with sample posts
+  creators: [
+    { 
+      id: "c1", 
+      name: "@linafit", 
+      handle: "@linafit",
+      avatar: uns("1494790108755-2616b612b9e3", 150), 
+      followers: 128000, 
+      verified: true,
+      bio: "Wellness & athleisure",
+      live: true
+    },
+    { 
+      id: "c2", 
+      name: "@saudichef", 
+      handle: "@saudichef",
+      avatar: uns("1507003211169-0a1dd7bf0ec3", 150), 
+      followers: 98000, 
+      verified: false,
+      bio: "Traditional Saudi cuisine",
+      live: false
+    },
+    { 
+      id: "c3", 
+      name: "@homeguru", 
+      handle: "@homeguru",
+      avatar: uns("1472099645785-5658abf4ff4e", 150), 
+      followers: 54000, 
+      verified: true,
+      bio: "Clean home & lifestyle",
+      live: false
+    }
+  ],
+
+  cart: [],
+  wishlist: [],
+  orders: [],
+  
+  messages: [
+    { 
+      id: "m1", 
+      with: "@linafit", 
+      creatorId: "c1",
+      unread: 2,
+      thread: [
+        { from: "@linafit", text: "New drop tonight! Tap \"Live\" from my profile 👀", ts: Date.now() - 3600e3 },
+        { from: "user", text: "Can't wait! What time?", ts: Date.now() - 3500e3 },
+        { from: "@linafit", text: "Starting at 8 PM! I'll be showing the new active wear collection with special prices 🔥", ts: Date.now() - 1800e3 },
+        { from: "@linafit", text: "Don't miss the flash deals during the stream!", ts: Date.now() - 900e3 }
+      ] 
+    },
+    {
+      id: "m2",
+      with: "@saudichef",
+      creatorId: "c2", 
+      unread: 0,
+      thread: [
+        { from: "user", text: "Love your cooking videos! Do you ship ingredients?", ts: Date.now() - 86400e3 },
+        { from: "@saudichef", text: "Thank you! Yes, we have spice kits and specialty ingredients. Check my store!", ts: Date.now() - 82800e3 },
+        { from: "user", text: "Perfect! Just ordered the traditional spice collection", ts: Date.now() - 82200e3 },
+        { from: "@saudichef", text: "Excellent choice! I'll include the recipe card for Kabsa 😊", ts: Date.now() - 82000e3 }
+      ]
+    },
+    {
+      id: "m3",
+      with: "Support Team",
+      creatorId: null,
+      unread: 1,
+      thread: [
+        { from: "user", text: "I need help with my recent order #12345", ts: Date.now() - 7200e3 },
+        { from: "support", text: "I'd be happy to help! Let me check your order status.", ts: Date.now() - 7000e3 },
+        { from: "support", text: "Your order is being prepared and will ship tomorrow. You'll get tracking details via SMS.", ts: Date.now() - 6800e3 }
+      ]
+    }
+  ],
+
   ugcFeed: [
     {
       id: "ugc1",
@@ -93,197 +228,97 @@
       }
     }
   ],
-
-  metrics: { impressions: 0, addToCart: 0, purchases: 0, revenue: 0, productViews: 0, favorites: 0 }      with: "@linafit", 
-      creatorId: "c1",
-      unread: 2,
-      thread: [
-        { from: "@linafit", text: "New drop tonight! Tap "Live" from my profile 👀", ts: Date.now() - 3600e3 },
-        { from: "user", text: "Can't wait! What time?", ts: Date.now() - 3500e3 },
-        { from: "@linafit", text: "Starting at 8 PM! I'll be showing the new active wear collection with special prices 🔥", ts: Date.now() - 1800e3 },
-        { from: "@linafit", text: "Don't miss the flash deals during the stream!", ts: Date.now() - 900e3 }
-      ] 
-    },
-    {
-      id: "m2",
-      with: "@saudichef",
-      creatorId: "c2", 
-      unread: 0,
-      thread: [
-        { from: "user", text: "Love your cooking videos! Do you ship ingredients?", ts: Date.now() - 86400e3 },
-        { from: "@saudichef", text: "Thank you! Yes, we have spice kits and specialty ingredients. Check my store!", ts: Date.now() - 82800e3 },
-        { from: "user", text: "Perfect! Just ordered the traditional spice collection", ts: Date.now() - 82200e3 },
-        { from: "@saudichef", text: "Excellent choice! I'll include the recipe card for Kabsa 😊", ts: Date.now() - 82000e3 }
-      ]
-    },
-    {
-      id: "m3",
-      with: "Support Team",
-      creatorId: null,
-      unread: 1,
-      thread: [
-        { from: "user", text: "I need help with my recent order #12345", ts: Date.now() - 7200e3 },
-        { from: "support", text: "I'd be happy to help! Let me check your order status.", ts: Date.now() - 7000e3 },
-        { from: "support", text: "Your order is currently being prepared and will ship within 24 hours. You'll receive tracking info via SMS.", ts: Date.now() - 6800e3 }
-      ]
-    }
-  ],2205e87b6f", "حذاء كلاود رانر الرياضي", "أحذية"),
-    P("p2", "Aura Skin Serum", "Beauty", 119, null, "c3", "1522336572468-97b06e8ef143", "سيروم أورا للبشرة", "جمال"),
-    P("p3", "Hologram Phone Case", "Accessories", 49, 69, "c2", "1580894895111-1fc068d51666", "جراب هولوجرام للهاتف", "إكسسوارات"),
-    P("p4", "Oversize Tee "Shift"", "Apparel", 89, 119, "c1", "1521572163474-6864f9cf17ab", "تيشيرت شيفت الواسع", "ملابس"),
-    P("p5", "Fold Wallet Nano", "Accessories", 79, null, "c2", "1522312346375-d1a52e2b99b3", "محفظة فولد نانو", "إكسسوارات"),
-    P("p6", "Active Leggings", "Apparel", 149, 189, "c1", "1521572267360-ee0c2909d518", "ليجنز رياضي", "ملابس"),
-    P("p7", "Blue Light Glasses", "Accessories", 99, 129, "c3", "1515879218367-8466d910aaa4", "نظارات الضوء الأزرق", "إكسسوارات"),
-    P("p8", "Detox Clay Mask", "Beauty", 79, null, "c3", "1515378791036-0648a3ef77b2", "ماسك الطين المنظف", "جمال")
-  ],nst LS_STATE_KEY = "storez_spa_state_v2";
-
-/* ---------- helpers ---------- */
-export const uns = (id, w = 900) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
-
-function P(id, name, cat, price, listPrice = null, creatorId = null, img = null, nameAr = null, catAr = null) {
-  return {
-    id, 
-    name: { en: name, ar: nameAr || name }, 
-    cat: { en: cat, ar: catAr || cat }, 
-    price, 
-    listPrice, 
-    creatorId,
-    img,
-    stock: Math.floor(Math.random() * 26) + 5,
-    rating: (Math.floor(Math.random() * 13) + 36) / 10 // 3.6–4.8
-  };
-}
-
-// Helper to get localized product field
-export function getProductField(product, field, lang = null) {
-  const currentLang = lang || localStorage.getItem("storez_lang") || "en";
-  return product[field][currentLang] || product[field].en;
-}
-
-/* ---------- initial state ---------- */
-export const state = {
-  prefs: {
-    lang: "en",
-    theme: "auto",
-    rtlOverride: null,
-    sponsor: false,
-    notif: { orders: true, live: true, marketing: false, consent: true }
-  },
-  user: { 
-    id: "u1", 
-    name: "Maya", 
-    email: "",
-    authed: false, 
-    guest: false, 
-    credits: 45, 
-    referrals: 2,
-    authMethod: "",
-    interests: [],
-    preferences: { marketing: false, orders: true, live: false },
-    followedCreators: [],
-    likedProducts: [],
-    onboardingCompleted: false,
-    addresses: [
+  
+  live: {
+    activeStreams: [
       {
-        name: "Maya Al-Rashid",
-        address: "King Fahd Road, Building 123, Apt 45",
-        city: "riyadh",
-        postal: "12345",
-        default: true
-      },
-      {
-        name: "Maya Al-Rashid", 
-        address: "Olaya Street, Office Tower 2",
-        city: "riyadh",
-        postal: "11564",
-        default: false
+        id: "live1",
+        creatorId: "c1",
+        creator: "@linafit",
+        title: "New Active Wear Collection Drop! 🔥",
+        viewers: 1247,
+        startTime: Date.now() - 2400000, // 40 mins ago
+        thumbnail: uns("1571019613454-1cb2f99b2d8b", 600),
+        tags: ["#newdrop", "#activewear", "#fitness"],
+        products: ["p1", "p6"],
+        flashDeals: [
+          { productId: "p1", originalPrice: 329, salePrice: 249, endTime: Date.now() + 600000 },
+          { productId: "p6", originalPrice: 149, salePrice: 99, endTime: Date.now() + 1200000 }
+        ],
+        isLive: true
       }
     ],
-    paymentMethods: [
+    upcomingStreams: [
       {
-        type: "visa",
-        last4: "4532",
-        expiry: "12/26",
-        default: true
+        id: "upcoming1",
+        creatorId: "c2",
+        creator: "@saudichef",
+        title: "Traditional Kabsa Cooking Master Class",
+        scheduledTime: Date.now() + 7200000, // 2 hours from now
+        thumbnail: uns("1556909114-f6e7ad7d3136", 600),
+        description: "Learn authentic Saudi Kabsa recipe with traditional spices",
+        products: ["p4"], // Spice collection
+        estimatedDuration: 60, // minutes
+        reminders: 156
       },
       {
-        type: "mastercard", 
-        last4: "8901",
-        expiry: "08/25",
-        default: false
+        id: "upcoming2", 
+        creatorId: "c3",
+        creator: "@homeguru",
+        title: "Home Organization & Minimalist Living",
+        scheduledTime: Date.now() + 21600000, // 6 hours from now
+        thumbnail: uns("1586023492239-4922ffb4d83b", 600),
+        description: "Transform your space with these organization tips",
+        products: ["p5"], // Plant pot set
+        estimatedDuration: 45,
+        reminders: 89
+      }
+    ],
+    featuredStreams: [
+      {
+        id: "featured1",
+        creatorId: "c1", 
+        creator: "@linafit",
+        title: "Weekly Fitness Challenge",
+        type: "series",
+        nextEpisode: Date.now() + 86400000, // Tomorrow
+        episodeCount: 4,
+        subscribers: 2341
       }
     ]
   },
 
-  creators: [
-    { id: "c1", handle: "@linafit", name: "Lina", followers: 128000, bio: "Wellness & athleisure", live: true },
-    { id: "c2", handle: "@technoz", name: "Tariq", followers: 98000, bio: "Phone mods & cases", live: false },
-    { id: "c3", handle: "@seaskin", name: "Sara", followers: 54000, bio: "Clean skincare drops", live: false }
-  ],
+  analytics: {
+    pageViews: 0,
+    sessionStart: Date.now(),
+    interactions: [],
+    performance: [],
+    metrics: [],
+    errors: []
+  },
 
-  products: [
-    P("p1", "CloudRunner Sneakers", "Footwear", 329, 399, "c1", "1519744792095-2f2205e87b6f"),
-    P("p2", "Aura Skin Serum", "Beauty", 119, null, "c3", "1522336572468-97b06e8ef143"),
-    P("p3", "Hologram Phone Case", "Accessories", 49, 69, "c2", "1580894895111-1fc068d51666"),
-    P("p4", "Oversize Tee “Shift”", "Apparel", 89, 119, "c1", "1521572163474-6864f9cf17ab"),
-    P("p5", "Fold Wallet Nano", "Accessories", 79, null, "c2", "1522312346375-d1a52e2b99b3"),
-    P("p6", "Active Leggings", "Apparel", 149, 189, "c1", "1521572267360-ee0c2909d518"),
-    P("p7", "Blue Light Glasses", "Accessories", 99, 129, "c3", "1515879218367-8466d910aaa4"),
-    P("p8", "Detox Clay Mask", "Beauty", 79, null, "c3", "1515378791036-0648a3ef77b2")
-  ],
-
-  cart: { items: [] },
-  wishlist: [],
-  orders: [
-    {
-      id: "o1",
-      date: Date.now() - 86400000 * 6,
-      ts: Date.now() - 86400000 * 6,
-      items: [{ id: "p2", qty: 1, price: 119 }],
-      total: 134, // 119 + 15 shipping + tax
-      status: "Delivered",
-      reviewed: true,
-      timeline: ["Processing", "Shipped", "Out for delivery", "Delivered"]
-    },
-    {
-      id: "o2", 
-      date: Date.now() - 86400000 * 2,
-      ts: Date.now() - 86400000 * 2,
-      items: [
-        { id: "p1", qty: 1, price: 329 },
-        { id: "p6", qty: 1, price: 149 }
-      ],
-      total: 503, // 478 + 15 shipping + 10 tax
-      status: "Shipped",
-      timeline: ["Processing", "Shipped", "Out for delivery", "Delivered"]
-    },
-    {
-      id: "o3",
-      date: Date.now() - 86400000 * 1, 
-      ts: Date.now() - 86400000 * 1,
-      items: [{ id: "p3", qty: 2, price: 49 }],
-      total: 113, // 98 + 15 shipping + tax
-      status: "Processing",
-      timeline: ["Processing", "Shipped", "Out for delivery", "Delivered"]
-    },
-    {
-      id: "o4",
-      date: Date.now() - 86400000 * 15,
-      ts: Date.now() - 86400000 * 15,
-      items: [{ id: "p7", qty: 1, price: 99 }],
-      total: 114, // 99 + 15 shipping + tax
-      status: "Cancelled",
-      cancelReason: "Changed my mind",
-      timeline: ["Processing", "Cancelled"]
-    }
-  ],
-  messages: [
-    { id: "m1", with: "@linafit", thread: [{ from: "@linafit", text: "New drop tonight! Tap “Live” from my profile 👀", ts: Date.now() - 3600e3 }] }
-  ],
-
-  metrics: { impressions: 0, addToCart: 0, purchases: 0, revenue: 0, productViews: 0, favorites: 0 }
+  metrics: { 
+    impressions: 0, 
+    addToCart: 0, 
+    purchases: 0, 
+    revenue: 0, 
+    productViews: 0, 
+    favorites: 0 
+  }
 };
+
+/* ---------- helpers ---------- */
+export function productById(id) { 
+  return state.products.find(p => p.id === id); 
+}
+
+export function creatorById(id) { 
+  return state.creators.find(c => c.id === id); 
+}
+
+export function cartTotal() {
+  return state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+}
 
 /* ---------- persistence ---------- */
 export function loadState(target = state) {
@@ -296,6 +331,7 @@ export function loadState(target = state) {
     console.warn("loadState failed", e);
   }
 }
+
 export function saveState(s = state) {
   try {
     localStorage.setItem(LS_STATE_KEY, JSON.stringify(s));
@@ -303,80 +339,134 @@ export function saveState(s = state) {
     console.warn("saveState failed", e);
   }
 }
+
+export function clearState() {
+  localStorage.removeItem(LS_STATE_KEY);
+}
+
 export function resetState() {
-  try {
-    localStorage.removeItem(LS_STATE_KEY);
-  } catch {}
+  clearState();
+  // Reset to default values
+  Object.assign(state, {
+    cart: [],
+    wishlist: [],
+    orders: [],
+    metrics: { impressions: 0, addToCart: 0, purchases: 0, revenue: 0, productViews: 0, favorites: 0 }
+  });
 }
 
-/* ---------- lookups ---------- */
-export function productById(id) { return state.products.find(p => p.id === id); }
-export function creatorById(id) { return state.creators.find(c => c.id === id); }
-export function cartTotal() {
-  return state.cart.items.reduce((sum, it) => sum + it.qty * it.price, 0);
-}
-
-/* ---------- actions (used by routes and app shell) ---------- */
-function addToCart(id, qty = 1, priceOverride) {
-  const p = productById(id);
-  if (!p) return;
-  const line = state.cart.items.find(i => i.id === id);
-  const price = priceOverride ?? p.price;
-  if (line) line.qty += qty;
-  else state.cart.items.push({ id, qty, price });
-  state.metrics.addToCart++;
-}
-
-function toggleWishlist(id) {
-  const i = state.wishlist.indexOf(id);
-  if (i >= 0) state.wishlist.splice(i, 1);
-  else state.wishlist.push(id);
-}
-
-function setQty(id, qty) {
-  const it = state.cart.items.find(i => i.id === id);
-  if (!it) return;
-  it.qty = Math.max(1, qty | 0);
-}
-
-function removeFromCart(id) {
-  state.cart.items = state.cart.items.filter(i => i.id !== id);
-}
-
-function placeOrderFromCart() {
-  const items = state.cart.items.slice();
-  if (!items.length) return null;
-  const shipping = 15;
-  const tax = Math.round(cartTotal() * 0.05);
-  const total = cartTotal() + shipping + tax;
-  const id = "o" + (state.orders.length + 1);
-  const order = {
-    id,
-    ts: Date.now(),
-    items,
-    total,
-    status: "Processing",
-    review: false,
-    timeline: ["Placed"]
-  };
-  state.orders.unshift(order);
-  state.cart.items = [];
-  state.metrics.purchases++;
-  state.metrics.revenue += total;
-  return order;
-}
-
-function createSupportTicket(text) {
-  const msg = { id: "m" + (state.messages.length + 1), with: "Support", thread: [{ from: "SupportBot", text, ts: Date.now() }] };
-  state.messages.push(msg);
-  return msg;
-}
-
+/* ---------- actions ---------- */
 export const actions = {
-  addToCart,
-  toggleWishlist,
-  setQty,
-  removeFromCart,
-  placeOrderFromCart,
-  createSupportTicket
+  addToCart(productId, qty = 1) {
+    const product = productById(productId);
+    if (!product) return;
+    
+    const existing = state.cart.find(item => item.id === productId);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      state.cart.push({ ...product, qty });
+    }
+    
+    state.metrics.addToCart++;
+    saveState();
+  },
+
+  removeFromCart(productId) {
+    const index = state.cart.findIndex(item => item.id === productId);
+    if (index > -1) {
+      state.cart.splice(index, 1);
+      saveState();
+    }
+  },
+
+  setQty(productId, qty) {
+    const item = state.cart.find(i => i.id === productId);
+    if (!item) return;
+    item.qty = Math.max(1, qty | 0);
+    saveState();
+  },
+
+  toggleWishlist(productId) {
+    const index = state.wishlist.indexOf(productId);
+    if (index > -1) {
+      state.wishlist.splice(index, 1);
+    } else {
+      state.wishlist.push(productId);
+      state.metrics.favorites++;
+    }
+    saveState();
+  },
+
+  updateUser(updates) {
+    Object.assign(state.user, updates);
+    saveState();
+  },
+
+  updatePrefs(updates) {
+    Object.assign(state.prefs, updates);
+    saveState();
+  },
+
+  trackView(productId) {
+    state.metrics.productViews++;
+    state.user.stats.productViews++;
+    saveState();
+  },
+
+  placeOrder(orderData) {
+    const order = {
+      id: `order_${Date.now()}`,
+      items: [...state.cart],
+      total: cartTotal(),
+      status: "processing",
+      timestamp: Date.now(),
+      ...orderData
+    };
+    
+    state.orders.push(order);
+    state.cart = [];
+    state.metrics.purchases++;
+    state.metrics.revenue += order.total;
+    
+    saveState();
+    return order;
+  },
+
+  placeOrderFromCart() {
+    const items = state.cart.slice();
+    if (!items.length) return null;
+    const shipping = 15;
+    const tax = Math.round(cartTotal() * 0.05);
+    const total = cartTotal() + shipping + tax;
+    const id = "o" + (state.orders.length + 1);
+    const order = {
+      id,
+      ts: Date.now(),
+      items,
+      total,
+      status: "Processing",
+      review: false,
+      timeline: ["Placed"]
+    };
+    state.orders.unshift(order);
+    state.cart = [];
+    state.metrics.purchases++;
+    state.metrics.revenue += total;
+    saveState();
+    return order;
+  },
+
+  createSupportTicket(text) {
+    const msg = { 
+      id: "m" + (state.messages.length + 1), 
+      with: "Support", 
+      creatorId: null,
+      unread: 1,
+      thread: [{ from: "SupportBot", text, ts: Date.now() }] 
+    };
+    state.messages.push(msg);
+    saveState();
+    return msg;
+  }
 };
