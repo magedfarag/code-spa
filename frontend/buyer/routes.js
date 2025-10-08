@@ -148,7 +148,7 @@ const home = ({ el, state, actions }) => {
                 <div style="position: absolute; top: 8px; left: 8px; background: var(--primary); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; z-index: 1;">
                   ${Math.round(product.personalizedScore)}% ${t("match") || "مطابقة"}
                 </div>
-                <img src="${uns(product.imageId, 300)}" alt="${getProductTitle(product)}" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
+                <img src="${uns(product.img, 300)}" alt="${getProductTitle(product)}" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
                 <div style="padding: 12px;">
                   <h4 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; line-height: 1.3;">${getProductTitle(product)}</h4>
                   <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -183,7 +183,7 @@ const home = ({ el, state, actions }) => {
                 <div style="position: absolute; top: 8px; left: 8px; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; z-index: 1;">
                   #${index + 1} ${t("trending")}
                 </div>
-                <img src="${uns(product.imageId, 300)}" alt="${getProductTitle(product)}" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
+                <img src="${uns(product.img, 300)}" alt="${getProductTitle(product)}" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
                 <div style="padding: 12px;">
                   <h4 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; line-height: 1.3;">${getProductTitle(product)}</h4>
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -213,7 +213,7 @@ const home = ({ el, state, actions }) => {
             ${recentlyViewed.map(product => `
               <div onclick="location.hash='#/pdp/${product.id}'; trackRecommendationClick('${product.id}', 'recently_viewed')" 
                    style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.3s ease;">
-                <img src="${uns(product.imageId, 300)}" alt="${getProductTitle(product)}" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
+                <img src="${uns(product.img, 300)}" alt="${getProductTitle(product)}" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
                 <div style="padding: 12px;">
                   <h4 style="margin: 0 0 8px; font-size: 14px; font-weight: 600; line-height: 1.3;">${getProductTitle(product)}</h4>
                   <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -646,7 +646,7 @@ const pdp = ({ el, state, actions }, id) => {
                  style="width: 100%; border-radius: 12px; margin-bottom: 16px;" class="main-image" id="mainProductImage">
             
             <!-- Image Gallery -->
-            ${selectedVariant?.images ? `
+            ${selectedVariant?.images && selectedVariant.images.length > 0 ? `
               <div style="display: flex; gap: 8px; margin-top: 16px;">
                 ${selectedVariant.images.map(imgId => `
                   <img src="${uns(imgId, 150)}" alt="Product variant" 
@@ -934,7 +934,9 @@ const pdp = ({ el, state, actions }, id) => {
   function updateProductDisplay() {
     if (selectedVariant) {
       document.getElementById('currentPrice').textContent = fmtSAR(selectedVariant.price);
-      document.getElementById('mainProductImage').src = uns(selectedVariant.images[0], 600);
+      if (selectedVariant.images && selectedVariant.images.length > 0) {
+        document.getElementById('mainProductImage').src = uns(selectedVariant.images[0], 600);
+      }
     }
   }
   

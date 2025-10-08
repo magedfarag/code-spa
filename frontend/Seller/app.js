@@ -1156,7 +1156,7 @@ function renderCatalog(){
         <div class="catalog-title">
           <h1>${t("catalog_title")}</h1>
           <div class="catalog-stats">
-            ${getState().products.length} products
+            ${state.catalog.length} products
           </div>
         </div>
         <div class="catalog-actions">
