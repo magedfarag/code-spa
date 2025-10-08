@@ -190,6 +190,9 @@ const DICTS = {
     like: "Like",
     likes: "likes",
     results_count: "{n} results",
+    no_products_found: "No products found",
+    try_different_search: "Try adjusting your search or filters",
+    products: "Products",
 
     // cart / checkout
     your_cart: "Your cart",

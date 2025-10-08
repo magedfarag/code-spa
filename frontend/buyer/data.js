@@ -309,6 +309,37 @@ export const state = {
     ]
   },
 
+  // Enhanced search and discovery state
+  search: {
+    query: "",
+    filters: {
+      category: [],
+      priceRange: [0, 1000],
+      rating: 0,
+      availability: "all", // all, in-stock, sale
+      sortBy: "relevance" // relevance, price-low, price-high, rating, newest
+    },
+    history: ["حذاء رياضي", "سويت شيرت", "جاكيت", "sneakers", "hoodie"],
+    trending: ["حذاء رياضي", "سويت شيرت", "جينز", "sneakers", "activewear", "home decor"],
+    suggestions: [],
+    results: [],
+    categories: [
+      { id: "apparel", name: { en: "Apparel", ar: "ملابس" }, count: 3 },
+      { id: "footwear", name: { en: "Footwear", ar: "أحذية" }, count: 1 },
+      { id: "accessories", name: { en: "Accessories", ar: "إكسسوارات" }, count: 2 },
+      { id: "home", name: { en: "Home", ar: "منزل" }, count: 2 },
+      { id: "beauty", name: { en: "Beauty", ar: "جمال" }, count: 1 }
+    ],
+    recentSearches: [],
+    popularSearches: [
+      { query: "حذاء رياضي", count: 1250 },
+      { query: "سويت شيرت", count: 890 },
+      { query: "جينز", count: 672 },
+      { query: "sneakers", count: 1340 },
+      { query: "hoodie", count: 756 }
+    ]
+  },
+
   analytics: {
     pageViews: 0,
     sessionStart: Date.now(),
@@ -504,5 +535,102 @@ export const actions = {
     state.messages.push(msg);
     saveState();
     return msg;
+  },
+
+  // Search and discovery actions
+  performSearch(query, filters = {}) {
+    if (query.trim()) {
+      // Add to search history
+      state.search.recentSearches = [
+        query,
+        ...state.search.recentSearches.filter(q => q !== query)
+      ].slice(0, 10);
+    }
+
+    state.search.query = query;
+    state.search.filters = { ...state.search.filters, ...filters };
+    
+    // Filter products based on search criteria
+    let results = state.products.filter(product => {
+      const title = getProductTitle(product).toLowerCase();
+      const category = loc(product, "cat").toLowerCase();
+      const matchesQuery = !query || 
+        title.includes(query.toLowerCase()) || 
+        category.includes(query.toLowerCase());
+      
+      const matchesCategory = !filters.category?.length || 
+        filters.category.includes(loc(product, "cat"));
+      
+      const matchesPrice = (!filters.priceRange || 
+        (product.price >= filters.priceRange[0] && product.price <= filters.priceRange[1]));
+      
+      const matchesRating = !filters.rating || product.rating >= filters.rating;
+      
+      return matchesQuery && matchesCategory && matchesPrice && matchesRating;
+    });
+
+    // Apply sorting
+    if (filters.sortBy) {
+      switch (filters.sortBy) {
+        case "price-low":
+          results.sort((a, b) => a.price - b.price);
+          break;
+        case "price-high":
+          results.sort((a, b) => b.price - a.price);
+          break;
+        case "rating":
+          results.sort((a, b) => b.rating - a.rating);
+          break;
+        case "newest":
+          results.sort((a, b) => b.id.localeCompare(a.id));
+          break;
+        default: // relevance
+          break;
+      }
+    }
+
+    state.search.results = results;
+    saveState();
+    return results;
+  },
+
+  updateSearchFilters(filters) {
+    state.search.filters = { ...state.search.filters, ...filters };
+    // Re-run search with updated filters
+    return this.performSearch(state.search.query, state.search.filters);
+  },
+
+  clearSearch() {
+    state.search.query = "";
+    state.search.results = [];
+    state.search.filters = {
+      category: [],
+      priceRange: [0, 1000],
+      rating: 0,
+      availability: "all",
+      sortBy: "relevance"
+    };
+    saveState();
+  },
+
+  getSearchSuggestions(query) {
+    const suggestions = [];
+    
+    // Add popular searches that match
+    state.search.popularSearches.forEach(search => {
+      if (search.query.toLowerCase().includes(query.toLowerCase())) {
+        suggestions.push({ type: "popular", text: search.query, count: search.count });
+      }
+    });
+    
+    // Add product name matches
+    state.products.forEach(product => {
+      const title = getProductTitle(product);
+      if (title.toLowerCase().includes(query.toLowerCase())) {
+        suggestions.push({ type: "product", text: title, productId: product.id });
+      }
+    });
+    
+    return suggestions.slice(0, 8);
   }
 };
