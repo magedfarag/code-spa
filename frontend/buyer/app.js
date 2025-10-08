@@ -53,7 +53,7 @@ function toggleDir() {
 
 /* ------------- KPIs & badges ------------- */
 function refreshBadges() {
-  const cartCount = state.cart.reduce((s, i) => s + i.qty, 0);
+  const cartCount = state.cart.reduce((s, i) => s + i.quantity, 0);
   const wishCount = state.wishlist.length;
   const cartBadge = qs("#cartBadge");
   const wishBadge = qs("#wishlistBadge");

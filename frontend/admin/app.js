@@ -1029,6 +1029,7 @@ function renderLiveCommerce(){
 }
 
 function renderModeration(){
+  const tab = new URLSearchParams(location.hash.split("?")[1]||"").get("tab") || "content";
   const isContent = tab==="content";
   const isSellers = tab==="sellers";
   const isUGC = tab==="ugc";

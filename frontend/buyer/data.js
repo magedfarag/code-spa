@@ -23,6 +23,27 @@ function P(id, name, cat, price, listPrice = null, creatorId = null, img = null,
 }
 
 // Helper to get localized product field
+export function loc(product, field, fallback = "en") {
+  if (!product || !product[field]) return "";
+  const lang = getCurrentLang();
+  return product[field][lang] || product[field][fallback] || "";
+}
+
+// Helper to get product title in current language
+export function getProductTitle(product) {
+  return loc(product, "name");
+}
+
+// Helper to get product image URL
+export function getProductImage(product, width = 900) {
+  if (!product || !product.img) return "";
+  return `https://images.unsplash.com/photo-${product.img}?auto=format&fit=crop&w=${width}&q=70`;
+}
+
+// Helper to get current language (simplified)
+function getCurrentLang() {
+  return localStorage.getItem("storez_spa_lang") || "en";
+}
 export function getProductField(product, field, lang = null) {
   const currentLang = lang || localStorage.getItem("storez_lang") || "en";
   if (typeof product[field] === 'object' && product[field] !== null) {
@@ -317,7 +338,7 @@ export function creatorById(id) {
 }
 
 export function cartTotal() {
-  return state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  return state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 }
 
 /* ---------- persistence ---------- */
@@ -361,11 +382,16 @@ export const actions = {
     const product = productById(productId);
     if (!product) return;
     
-    const existing = state.cart.find(item => item.id === productId);
+    const existing = state.cart.find(item => item.productId === productId);
     if (existing) {
-      existing.qty += qty;
+      existing.quantity += qty;
     } else {
-      state.cart.push({ ...product, qty });
+      state.cart.push({ 
+        productId: productId,
+        quantity: qty,
+        price: product.price,
+        title: getProductTitle(product)
+      });
     }
     
     state.metrics.addToCart++;
@@ -373,7 +399,7 @@ export const actions = {
   },
 
   removeFromCart(productId) {
-    const index = state.cart.findIndex(item => item.id === productId);
+    const index = state.cart.findIndex(item => item.productId === productId);
     if (index > -1) {
       state.cart.splice(index, 1);
       saveState();
@@ -381,9 +407,9 @@ export const actions = {
   },
 
   setQty(productId, qty) {
-    const item = state.cart.find(i => i.id === productId);
+    const item = state.cart.find(i => i.productId === productId);
     if (!item) return;
-    item.qty = Math.max(1, qty | 0);
+    item.quantity = Math.max(1, qty | 0);
     saveState();
   },
 
@@ -400,6 +426,16 @@ export const actions = {
 
   updateUser(updates) {
     Object.assign(state.user, updates);
+    saveState();
+  },
+
+  setUserAuth(isAuthenticated) {
+    state.user.authed = isAuthenticated;
+    if (isAuthenticated) {
+      // Set some demo user data for testing
+      state.user.name = state.user.name || "Demo User";
+      state.user.email = state.user.email || "demo@storez.com";
+    }
     saveState();
   },
 

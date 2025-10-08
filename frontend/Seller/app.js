@@ -2116,7 +2116,7 @@ function showContentPolicy() {
 }
 
 /* ---------- Live Commerce Functions ---------- */
-function toggleLiveSession() {
+window.toggleLiveSession = function() {
   state.store.live = !state.store.live;
   if (state.store.live) {
     // Update metrics when going live
@@ -2126,24 +2126,24 @@ function toggleLiveSession() {
   }
   saveState();
   route();
-}
+};
 
-function updateFeaturedProduct() {
+window.updateFeaturedProduct = function() {
   const productId = qs('#live_product')?.value;
   if (productId && state.store.live) {
     // In a real app, this would update the live stream
     console.log(`Featuring product: ${productId}`);
   }
-}
+};
 
-function spotlightProduct() {
+window.spotlightProduct = function() {
   const productId = qs('#live_product')?.value;
   const product = state.catalog.find(p => p.id === productId);
   if (product) {
     alert(`Spotlighting "${product.name}" for 30 seconds!`);
     // In a real app, this would highlight the product in the live stream
   }
-}
+};
 
 function addViewerMessage() {
   const message = prompt('Send message to viewers:');

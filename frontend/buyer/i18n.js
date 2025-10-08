@@ -32,6 +32,33 @@ const DICTS = {
     buy_now: "Buy now",
     by_creator: "By",
     live_now: "Live now ▶",
+    
+    // Auth & landing
+    sign_in: "Sign In",
+    sign_up: "Sign Up", 
+    email: "Email",
+    password: "Password",
+    welcome: "Welcome to StoreZ",
+    landing_subtitle: "Your premier social commerce platform",
+    start_shopping: "Start Shopping",
+    no_account: "Don't have an account?",
+    demo_mode: "Demo Mode",
+    quick_login: "Quick Login (Demo)",
+    added_to_cart: "Added to cart!",
+    
+    // Pages
+    featured_products: "Featured Products",
+    discover: "Discover", 
+    cart: "Cart",
+    profile: "Profile",
+    social: "Social",
+    home: "Home",
+    creators: "Creators",
+    
+    // Content
+    no_description: "Product description coming soon...",
+    discover_desc: "Explore trending products and creators",
+    back: "Back",
 
     // PDP
     what_people_say: "What people say",
@@ -793,6 +820,33 @@ const DICTS = {
     buy_now: "اشتري الآن",
     by_creator: "من",
     live_now: "بث مباشر ▶",
+    
+    // Auth & landing
+    sign_in: "تسجيل الدخول",
+    sign_up: "إنشاء حساب",
+    email: "البريد الإلكتروني", 
+    password: "كلمة المرور",
+    welcome: "مرحباً بك في StoreZ",
+    landing_subtitle: "منصة التجارة الاجتماعية الرائدة",
+    start_shopping: "ابدأ التسوق",
+    no_account: "ليس لديك حساب؟",
+    demo_mode: "الوضع التجريبي",
+    quick_login: "تسجيل دخول سريع (تجريبي)",
+    added_to_cart: "تم إضافته للسلة!",
+    
+    // Pages
+    featured_products: "المنتجات المميزة",
+    discover: "اكتشف",
+    cart: "السلة", 
+    profile: "الملف",
+    social: "اجتماعي",
+    home: "الرئيسية",
+    creators: "المبدعون",
+    
+    // Content  
+    no_description: "وصف المنتج قريباً...",
+    discover_desc: "استكشف المنتجات والمبدعين الرائجين", 
+    back: "رجوع",
 
     what_people_say: "آراء الناس",
     review_1_t: "مريحة جدًا",
