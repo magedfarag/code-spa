@@ -2674,7 +2674,7 @@ function renderSocialPost(post) {
   const isSaved = state.user.savedPosts.includes(post.id);
   
   return h(`
-    <div class="social-post" style="background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border);">
+    <div class="social-post" data-post-id="${post.id}" style="background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border);">
       <!-- Post Header -->
       <div class="post-header" style="display: flex; align-items: center; margin-bottom: 12px;">
         <img src="${post.avatar}" alt="${post.username}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 12px;" loading="lazy">
@@ -2850,6 +2850,76 @@ function setupSocialFunctionality() {
     // Filter posts (simplified - in real app would re-render)
     const allPosts = document.querySelectorAll('.social-post');
     allPosts.forEach(post => post.style.display = 'block');
+  };
+
+  window.showPostMenu = function(postId) {
+    // Show post menu options
+    const modal = document.createElement('div');
+    modal.className = 'post-menu-modal';
+    modal.style.cssText = `
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; box-sizing: border-box;
+    `;
+
+    modal.innerHTML = `
+      <div style="background: var(--bg); border-radius: 12px; padding: 20px; min-width: 250px;">
+        <h3 style="margin: 0 0 16px; text-align: center;">${t("post_options") || "خيارات المنشور"}</h3>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button onclick="sharePost('${postId}')" style="padding: 12px; background: none; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; text-align: right;">
+            📤 ${t("share_post") || "مشاركة المنشور"}
+          </button>
+          <button onclick="reportPost('${postId}')" style="padding: 12px; background: none; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; text-align: right;">
+            🚨 ${t("report_post") || "الإبلاغ عن المنشور"}
+          </button>
+          <button onclick="hidePost('${postId}')" style="padding: 12px; background: none; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; text-align: right;">
+            👁️‍🗨️ ${t("hide_post") || "إخفاء المنشور"}
+          </button>
+          <button onclick="closePostMenu()" style="padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; text-align: center; margin-top: 8px;">
+            ${t("cancel") || "إلغاء"}
+          </button>
+        </div>
+      </div>
+    `;
+
+    modal.onclick = (e) => {
+      if (e.target === modal) closePostMenu();
+    };
+
+    document.body.appendChild(modal);
+  };
+
+  window.closePostMenu = function() {
+    const modal = document.querySelector('.post-menu-modal');
+    if (modal) document.body.removeChild(modal);
+  };
+
+  window.sharePost = function(postId) {
+    closePostMenu();
+    // Implement post sharing
+    if (navigator.share) {
+      navigator.share({
+        title: t("check_out_post") || "اطلع على هذا المنشور",
+        url: `${location.origin}${location.pathname}#/social`
+      });
+    } else {
+      alert(t("post_shared") || "تم نسخ رابط المنشور");
+    }
+  };
+
+  window.reportPost = function(postId) {
+    closePostMenu();
+    alert(t("post_reported") || "تم الإبلاغ عن المنشور");
+  };
+
+  window.hidePost = function(postId) {
+    closePostMenu();
+    const postElement = document.querySelector(`[data-post-id="${postId}"]`);
+    if (postElement) {
+      postElement.style.display = 'none';
+    }
+    alert(t("post_hidden") || "تم إخفاء المنشور");
   };
 }
 

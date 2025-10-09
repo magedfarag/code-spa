@@ -284,6 +284,185 @@ export const state = {
             likes: 8
           }
         ]
+      },
+      {
+        id: "post5",
+        userId: "c3",
+        username: "@homeguru",
+        avatar: uns("1438761681033-6461ffad8d80", 100),
+        content: "Transform your workspace with these beautiful succulent planters! 🌱 Perfect for adding life to any home office. Currently 30% off this week! 🏠✨",
+        productIds: ["p8"], // Plant pot set
+        images: [uns("1416879595882-3373a0480b5b", 400), uns("1441974231531-c6227db76b6e", 400)],
+        likes: 156,
+        comments: 34,
+        shares: 22,
+        views: 2100,
+        timestamp: Date.now() - 43200000, // 12 hours ago
+        likedBy: ["u1", "u2", "u3", "u4"],
+        location: "Dammam, Saudi Arabia",
+        hashtags: ["#plants", "#homedecor", "#workspace", "#sale"],
+        mentions: ["@ahmed_home"],
+        isCreator: true,
+        isSponsored: true,
+        promoCode: "PLANT30",
+        discount: 30,
+        commentsPreview: [
+          {
+            id: "c7",
+            userId: "u1",
+            username: "@maya_user",
+            content: "Just ordered! Can't wait to green up my desk 🌿",
+            timestamp: Date.now() - 39600000,
+            likes: 8
+          },
+          {
+            id: "c8",
+            userId: "u3",
+            username: "@ahmed_home",
+            content: "These look perfect for my living room corner!",
+            timestamp: Date.now() - 36000000,
+            likes: 5
+          }
+        ]
+      },
+      {
+        id: "post6",
+        userId: "u4",
+        username: "@fitness_sara",
+        avatar: uns("1494790108755-2616b612b5bc", 100),
+        content: "Morning workout complete! 💪 These blue light glasses are a game changer for my screen time. My eyes feel so much better after long work days! 👀✨",
+        productIds: ["p2"], // Blue light glasses
+        images: [uns("1498050108023-c5d4b4b6aec4", 400)],
+        likes: 92,
+        comments: 15,
+        shares: 7,
+        views: 1340,
+        timestamp: Date.now() - 10800000, // 3 hours ago
+        likedBy: ["u1", "u2", "u3"],
+        location: "Riyadh, Saudi Arabia",
+        hashtags: ["#fitness", "#bluelightglasses", "#workfromhome", "#eyecare"],
+        mentions: ["@techtalks_sa"],
+        isSponsored: false,
+        commentsPreview: [
+          {
+            id: "c9",
+            userId: "c4",
+            username: "@techtalks_sa",
+            content: "Great choice! Blue light protection is so important for digital wellness 📱👓",
+            timestamp: Date.now() - 9000000,
+            likes: 12,
+            isCreator: true
+          }
+        ]
+      },
+      {
+        id: "post7",
+        userId: "c2", 
+        username: "@saudichef",
+        avatar: uns("1507003211169-0a1dd7bf0ec3", 100),
+        content: "Ramadan prep starts early! 🌙 This travel mug keeps my qahwa perfectly hot during suhoor. Essential for busy mornings! ☕️ Link in bio for 15% off!",
+        productIds: ["p4"], // Travel mug
+        images: [uns("1495474472287-5bd95ad6e1cd", 400)],
+        likes: 203,
+        comments: 47,
+        shares: 31,
+        views: 3200,
+        timestamp: Date.now() - 86400000, // 1 day ago  
+        likedBy: ["u1", "u2", "u3", "u4"],
+        location: "Mecca, Saudi Arabia",
+        hashtags: ["#ramadan", "#qahwa", "#saudiarabiacoffee", "#suhoor"],
+        mentions: [],
+        isCreator: true,
+        isSponsored: true,
+        promoCode: "RAMADAN15",
+        discount: 15,
+        commentsPreview: [
+          {
+            id: "c10",
+            userId: "u1",
+            username: "@maya_user",
+            content: "Perfect timing! Need this for Ramadan prep 🌙",
+            timestamp: Date.now() - 82800000,
+            likes: 18
+          },
+          {
+            id: "c11",
+            userId: "u2", 
+            username: "@sara_style",
+            content: "The quality looks amazing! Does it keep drinks cold too?",
+            timestamp: Date.now() - 79200000,
+            likes: 7
+          }
+        ]
+      },
+      {
+        id: "post8",
+        userId: "u1",
+        username: "@maya_user", 
+        avatar: uns("1535713875002-d1d0cf377fde", 100),
+        content: "Self-care Sunday with this incredible clay mask! 🧴✨ My skin feels so refreshed and glowing. Perfect for unwinding after a busy week! 💆‍♀️",
+        productIds: ["p7"], // Detox clay mask
+        images: [uns("1571019613454-1cb2f99b2d8b", 400)],
+        likes: 78,
+        comments: 12,
+        shares: 4,
+        views: 980,
+        timestamp: Date.now() - 57600000, // 16 hours ago
+        likedBy: ["u2", "u3", "u4"],
+        location: "Riyadh, Saudi Arabia", 
+        hashtags: ["#selfcare", "#claymask", "#skincare", "#sundayvibes"],
+        mentions: ["@linafit"],
+        isSponsored: false,
+        commentsPreview: [
+          {
+            id: "c12",
+            userId: "c1",
+            username: "@linafit",
+            content: "Your skin is absolutely glowing! 🌟 This mask is on my wishlist now!",
+            timestamp: Date.now() - 54000000,
+            likes: 15,
+            isCreator: true
+          }
+        ]
+      },
+      {
+        id: "post9",
+        userId: "c4",
+        username: "@techtalks_sa",
+        avatar: uns("1438761681033-6461ffad8d80", 100),
+        content: "Late night coding session! 💻 This sunset hoodie is keeping me cozy while I work on my latest app. Comfort meets style! 🌅👨‍💻",
+        productIds: ["p5"], // Sunset hoodie
+        images: [uns("1441974231531-c6227db76b6e", 400)],
+        likes: 134,
+        comments: 28,
+        shares: 15,
+        views: 1890,
+        timestamp: Date.now() - 32400000, // 9 hours ago
+        likedBy: ["u1", "u2", "u3"],
+        location: "Riyadh, Saudi Arabia",
+        hashtags: ["#coding", "#techlife", "#comfy", "#hoodie", "#developer"],
+        mentions: ["@saudichef"],
+        isCreator: true,
+        isSponsored: false,
+        commentsPreview: [
+          {
+            id: "c13",
+            userId: "u3",
+            username: "@ahmed_home",
+            content: "That hoodie looks so comfortable! Perfect for working from home 🏠",
+            timestamp: Date.now() - 28800000,
+            likes: 9
+          },
+          {
+            id: "c14",
+            userId: "c2",
+            username: "@saudichef", 
+            content: "Looks great! I need one for my early morning cooking videos 👨‍🍳",
+            timestamp: Date.now() - 25200000,
+            likes: 11,
+            isCreator: true
+          }
+        ]
       }
     ],
     activities: [
