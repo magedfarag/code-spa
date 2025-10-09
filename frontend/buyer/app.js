@@ -60,6 +60,8 @@ function refreshBadges() {
   if (cartBadge) cartBadge.textContent = String(cartCount);
   if (wishBadge) wishBadge.textContent = String(wishCount);
 }
+// Expose to global for route handlers
+window.refreshBadges = refreshBadges;
 function updateKPI() {
   const m = state.metrics;
   const impr = Math.max(m.impressions, 1);
@@ -198,11 +200,9 @@ function wireHeader() {
   const btnSponsor = qs("#btnSponsor");
   const btnAnalytics = qs("#btnAnalytics");
   const btnReset = qs("#btnReset");
-  const btnRtl = qs("#btnRtl");
 
   langSelect?.addEventListener("change", e => applyLang(e.target.value, true, true));
   themeSelect?.addEventListener("change", e => applyTheme(e.target.value, true));
-  btnRtl?.addEventListener("click", () => toggleDir());
 
   btnSponsor?.addEventListener("click", () => {
     state.prefs.sponsor = !state.prefs.sponsor;
@@ -311,5 +311,16 @@ document.addEventListener("DOMContentLoaded", boot);
 
 /* ------------- Dev handle for quick inspection ------------- */
 window.StoreZ = {
-  state, actions, navigate, goBack, t, tn, currency, fmtDate, productById, aiEngine
+  state, actions, navigate, goBack, t, tn, currency, fmtDate, productById, aiEngine,
+  showSheet, hideSheet
 };
+
+// Expose critical functions to window scope for onclick handlers
+window.addToWishlist = (productId) => actions.addToWishlist(productId);
+window.toggleWishlist = (productId) => actions.toggleWishlist(productId);
+window.removeFilter = (filterType) => {
+  // Navigate to discover page without filter
+  navigate('discover');
+};
+window.showSheet = showSheet;
+window.hideSheet = hideSheet;

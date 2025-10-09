@@ -532,6 +532,8 @@ const routes = {
   "/billing": renderBilling,
 };
 function navigate(h){ location.hash = h; }
+// Make navigate available for inline onclick handlers
+window.navigate = navigate;
 function route(){
   const { path, id } = parseHash();
   highlightTab(path);
@@ -1047,30 +1049,30 @@ function renderDashboard(){
       
       <!-- Creator KPIs Grid -->
       <div class="kpis" style="margin-top:16px">
-        <div class="kpi">
+        <div class="kpi" style="cursor:pointer" onclick="navigate('#/dashboard')" title="View sales details">
           <div class="head">${t("kpi_gmv")}</div>
           <div class="val">${fmtSAR(m.gmv30)}</div>
         </div>
-        <div class="kpi">
+        <div class="kpi" style="cursor:pointer" onclick="navigate('#/creator')" title="View social sales">
           <div class="head">${t("kpi_social_gmv")}</div>
           <div class="val">${fmtSAR(m.socialGmv)}</div>
           <div class="sub">${Math.round((m.socialGmv/m.gmv30)*100)}% of total</div>
         </div>
-        <div class="kpi">
+        <div class="kpi" style="cursor:pointer" onclick="navigate('#/creator')" title="View followers">
           <div class="head">${t("kpi_followers")}</div>
           <div class="val">${m.followers.toLocaleString()}</div>
           <div class="sub positive">+${Math.floor(Math.random()*50)+10} this week</div>
         </div>
-        <div class="kpi">
+        <div class="kpi" style="cursor:pointer" onclick="navigate('#/creator')" title="View engagement metrics">
           <div class="head">${t("kpi_engagement")}</div>
           <div class="val">${m.engagement}%</div>
           <div class="sub">${t("kpi_live_viewers")}: ${state.store.live ? Math.floor(Math.random()*500)+200 : 0}</div>
         </div>
-        <div class="kpi">
+        <div class="kpi" style="cursor:pointer" onclick="navigate('#/orders')" title="View all orders">
           <div class="head">${t("kpi_orders")}</div>
           <div class="val">${m.orders30}</div>
         </div>
-        <div class="kpi">
+        <div class="kpi" style="cursor:pointer" onclick="navigate('#/orders')" title="View order details">
           <div class="head">${t("kpi_aov")}</div>
           <div class="val">${fmtSAR(m.aov)}</div>
         </div>
@@ -1086,8 +1088,8 @@ function renderDashboard(){
       </div>
       
       <!-- Alerts/Notifications -->
-      ${ordersPending ? `<div class="alert" style="margin-top:12px">⚠️ ${ordersPending} orders need processing</div>` : ""}
-      ${returnsPending ? `<div class="alert" style="margin-top:8px">📦 ${returnsPending} returns pending review</div>` : ""}
+      ${ordersPending ? `<div class="alert" style="margin-top:12px; cursor:pointer" onclick="navigate('#/orders')" title="Click to view pending orders">⚠️ ${ordersPending} orders need processing</div>` : ""}
+      ${returnsPending ? `<div class="alert" style="margin-top:8px; cursor:pointer" onclick="navigate('#/returns')" title="Click to view pending returns">📦 ${returnsPending} returns pending review</div>` : ""}
       
       <!-- Creator Performance Insights -->
       <div class="panel" style="margin-top:16px; background:var(--panel-secondary,var(--panel))">
@@ -1929,21 +1931,21 @@ function renderUGC(){
       
       <!-- UGC Stats -->
       <div class="kpis" style="margin-top:16px">
-        <div class="kpi">
+        <div class="kpi" style="cursor:pointer" onclick="filterUGC('all')" title="View all posts">
           <div class="head">Total Posts</div>
           <div class="val">${posts.length}</div>
         </div>
-        <div class="kpi">
+        <div class="kpi" style="cursor:pointer" onclick="filterUGC('pending')" title="View pending posts">
           <div class="head">${t("ugc_pending")}</div>
           <div class="val">${pendingCount}</div>
           <div class="sub ${pendingCount > 0 ? 'warning' : ''}">Needs review</div>
         </div>
-        <div class="kpi">
+        <div class="kpi" style="cursor:pointer" onclick="filterUGC('flagged')" title="View flagged posts">
           <div class="head">${t("ugc_flagged")}</div>
           <div class="val">${flaggedCount}</div>
           <div class="sub ${flaggedCount > 0 ? 'danger' : ''}">Requires action</div>
         </div>
-        <div class="kpi">
+        <div class="kpi" style="cursor:pointer" onclick="navigate('#/creator')" title="View engagement details">
           <div class="head">Engagement</div>
           <div class="val">${(posts.reduce((sum, p) => sum + p.likes + p.comments, 0) / posts.length || 0).toFixed(0)}</div>
           <div class="sub">Avg per post</div>
@@ -2399,6 +2401,13 @@ window.showNotification = function(message) {
     setTimeout(() => notification.remove(), 300);
   }, 3000);
 };
+
+// Expose functions for inline onclick handlers
+window.showDetailedCommissions = showDetailedCommissions;
+window.showScheduleStream = showScheduleStream;
+window.showDetailedPerformance = showDetailedPerformance;
+window.viewPostDetails = viewPostDetails;
+window.showContentPolicy = showContentPolicy;
 
 /* ---------- Boot ---------- */
 

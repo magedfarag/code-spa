@@ -3,9 +3,9 @@
      ctx = { el, state, actions, t, tn, currency, fmtDate, navigate, showSheet, refresh }
    and optional id from the hash (e.g., #/pdp/p1 => id = "p1")
 */
-import { uns, state, actions, productById, creatorById, cartTotal, getProductField, getProductTitle, getProductImage, loc } from "./data.js?v=20251010";
-import { t, tn, getLang, formatTimeAgo, fmtSAR } from "./i18n.js?v=20251010";
-import { aiEngine } from "./ai.js?v=20251010";
+import { uns, state, actions, saveState, productById, creatorById, cartTotal, getProductField, getProductTitle, getProductImage, loc } from "./data.js?v=20251010-imageFix";
+import { t, tn, getLang, formatTimeAgo, fmtSAR } from "./i18n.js?v=20251010-imageFix";
+import { aiEngine } from "./ai.js?v=20251010-imageFix";
 
 /* ---------- tiny DOM helpers ---------- */
 const h = (html) => html.trim();
@@ -26,6 +26,8 @@ const creatorName = (cid) => (creatorById(cid)?.name || "Creator");
 window.addToCart = function(productId) {
   if (actions.addToCart) {
     actions.addToCart(productId);
+    // refresh cart badge count
+    window.refreshBadges();
     alert(t("added_to_cart") || "Added to cart!");
   }
 };
@@ -86,15 +88,15 @@ const home = ({ el, state, actions }) => {
 
       <!-- Quick Stats -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 32px;">
-        <div style="background: linear-gradient(135deg, #ff6b6b, #ff8e8e); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+        <div onclick="navigate('cart')" style="background: linear-gradient(135deg, #ff6b6b, #ff8e8e); color: white; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="${t("go_to_cart") || "الذهاب إلى السلة"}">
           <div style="font-size: 24px; font-weight: bold;">${state.cart?.length || 0}</div>
           <div style="opacity: 0.9; font-size: 14px;">${t("cart_items") || "في السلة"}</div>
         </div>
-        <div style="background: linear-gradient(135deg, #4ecdc4, #6bcf7f); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+        <div onclick="navigate('wishlist')" style="background: linear-gradient(135deg, #4ecdc4, #6bcf7f); color: white; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="${t("go_to_wishlist") || "الذهاب إلى المفضلة"}">
           <div style="font-size: 24px; font-weight: bold;">${wishlistCount}</div>
           <div style="opacity: 0.9; font-size: 14px;">${t("wishlist_items") || "في المفضلة"}</div>
         </div>
-        <div style="background: linear-gradient(135deg, #a8e6cf, #7fcdcd); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+        <div onclick="navigate('profile')" style="background: linear-gradient(135deg, #a8e6cf, #7fcdcd); color: white; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="${t("go_to_orders") || "الذهاب إلى الطلبات"}">
           <div style="font-size: 24px; font-weight: bold;">${state.orders?.length || 0}</div>
           <div style="opacity: 0.9; font-size: 14px;">${t("total_orders") || "إجمالي الطلبات"}</div>
         </div>
@@ -116,7 +118,7 @@ const home = ({ el, state, actions }) => {
                 <div style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">${getProductTitle(product)}</div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                   <span style="font-weight: bold; color: #ff4757;">${fmtSAR(product.price)}</span>
-                  <span style="text-decoration: line-through; font-size: 12px; color: #666;">${fmtSAR(product.originalPrice)}</span>
+                  <span style="text-decoration: line-through; font-size: 12px; color: var(--text-muted);">${fmtSAR(product.originalPrice)}</span>
                   <span style="background: #ff4757; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px;">
                     -${product.discount}%
                   </span>
@@ -359,7 +361,7 @@ const discover = ({ el, state, actions }) => {
             oninput="handleSearchInput(this.value)"
             onfocus="showSearchSuggestions(true)"
           />
-          ${searchQuery ? `<button onclick="clearSearch()" style="padding: 8px 16px; border: none; background: transparent; color: var(--text-muted); cursor: pointer;">✕</button>` : ''}
+          ${searchQuery ? `<button onclick="clearSearch()" style="padding: 8px 16px; border: none; background: transparent; color: var(--text-muted); cursor: pointer;" title="Clear search">✕</button>` : ''}
         </div>
         
         <!-- Search Suggestions Dropdown -->
@@ -385,7 +387,7 @@ const discover = ({ el, state, actions }) => {
           <!-- Results Header -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
             <h3>${t("results_count").replace("{n}", searchResults.length)}</h3>
-            <button onclick="showFilters()" style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; cursor: pointer;">
+            <button onclick="showFilters()" style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; cursor: pointer;" title="${t("filters") || "Filters"}">
               <span>⚙️</span>
               <span>${t("filters")}</span>
             </button>
@@ -624,7 +626,7 @@ const pdp = ({ el, state, actions }, id) => {
   el.innerHTML = h(`
     <div style="padding: 20px; max-width: 1200px; margin: 0 auto;">
       <!-- Back Button -->
-      <button onclick="history.back()" class="secondary" style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+      <button onclick="history.back()" class="secondary" style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;" title="${t("back") || "Back"}">
         <span>←</span>
         <span>${t("back") || "Back"}</span>
       </button>
@@ -665,12 +667,12 @@ const pdp = ({ el, state, actions }, id) => {
               </h4>
               <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                 ${product.arFeatures.includes('virtual_try_on') ? `
-                  <button onclick="startAR('virtual_try_on')" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                  <button onclick="startAR('virtual_try_on')" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px;" title="${t("virtual_try_on") || "Virtual Try-On"}">
                     ${t("virtual_try_on")}
                   </button>
                 ` : ''}
                 ${product.arFeatures.includes('placement_preview') ? `
-                  <button onclick="startAR('placement_preview')" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                  <button onclick="startAR('placement_preview')" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px;" title="${t("see_in_your_space") || "See in Your Space"}">
                     ${t("see_in_your_space")}
                   </button>
                 ` : ''}
@@ -761,14 +763,19 @@ const pdp = ({ el, state, actions }, id) => {
 
           <!-- Action Buttons -->
           <div style="display: flex; gap: 12px; margin: 32px 0;">
-            <button onclick="window.addToCart?.('${product.id}')" class="primary large" style="flex: 1;">
+            ${(() => {
+              const cartItem = state.cart.find(item => item.productId === product.id);
+              const inCart = cartItem ? true : false;
+              const cartQty = cartItem ? cartItem.quantity : 0;
+              return `<button onclick="window.addToCart?.('${product.id}')" class="primary large" style="flex: 1;" title="${inCart ? `In Cart (${cartQty})` : t("add_to_cart") || "Add to Cart"}">
               <span style="margin-right: 8px;">🛒</span>
-              ${t("add_to_cart") || "Add to Cart"}
-            </button>
-            <button onclick="toggleWishlist('${product.id}')" class="secondary" style="padding: 16px; aspect-ratio: 1;">
+              ${inCart ? `${t("add_to_cart") || "Add to Cart"} (${cartQty} in cart)` : t("add_to_cart") || "Add to Cart"}
+            </button>`;
+            })()}
+            <button onclick="toggleWishlist('${product.id}')" class="secondary" style="padding: 16px; aspect-ratio: 1;" title="${t("add_to_wishlist") || "Add to Wishlist"}">
               ❤️
             </button>
-            <button onclick="compareProduct('${product.id}')" class="secondary" style="padding: 16px; aspect-ratio: 1;">
+            <button onclick="compareProduct('${product.id}')" class="secondary" style="padding: 16px; aspect-ratio: 1;" title="Compare Product">
               ⚖️
             </button>
           </div>
@@ -822,7 +829,7 @@ const pdp = ({ el, state, actions }, id) => {
             ${Object.entries(product.specifications).map(([key, value]) => `
               <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
                 <span style="font-weight: 500; text-transform: capitalize;">${key.replace('_', ' ')}:</span>
-                <span style="color: var(--text-muted);">${loc(value) || value}</span>
+                <span style="color: var(--text-muted);">${typeof value === 'object' && value !== null ? (value[getLang()] || value.en || JSON.stringify(value)) : (loc(value) || value)}</span>
               </div>
             `).join('')}
           </div>
@@ -882,7 +889,7 @@ const pdp = ({ el, state, actions }, id) => {
           <!-- Rating Breakdown -->
           <div>
             ${[5,4,3,2,1].map(rating => {
-              const count = reviewStats.ratingBreakdown[rating] || 0;
+              const count = (reviewStats.ratingBreakdown?.[rating]) || 0;
               const percentage = reviewStats.totalReviews > 0 ? (count / reviewStats.totalReviews) * 100 : 0;
               return `
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
@@ -899,7 +906,7 @@ const pdp = ({ el, state, actions }, id) => {
 
         <!-- Individual Reviews -->
         <div class="reviews-list">
-          ${filteredReviews.slice(0, 3).map(review => `
+          ${filteredReviews?.slice(0, 3).map(review => `
             <div style="border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px;">
               <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
                 <div>
@@ -1693,7 +1700,7 @@ const ugcfeed = ({ el }) => {
 };
 
 /* ---------- Enhanced Wishlist & Save for Later Route ---------- */
-const wishlist = ({ el, navigate }) => {
+const wishlist = ({ el, navigate, actions }) => {
   const collections = actions.getWishlistCollections();
   const stats = actions.getWishlistStats();
   const saveForLaterItems = state.wishlist.saveForLater.map(id => productById(id)).filter(Boolean);
@@ -1730,19 +1737,19 @@ const wishlist = ({ el, navigate }) => {
 
       <!-- Wishlist Stats -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
-        <div style="background: linear-gradient(135deg, #ff6b6b, #ff8e8e); color: white; padding: 20px; border-radius: 12px;">
+        <div onclick="location.hash='#/wishlist'" style="background: linear-gradient(135deg, #ff6b6b, #ff8e8e); color: white; padding: 20px; border-radius: 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="View all wishlist items">
           <div style="font-size: 32px; font-weight: bold;">${stats.totalItems}</div>
           <div style="opacity: 0.9;">${t("total_items_saved")}</div>
         </div>
-        <div style="background: linear-gradient(135deg, #4ecdc4, #6bcf7f); color: white; padding: 20px; border-radius: 12px;">
+        <div onclick="switchWishlistCollection('all')" style="background: linear-gradient(135deg, #4ecdc4, #6bcf7f); color: white; padding: 20px; border-radius: 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="View all collections">
           <div style="font-size: 32px; font-weight: bold;">${stats.totalCollections}</div>
           <div style="opacity: 0.9;">${t("total_lists_created")}</div>
         </div>
-        <div style="background: linear-gradient(135deg, #a8e6cf, #7fcdcd); color: white; padding: 20px; border-radius: 12px;">
+        <div onclick="showAllSaveForLater()" style="background: linear-gradient(135deg, #a8e6cf, #7fcdcd); color: white; padding: 20px; border-radius: 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="View saved for later items">
           <div style="font-size: 32px; font-weight: bold;">${stats.totalSaveForLater}</div>
           <div style="opacity: 0.9;">${t("saved_for_later")}</div>
         </div>
-        <div style="background: linear-gradient(135deg, #ffd93d, #6bcf7f); color: white; padding: 20px; border-radius: 12px;">
+        <div onclick="location.hash='#/home'" style="background: linear-gradient(135deg, #ffd93d, #6bcf7f); color: white; padding: 20px; border-radius: 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="View recently viewed items">
           <div style="font-size: 32px; font-weight: bold;">${stats.recentlyViewedCount}</div>
           <div style="opacity: 0.9;">${t("recently_viewed")}</div>
         </div>
@@ -1858,7 +1865,7 @@ const wishlist = ({ el, navigate }) => {
                         ${fmtSAR(product.price)}
                       </div>
                     </div>
-                    <button onclick="actions.addToWishlist('${product.id}'); location.reload()" style="padding: 4px; background: none; border: none; cursor: pointer; font-size: 16px;">
+                    <button onclick="addToWishlist('${product.id}')" title="${actions.isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}" style="padding: 4px; background: none; border: none; cursor: pointer; font-size: 16px;">
                       ${actions.isInWishlist(product.id) ? '❤️' : '🤍'}
                     </button>
                   </div>
@@ -1914,12 +1921,20 @@ function renderWishlistProductCard(product, collectionId) {
           </div>
           
           <div style="display: flex; gap: 8px;">
-            <button onclick="event.stopPropagation(); addToCartFromWishlist('${product.id}')" 
-                    style="flex: 1; padding: 10px; background: var(--brand); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
-              🛒 ${t("add_to_cart")}
-            </button>
+            ${(() => {
+              const cartItem = window.__app__?.state?.cart?.find(item => item.productId === product.id);
+              const cartQty = cartItem ? cartItem.quantity : 0;
+              const buttonText = cartQty > 0 ? `🛒 ${t("add_to_cart")} (${cartQty})` : `🛒 ${t("add_to_cart")}`;
+              const titleText = cartQty > 0 ? `In Cart (${cartQty})` : t("add_to_cart") || "Add to Cart";
+              return `<button onclick="event.stopPropagation(); addToCartFromWishlist('${product.id}')" 
+                    style="flex: 1; padding: 10px; background: var(--brand); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;"
+                    title="${titleText}">
+              ${buttonText}
+            </button>`;
+            })()}
             <button onclick="event.stopPropagation(); shareProduct('${product.id}')" 
-                    style="padding: 10px 12px; border: 1px solid var(--border); background: white; border-radius: 6px; cursor: pointer;">
+                    style="padding: 10px 12px; border: 1px solid var(--border); background: white; border-radius: 6px; cursor: pointer;"
+                    title="Share Product">
               📤
             </button>
           </div>
@@ -2030,7 +2045,8 @@ function renderDiscoverProductCard(product) {
       <!-- Wishlist Button -->
       <div style="position: absolute; top: 12px; right: 12px; z-index: 2;">
         <button onclick="event.stopPropagation(); toggleWishlistFromCard('${product.id}')" 
-                style="background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;">
+                style="background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;"
+                title="${isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}">
           <span style="font-size: 18px;">${isInWishlist ? '❤️' : '🤍'}</span>
         </button>
       </div>
@@ -2038,7 +2054,8 @@ function renderDiscoverProductCard(product) {
       <!-- Save for Later Button -->
       <div style="position: absolute; top: 12px; left: 12px; z-index: 2;">
         <button onclick="event.stopPropagation(); saveForLaterFromCard('${product.id}')" 
-                style="background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;">
+                style="background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;"
+                title="Save for Later">
           <span style="font-size: 16px;">⏰</span>
         </button>
       </div>
@@ -2072,10 +2089,17 @@ function renderDiscoverProductCard(product) {
             </span>
           </div>
           
-          <button onclick="event.stopPropagation(); addToCartFromCard('${product.id}')" 
-                  style="width: 100%; padding: 10px; background: var(--brand); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s ease;">
-            🛒 ${t("add_to_cart")}
-          </button>
+          ${(() => {
+            const cartItem = window.__app__?.state?.cart?.find(item => item.productId === product.id);
+            const cartQty = cartItem ? cartItem.quantity : 0;
+            const buttonText = cartQty > 0 ? `🛒 ${t("add_to_cart")} (${cartQty})` : `🛒 ${t("add_to_cart")}`;
+            const titleText = cartQty > 0 ? `In Cart (${cartQty})` : t("add_to_cart") || "Add to Cart";
+            return `<button onclick="event.stopPropagation(); addToCartFromCard('${product.id}')" 
+                  style="width: 100%; padding: 10px; background: var(--brand); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s ease;"
+                  title="${titleText}">
+            ${buttonText}
+          </button>`;
+          })()}
         </div>
       </div>
     </div>
@@ -2195,21 +2219,37 @@ function setupSearchFunctionality() {
 
   window.performQuickSearch = function(query) {
     actions.performSearch(query);
-    location.hash = '#/discover';
+    if (location.hash === '#/discover') {
+      // Force re-render if already on discover page
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    } else {
+      location.hash = '#/discover';
+    }
   };
 
   window.searchByCategory = function(categoryId) {
     const category = state.search.categories.find(c => c.id === categoryId);
     if (category) {
       actions.performSearch("", { category: [loc(category, "name")] });
-      location.hash = '#/discover';
+      if (location.hash === '#/discover') {
+        // Force re-render if already on discover page
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
+      } else {
+        location.hash = '#/discover';
+      }
     }
   };
 
   window.clearSearch = function() {
     actions.clearSearch();
-    document.getElementById('searchInput').value = '';
-    location.hash = '#/discover';
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
+    if (location.hash === '#/discover') {
+      // Force re-render if already on discover page
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    } else {
+      location.hash = '#/discover';
+    }
   };
 
   window.showSearchSuggestions = function(show) {
@@ -2382,7 +2422,7 @@ function setupReviewFunctionality(productId) {
             <div class="star-rating" style="display: flex; gap: 4px; margin-bottom: 8px;">
               ${[1, 2, 3, 4, 5].map(star => `
                 <button type="button" class="star-btn" data-rating="${star}" 
-                        style="background: none; border: none; font-size: 32px; cursor: pointer; color: #ddd; transition: color 0.2s;"
+                        style="background: none; border: none; font-size: 32px; cursor: pointer; color: var(--text-muted); transition: color 0.2s;"
                         onmouseover="highlightStars(${star})" onmouseout="resetStars()" onclick="selectRating(${star})">
                   ⭐
                 </button>
@@ -2471,8 +2511,32 @@ function setupReviewFunctionality(productId) {
   };
 
   window.toggleWishlist = function(productId) {
-    // This will be implemented in Phase 1.3
-    console.log('Wishlist toggle for product:', productId);
+    const { state, actions } = window.__app__;
+    if (!actions || !actions.toggleWishlist) {
+      console.error('Actions not available');
+      return;
+    }
+    
+    actions.toggleWishlist(productId);
+    
+    // Update button appearance
+    const button = document.querySelector(`button[onclick*="toggleWishlist('${productId}')"]`);
+    if (button) {
+      const isInWishlist = state.wishlist.items.includes(productId);
+      button.innerHTML = isInWishlist ? '❤️' : '🤍';
+      button.title = isInWishlist ? (window.t?.("remove_from_wishlist") || "Remove from Wishlist") : (window.t?.("add_to_wishlist") || "Add to Wishlist");
+    }
+  };
+
+  // Global helper for adding to wishlist from onclick handlers
+  window.addToWishlist = function(productId) {
+    const { actions } = window.__app__;
+    if (!actions || !actions.addToWishlist) {
+      console.error('Actions not available');
+      return;
+    }
+    actions.addToWishlist(productId);
+    location.reload();
   };
 }
 
@@ -2651,17 +2715,17 @@ function renderSocialPost(post) {
       <!-- Post Actions -->
       <div class="post-actions" style="display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border);">
         <div style="display: flex; align-items: center; gap: 16px;">
-          <button onclick="togglePostLike('${post.id}')" class="post-action" style="display: flex; align-items: center; gap: 4px; background: none; border: none; color: ${isLiked ? 'var(--brand)' : 'var(--text-muted)'}; cursor: pointer;">
+          <button onclick="togglePostLike('${post.id}')" class="post-action" style="display: flex; align-items: center; gap: 4px; background: none; border: none; color: ${isLiked ? 'var(--brand)' : 'var(--text-muted)'}; cursor: pointer;" title="${isLiked ? 'Unlike' : 'Like'} post">
             ${isLiked ? '❤️' : '🤍'} ${post.likes}
           </button>
-          <button onclick="showComments('${post.id}')" class="post-action" style="display: flex; align-items: center; gap: 4px; background: none; border: none; color: var(--text-muted); cursor: pointer;">
+          <button onclick="showComments('${post.id}')" class="post-action" style="display: flex; align-items: center; gap: 4px; background: none; border: none; color: var(--text-muted); cursor: pointer;" title="View comments">
             💬 ${post.comments}
           </button>
-          <button onclick="sharePost('${post.id}')" class="post-action" style="display: flex; align-items: center; gap: 4px; background: none; border: none; color: var(--text-muted); cursor: pointer;">
+          <button onclick="sharePost('${post.id}')" class="post-action" style="display: flex; align-items: center; gap: 4px; background: none; border: none; color: var(--text-muted); cursor: pointer;" title="Share post">
             📤 ${post.shares}
           </button>
         </div>
-        <button onclick="toggleSavePost('${post.id}')" class="post-action" style="background: none; border: none; color: ${isSaved ? 'var(--brand)' : 'var(--text-muted)'}; cursor: pointer;">
+        <button onclick="toggleSavePost('${post.id}')" class="post-action" style="background: none; border: none; color: ${isSaved ? 'var(--brand)' : 'var(--text-muted)'}; cursor: pointer;" title="${isSaved ? 'Unsave' : 'Save'} post">
           ${isSaved ? '🔖' : '📑'}
         </button>
       </div>
@@ -2806,7 +2870,7 @@ function setupProfileFunctionality() {
     const newBio = prompt(t("enter_new_bio"), state.user.bio);
     if (newBio !== null) {
       state.user.bio = newBio;
-      actions.saveState();
+      saveState();
       location.reload();
     }
   };
@@ -2827,3 +2891,15 @@ function setupCartEnhancementFunctionality() {
     window.actions.updateCartSummary();
   }
 }
+
+// Global function for showing all Save for Later items
+window.showAllSaveForLater = function() {
+  window.location.hash = '#/wishlist';
+  // Wait for navigation, then scroll to Save for Later section
+  setTimeout(() => {
+    const saveForLaterSection = document.querySelector('[data-section="save-for-later"]');
+    if (saveForLaterSection) {
+      saveForLaterSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 300);
+};

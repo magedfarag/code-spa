@@ -316,6 +316,10 @@ header .actions > *:not(button)::before {
     min-width: 70px;
   }
 }
+/* Prevent header from overlapping main content */
+main#view {
+  padding-top: 64px;
+}
 
 @media (max-width: 480px) {
   header {
@@ -541,10 +545,15 @@ header .actions > *:not(button)::before {
 
 /* ---------- Bottom nav ---------- */
 nav.bottom {
-  position: sticky; bottom:0; inset-inline:0; height:64px; z-index:10;
+  position: fixed; bottom:0; left:0; right:0; height:64px; z-index:10;
   background: rgba(18,19,25,.86); backdrop-filter: blur(8px);
-  display:grid; grid-template-columns:repeat(5,1fr);
+  display:flex; flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden;
   border-top:1px solid var(--border);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+nav.bottom::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
 }
 html[data-theme="light"] nav.bottom { background: rgba(248,250,252,.92); }
 nav.bottom a { 
@@ -554,8 +563,11 @@ nav.bottom a {
   justify-content:center; 
   gap:6px; 
   font-size:12px; 
-  padding:6px 0; 
+  padding:6px 12px; 
   transition: all 0.2s ease;
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
 }
 nav.bottom a.active { color:#fff; }
 html[data-theme="light"] nav.bottom a.active { color:#000; }

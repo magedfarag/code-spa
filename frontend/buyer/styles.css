@@ -124,15 +124,29 @@ button:active { transform: translateY(1px); }
 #app-header .logo .brand { font-weight: 700; }
 #app-header .logo svg { width: 24px; height: 24px; }
 #app-header .actions { 
-  margin-inline-start: auto; display: flex; gap: 4px; align-items: center; 
-  /* Allow more space for header actions */
-  max-width: 55%; overflow: hidden;
+  margin-inline-start: auto; display: flex; gap: 6px; align-items: center; 
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
+#app-header .actions::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
 /* Minimize header actions on small screens */
 @media (max-width: 480px) {
-  #app-header .actions > *:nth-child(3) ~ * { display: none !important; }
-  #app-header .actions { gap: 2px; max-width: 40%; }
+  #app-header .actions > *:nth-child(4) ~ * { display: none !important; }
+  #app-header .actions { gap: 4px; }
+  #app-header .actions select { 
+    font-size: 13px; 
+    min-width: 60px; 
+    padding: 4px 6px;
+    min-height: 32px;
+  }
+  #app-header .actions button { 
+    padding: 6px 10px;
+    font-size: 13px;
+    min-height: 32px;
+  }
 }
 
 /* Show more elements on larger screens */
@@ -215,13 +229,18 @@ html[data-theme="light"] .card .media { background: #f4f6fb; }
 
 /* ---------- Bottom nav ---------- */
 nav.bottom {
-  position: sticky; bottom: 0; inset-inline: 0; height: 64px; z-index: 10;
+  position: fixed; bottom: 0; left: 0; right: 0; height: 64px; z-index: 10;
   background: rgba(18,19,25,.86); backdrop-filter: blur(8px);
-  display: grid; grid-template-columns: repeat(6, 1fr);
+  display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
   border-top: 1px solid var(--border);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+nav.bottom::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
 }
 html[data-theme="light"] nav.bottom { background: rgba(248,250,252,.92); }
-nav.bottom a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; padding: 6px 0; }
+nav.bottom a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; padding: 6px 12px; flex: 1 1 0; min-width: 0; white-space: nowrap; }
 nav.bottom a.active { color: #ffffff; }
 html[data-theme="light"] nav.bottom a.active { color: #000000; }
 
