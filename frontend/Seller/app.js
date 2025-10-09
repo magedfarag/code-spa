@@ -1558,7 +1558,7 @@ function renderCreator(){
           ${topProducts.map(product => `
             <div class="row between" style="padding:12px; background:var(--bg); border-radius:8px; margin-bottom:8px">
               <div style="flex:1">
-                <div style="font-weight:600; margin-bottom:4px">${product.name}</div>
+                <div style="font-weight:600; margin-bottom:4px">${typeof product.name === 'object' ? (product.name[getLang()] || product.name.en || product.name.ar) : product.name}</div>
                 <div class="muted small">${product.sales} sales • ${product.rate}% commission</div>
               </div>
               <div style="text-align:right">
@@ -1729,9 +1729,9 @@ function renderLive(){
           </div>
           ${featuredProduct ? `
             <div class="row" style="gap:12px; margin-top:12px">
-              <img src="${uns(featuredProduct.imgId, 300)}" alt="${featuredProduct.name}" style="width:60px;height:60px;object-fit:cover;border-radius:8px">
+              <img src="${uns(featuredProduct.imgId, 300)}" alt="${typeof featuredProduct.name === 'object' ? (featuredProduct.name[getLang()] || featuredProduct.name.en || featuredProduct.name.ar) : featuredProduct.name}" style="width:60px;height:60px;object-fit:cover;border-radius:8px">
               <div style="flex:1">
-                <strong>${featuredProduct.name}</strong>
+                <strong>${typeof featuredProduct.name === 'object' ? (featuredProduct.name[getLang()] || featuredProduct.name.en || featuredProduct.name.ar) : featuredProduct.name}</strong>
                 <div class="muted">${fmtSAR(featuredProduct.price)} • Stock: ${featuredProduct.stock}</div>
                 ${featuredProduct.stock < 5 ? '<div class="warning small">⚠️ Low stock</div>' : ''}
               </div>
@@ -1893,9 +1893,9 @@ function renderUGC(){
           <p style="margin:0 0 8px 0">${post.content}</p>
           ${product ? `
             <div class="row" style="gap:8px; margin-bottom:8px">
-              <img src="${uns(product.imgId, 150)}" alt="${product.name}" style="width:40px;height:40px;object-fit:cover;border-radius:6px">
+              <img src="${uns(product.imgId, 150)}" alt="${typeof product.name === 'object' ? (product.name[getLang()] || product.name.en || product.name.ar) : product.name}" style="width:40px;height:40px;object-fit:cover;border-radius:6px">
               <div style="flex:1">
-                <div class="small">${product.name}</div>
+                <div class="small">${typeof product.name === 'object' ? (product.name[getLang()] || product.name.en || product.name.ar) : product.name}</div>
                 <div class="muted small">${fmtSAR(product.price)}</div>
               </div>
             </div>
@@ -2063,9 +2063,9 @@ function viewPostDetails(postId) {
         ${product ? `
           <div class="card" style="margin-bottom:16px">
             <div class="row" style="gap:12px; padding:12px">
-              <img src="${uns(product.imgId, 200)}" alt="${product.name}" style="width:60px;height:60px;object-fit:cover;border-radius:8px">
+              <img src="${uns(product.imgId, 200)}" alt="${typeof product.name === 'object' ? (product.name[getLang()] || product.name.en || product.name.ar) : product.name}" style="width:60px;height:60px;object-fit:cover;border-radius:8px">
               <div>
-                <strong>${product.name}</strong>
+                <strong>${typeof product.name === 'object' ? (product.name[getLang()] || product.name.en || product.name.ar) : product.name}</strong>
                 <div class="muted">${fmtSAR(product.price)}</div>
               </div>
             </div>
@@ -2108,7 +2108,34 @@ function filterUGC(filter) {
 }
 
 function showContentPolicy() {
-  setSheet('Content Policy', `
+  const isArabic = getLang() === 'ar';
+  const content = isArabic ? `
+    <div style="max-width:500px" dir="rtl">
+      <h3>إرشادات المجتمع</h3>
+      
+      <h4>المحتوى المسموح</h4>
+      <ul style="margin-right:20px">
+        <li>تقييمات وتجارب حقيقية للمنتجات</li>
+        <li>عروض توضيحية واضحة للمنتجات</li>
+        <li>شهادات وتوصيات حقيقية</li>
+        <li>اقتراحات إبداعية للاستخدام أو التنسيق</li>
+      </ul>
+      
+      <h4>المحتوى المحظور</h4>
+      <ul style="margin-right:20px">
+        <li>محتوى غير لائق أو مسيء أو ضار</li>
+        <li>تقييمات مزيفة أو ادعاءات مضللة</li>
+        <li>محتوى لا يعرض منتجاتنا</li>
+        <li>مواد محمية بحقوق الطبع والنشر بدون إذن</li>
+        <li>معلومات شخصية للآخرين</li>
+      </ul>
+      
+      <h4>عملية المراجعة</h4>
+      <p>تتم مراجعة جميع المنشورات خلال 24 ساعة. يتم تصعيد المحتوى المبلغ عنه للمراجعة اليدوية. يمكن تقديم الطعون من خلال نظام الدعم لدينا.</p>
+      
+      <p><strong>ملاحظة:</strong> يجب أن يتوافق جميع المحتوى مع متطلبات نظام حماية البيانات الشخصية (PDPL) السعودي.</p>
+    </div>
+  ` : `
     <div style="max-width:500px">
       <h3>Community Guidelines</h3>
       
@@ -2134,7 +2161,9 @@ function showContentPolicy() {
       
       <p><strong>Note:</strong> All content must comply with PDPL (Saudi Data Protection Law) requirements.</p>
     </div>
-  `);
+  `;
+  
+  setSheet(t('content_policy'), content);
 }
 
 /* ---------- Live Commerce Functions ---------- */
@@ -2162,10 +2191,31 @@ window.spotlightProduct = function() {
   const productId = qs('#live_product')?.value;
   const product = state.catalog.find(p => p.id === productId);
   if (product) {
-    alert(`Spotlighting "${product.name}" for 30 seconds!`);
+    const productName = typeof product.name === 'object' ? (product.name[getLang()] || product.name.en || product.name.ar) : product.name;
+    alert(`Spotlighting "${productName}" for 30 seconds!`);
     // In a real app, this would highlight the product in the live stream
   }
 };
+
+window.addFlashDeal = function() {
+  const productId = qs('#live_product')?.value;
+  const product = state.catalog.find(p => p.id === productId);
+  if (product) {
+    const discount = prompt('Enter discount percentage (1-50):', '20');
+    if (discount && !isNaN(discount) && discount >= 1 && discount <= 50) {
+      const originalPrice = product.price;
+      const discountedPrice = originalPrice * (1 - discount / 100);
+      const productName = typeof product.name === 'object' ? (product.name[getLang()] || product.name.en || product.name.ar) : product.name;
+      alert(`⚡ Flash Deal created for "${productName}"\nOriginal: ${fmtSAR(originalPrice)}\nDiscounted: ${fmtSAR(discountedPrice)} (${discount}% off)\nDuration: 60 minutes`);
+      // In a real app, this would create a time-limited deal
+    } else {
+      alert('Invalid discount. Please enter a value between 1 and 50.');
+    }
+  }
+};
+
+window.showScheduleStream = showScheduleStream;
+window.showContentPolicy = showContentPolicy;
 
 function addViewerMessage() {
   const message = prompt('Send message to viewers:');
