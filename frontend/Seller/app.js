@@ -1,4 +1,4 @@
-/* StoreZ — Seller Console (single ES module)
+﻿/* StoreZ â€” Seller Console (single ES module)
    - Routing + state + i18n + views in one file for easy drop-in.
    - Open over http:// (not file://) to avoid CORS for modules.
 */
@@ -42,7 +42,7 @@ const DICT = {
     add_product: "Add product",
     import_catalog: "Import catalog",
     ai_addons: "AI add-ons",
-    search_catalog: "Search products…",
+    search_catalog: "Search productsâ€¦",
 
     orders_title: "Orders",
     order: "Order",
@@ -204,192 +204,192 @@ const DICT = {
     image_upload_coming_soon: "Image upload feature coming soon",
   },
   ar: {
-    nav_dashboard: "لوحة التحكم",
-    nav_catalog: "المنتجات",
-    nav_orders: "الطلبات",
-    nav_creator: "المبدع",
-    nav_live: "البث",
-    nav_ugc: "المحتوى",
+    nav_dashboard: "Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…",
+    nav_catalog: "Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª",
+    nav_orders: "Ø§Ù„Ø·Ù„Ø¨Ø§Øª",
+    nav_creator: "Ø§Ù„Ù…Ø¨Ø¯Ø¹",
+    nav_live: "Ø§Ù„Ø¨Ø«",
+    nav_ugc: "Ø§Ù„Ù…Ø­ØªÙˆÙ‰",
 
-    kpi_gmv: "المبيعات (٣٠ يوم)",
-    kpi_orders: "الطلبات",
-    kpi_aov: "متوسط قيمة الطلب",
-    kpi_ret: "معدل الإرجاع",
-    kpi_followers: "المتابعون",
-    kpi_engagement: "التفاعل",
-    kpi_live_viewers: "مشاهدو البث",
-    kpi_social_gmv: "مبيعات التواصل",
-    kpi_aov: "متوسط قيمة الطلب",
-    kpi_ret: "معدل الاسترجاع",
+    kpi_gmv: "Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª (Ù£Ù  ÙŠÙˆÙ…)",
+    kpi_orders: "Ø§Ù„Ø·Ù„Ø¨Ø§Øª",
+    kpi_aov: "Ù…ØªÙˆØ³Ø· Ù‚ÙŠÙ…Ø© Ø§Ù„Ø·Ù„Ø¨",
+    kpi_ret: "Ù…Ø¹Ø¯Ù„ Ø§Ù„Ø¥Ø±Ø¬Ø§Ø¹",
+    kpi_followers: "Ø§Ù„Ù…ØªØ§Ø¨Ø¹ÙˆÙ†",
+    kpi_engagement: "Ø§Ù„ØªÙØ§Ø¹Ù„",
+    kpi_live_viewers: "Ù…Ø´Ø§Ù‡Ø¯Ùˆ Ø§Ù„Ø¨Ø«",
+    kpi_social_gmv: "Ù…Ø¨ÙŠØ¹Ø§Øª Ø§Ù„ØªÙˆØ§ØµÙ„",
+    kpi_aov: "Ù…ØªÙˆØ³Ø· Ù‚ÙŠÙ…Ø© Ø§Ù„Ø·Ù„Ø¨",
+    kpi_ret: "Ù…Ø¹Ø¯Ù„ Ø§Ù„Ø§Ø³ØªØ±Ø¬Ø§Ø¹",
 
-    quick_add: "إضافة منتج",
-    quick_import: "استيراد CSV",
-    quick_announce: "إعلان",
+    quick_add: "Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬",
+    quick_import: "Ø§Ø³ØªÙŠØ±Ø§Ø¯ CSV",
+    quick_announce: "Ø¥Ø¹Ù„Ø§Ù†",
 
-    catalog_title: "المنتجات",
-    add_product: "إضافة منتج",
-    import_catalog: "استيراد المنتجات",
-    ai_addons: "إضافات الذكاء",
-    search_catalog: "ابحث في المنتجات…",
+    catalog_title: "Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª",
+    add_product: "Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬",
+    import_catalog: "Ø§Ø³ØªÙŠØ±Ø§Ø¯ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª",
+    ai_addons: "Ø¥Ø¶Ø§ÙØ§Øª Ø§Ù„Ø°ÙƒØ§Ø¡",
+    search_catalog: "Ø§Ø¨Ø­Ø« ÙÙŠ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øªâ€¦",
 
-    orders_title: "الطلبات",
-    order: "طلب",
-    customer: "العميل",
-    status: "الحالة",
-    total: "الإجمالي",
-    created: "أُنشىء",
-    actions: "الإجراءات",
-    view: "عرض",
-    fulfill: "تنفيذ",
-    refund: "استرجاع",
-    label: "ملصق شحن",
-    approve: "موافقة",
-    deny: "رفض",
+    orders_title: "Ø§Ù„Ø·Ù„Ø¨Ø§Øª",
+    order: "Ø·Ù„Ø¨",
+    customer: "Ø§Ù„Ø¹Ù…ÙŠÙ„",
+    status: "Ø§Ù„Ø­Ø§Ù„Ø©",
+    total: "Ø§Ù„Ø¥Ø¬Ù…Ø§Ù„ÙŠ",
+    created: "Ø£ÙÙ†Ø´Ù‰Ø¡",
+    actions: "Ø§Ù„Ø¥Ø¬Ø±Ø§Ø¡Ø§Øª",
+    view: "Ø¹Ø±Ø¶",
+    fulfill: "ØªÙ†ÙÙŠØ°",
+    refund: "Ø§Ø³ØªØ±Ø¬Ø§Ø¹",
+    label: "Ù…Ù„ØµÙ‚ Ø´Ø­Ù†",
+    approve: "Ù…ÙˆØ§ÙÙ‚Ø©",
+    deny: "Ø±ÙØ¶",
 
-    order_detail: "تفاصيل الطلب",
-    items: "المنتجات",
-    placed: "تم الإنشاء",
-    shipped: "تم الشحن",
-    out_for_delivery: "خارج للتسليم",
-    delivered: "تم التسليم",
-    processing: "قيد المعالجة",
-    start_return: "إنشاء استرجاع",
-    mark_fulfilled: "وضع تم التنفيذ",
-    create_label: "إنشاء ملصق",
+    order_detail: "ØªÙØ§ØµÙŠÙ„ Ø§Ù„Ø·Ù„Ø¨",
+    items: "Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª",
+    placed: "ØªÙ… Ø§Ù„Ø¥Ù†Ø´Ø§Ø¡",
+    shipped: "ØªÙ… Ø§Ù„Ø´Ø­Ù†",
+    out_for_delivery: "Ø®Ø§Ø±Ø¬ Ù„Ù„ØªØ³Ù„ÙŠÙ…",
+    delivered: "ØªÙ… Ø§Ù„ØªØ³Ù„ÙŠÙ…",
+    processing: "Ù‚ÙŠØ¯ Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø©",
+    start_return: "Ø¥Ù†Ø´Ø§Ø¡ Ø§Ø³ØªØ±Ø¬Ø§Ø¹",
+    mark_fulfilled: "ÙˆØ¶Ø¹ ØªÙ… Ø§Ù„ØªÙ†ÙÙŠØ°",
+    create_label: "Ø¥Ù†Ø´Ø§Ø¡ Ù…Ù„ØµÙ‚",
 
-    returns_title: "الاسترجاعات",
-    inbox_title: "الرسائل",
-    live_title: "البث",
-    live_go: "ابدأ البث",
-    live_end: "إنهاء البث",
-    pick_product: "اختر منتج للعرض",
-    live_viewers: "مشاهدو البث",
-    session_sales: "مبيعات الجلسة", 
-    current_viewers: "المشاهدون الحاليون",
-    engagement_rate: "معدل التفاعل",
-    spotlight_product: "تسليط الضوء",
-    send_message: "إرسال رسالة",
-    toggle_chat: "تبديل الدردشة",
-    share_link: "مشاركة الرابط",
-    add_discount: "إضافة خصم",
-    invite_followers: "دعوة المتابعين",
-    save_highlight: "حفظ مقطع مميز",
+    returns_title: "Ø§Ù„Ø§Ø³ØªØ±Ø¬Ø§Ø¹Ø§Øª",
+    inbox_title: "Ø§Ù„Ø±Ø³Ø§Ø¦Ù„",
+    live_title: "Ø§Ù„Ø¨Ø«",
+    live_go: "Ø§Ø¨Ø¯Ø£ Ø§Ù„Ø¨Ø«",
+    live_end: "Ø¥Ù†Ù‡Ø§Ø¡ Ø§Ù„Ø¨Ø«",
+    pick_product: "Ø§Ø®ØªØ± Ù…Ù†ØªØ¬ Ù„Ù„Ø¹Ø±Ø¶",
+    live_viewers: "Ù…Ø´Ø§Ù‡Ø¯Ùˆ Ø§Ù„Ø¨Ø«",
+    session_sales: "Ù…Ø¨ÙŠØ¹Ø§Øª Ø§Ù„Ø¬Ù„Ø³Ø©", 
+    current_viewers: "Ø§Ù„Ù…Ø´Ø§Ù‡Ø¯ÙˆÙ† Ø§Ù„Ø­Ø§Ù„ÙŠÙˆÙ†",
+    engagement_rate: "Ù…Ø¹Ø¯Ù„ Ø§Ù„ØªÙØ§Ø¹Ù„",
+    spotlight_product: "ØªØ³Ù„ÙŠØ· Ø§Ù„Ø¶ÙˆØ¡",
+    send_message: "Ø¥Ø±Ø³Ø§Ù„ Ø±Ø³Ø§Ù„Ø©",
+    toggle_chat: "ØªØ¨Ø¯ÙŠÙ„ Ø§Ù„Ø¯Ø±Ø¯Ø´Ø©",
+    share_link: "Ù…Ø´Ø§Ø±ÙƒØ© Ø§Ù„Ø±Ø§Ø¨Ø·",
+    add_discount: "Ø¥Ø¶Ø§ÙØ© Ø®ØµÙ…",
+    invite_followers: "Ø¯Ø¹ÙˆØ© Ø§Ù„Ù…ØªØ§Ø¨Ø¹ÙŠÙ†",
+    save_highlight: "Ø­ÙØ¸ Ù…Ù‚Ø·Ø¹ Ù…Ù…ÙŠØ²",
 
-    ugc_title: "المحتوى المُنشأ",
-    ugc_posts: "منشورات المبدعين",
-    ugc_pending: "في الانتظار",
-    ugc_approved: "موافق عليه",
-    ugc_flagged: "مبلغ عنه",
-    ugc_rejected: "مرفوض",
-    content_policy: "سياسة المحتوى",
-    moderation_queue: "طابور المراجعة",
-    approve_post: "موافقة",
-    reject_post: "رفض",
-    view_post: "عرض",
-    flag_reason: "سبب الإبلاغ",
-    content_guidelines: "إرشادات المحتوى",
+    ugc_title: "Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ø§Ù„Ù…ÙÙ†Ø´Ø£",
+    ugc_posts: "Ù…Ù†Ø´ÙˆØ±Ø§Øª Ø§Ù„Ù…Ø¨Ø¯Ø¹ÙŠÙ†",
+    ugc_pending: "ÙÙŠ Ø§Ù„Ø§Ù†ØªØ¸Ø§Ø±",
+    ugc_approved: "Ù…ÙˆØ§ÙÙ‚ Ø¹Ù„ÙŠÙ‡",
+    ugc_flagged: "Ù…Ø¨Ù„Øº Ø¹Ù†Ù‡",
+    ugc_rejected: "Ù…Ø±ÙÙˆØ¶",
+    content_policy: "Ø³ÙŠØ§Ø³Ø© Ø§Ù„Ù…Ø­ØªÙˆÙ‰",
+    moderation_queue: "Ø·Ø§Ø¨ÙˆØ± Ø§Ù„Ù…Ø±Ø§Ø¬Ø¹Ø©",
+    approve_post: "Ù…ÙˆØ§ÙÙ‚Ø©",
+    reject_post: "Ø±ÙØ¶",
+    view_post: "Ø¹Ø±Ø¶",
+    flag_reason: "Ø³Ø¨Ø¨ Ø§Ù„Ø¥Ø¨Ù„Ø§Øº",
+    content_guidelines: "Ø¥Ø±Ø´Ø§Ø¯Ø§Øª Ø§Ù„Ù…Ø­ØªÙˆÙ‰",
 
-    analytics_title: "التحليلات",
-    settings_title: "الإعدادات",
-    store_name: "اسم المتجر",
-    save: "حفظ",
-    billing_title: "الفوترة",
-    plan: "الخطة",
-    upgrade: "ترقية",
-    renew: "تجديد",
+    analytics_title: "Ø§Ù„ØªØ­Ù„ÙŠÙ„Ø§Øª",
+    settings_title: "Ø§Ù„Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª",
+    store_name: "Ø§Ø³Ù… Ø§Ù„Ù…ØªØ¬Ø±",
+    save: "Ø­ÙØ¸",
+    billing_title: "Ø§Ù„ÙÙˆØªØ±Ø©",
+    plan: "Ø§Ù„Ø®Ø·Ø©",
+    upgrade: "ØªØ±Ù‚ÙŠØ©",
+    renew: "ØªØ¬Ø¯ÙŠØ¯",
 
-    import_hint: "الصق CSV بالأعمدة: name,price,category,imageId",
-    parse: "تحليل وإضافة",
+    import_hint: "Ø§Ù„ØµÙ‚ CSV Ø¨Ø§Ù„Ø£Ø¹Ù…Ø¯Ø©: name,price,category,imageId",
+    parse: "ØªØ­Ù„ÙŠÙ„ ÙˆØ¥Ø¶Ø§ÙØ©",
 
-    pdpl_note: "نظام حماية البيانات: نعالج البيانات اللازمة فقط لتنفيذ الطلب.",
-    enable_ai: "تفعيل إضافات الذكاء",
-    ai_title_rewrite: "تحسين العنوان",
-    ai_image_enhance: "تحسين الصور",
-    ai_auto_translate: "ترجمة تلقائية",
+    pdpl_note: "Ù†Ø¸Ø§Ù… Ø­Ù…Ø§ÙŠØ© Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª: Ù†Ø¹Ø§Ù„Ø¬ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù„Ø§Ø²Ù…Ø© ÙÙ‚Ø· Ù„ØªÙ†ÙÙŠØ° Ø§Ù„Ø·Ù„Ø¨.",
+    enable_ai: "ØªÙØ¹ÙŠÙ„ Ø¥Ø¶Ø§ÙØ§Øª Ø§Ù„Ø°ÙƒØ§Ø¡",
+    ai_title_rewrite: "ØªØ­Ø³ÙŠÙ† Ø§Ù„Ø¹Ù†ÙˆØ§Ù†",
+    ai_image_enhance: "ØªØ­Ø³ÙŠÙ† Ø§Ù„ØµÙˆØ±",
+    ai_auto_translate: "ØªØ±Ø¬Ù…Ø© ØªÙ„Ù‚Ø§Ø¦ÙŠØ©",
     
     // Creator economy features
-    creator_title: "اقتصاد المبدعين",
-    creator_dashboard: "لوحة المبدع",
-    performance_analytics: "تحليلات الأداء",
-    commission_tracking: "تتبع العمولات",
-    livestream_management: "إدارة البث المباشر",
-    revenue_overview: "نظرة عامة على الإيرادات",
-    total_earnings: "إجمالي الأرباح",
-    this_month: "هذا الشهر",
-    last_month: "الشهر الماضي",
-    growth_rate: "معدل النمو",
-    commission_rate: "معدل العمولة",
-    followers_count: "المتابعون",
-    engagement_rate: "معدل التفاعل",
-    avg_order_value: "متوسط قيمة الطلب",
-    conversion_rate: "معدل التحويل",
-    content_views: "مشاهدات المحتوى",
-    revenue_trends: "اتجاهات الإيرادات",
-    top_products: "أفضل المنتجات أداءً",
-    audience_demographics: "الديموغرافيا للجمهور",
-    payment_schedule: "جدول المدفوعات",
-    next_payment: "الدفعة التالية",
-    payment_method: "طريقة الدفع",
-    earnings_breakdown: "تفصيل الأرباح",
-    product_commissions: "عمولات المنتجات",
-    referral_bonuses: "مكافآت الإحالة",
-    live_stream_tips: "نصائح البث المباشر",
-    performance_bonuses: "مكافآت الأداء",
-    scheduled_streams: "البث المجدول",
-    stream_analytics: "تحليلات البث",
-    peak_viewers: "ذروة المشاهدين",
-    stream_duration: "مدة البث",
-    revenue_per_stream: "الإيرادات لكل بث",
-    viewer_retention: "الاحتفاظ بالمشاهدين",
-    schedule_stream: "جدولة البث",
-    stream_title: "عنوان البث",
-    stream_date: "تاريخ البث",
-    stream_time: "وقت البث",
-    featured_products: "المنتجات المميزة",
-    stream_description: "وصف البث",
-    notify_followers: "إشعار المتابعين",
-    auto_post_social: "النشر التلقائي على وسائل التواصل",
+    creator_title: "Ø§Ù‚ØªØµØ§Ø¯ Ø§Ù„Ù…Ø¨Ø¯Ø¹ÙŠÙ†",
+    creator_dashboard: "Ù„ÙˆØ­Ø© Ø§Ù„Ù…Ø¨Ø¯Ø¹",
+    performance_analytics: "ØªØ­Ù„ÙŠÙ„Ø§Øª Ø§Ù„Ø£Ø¯Ø§Ø¡",
+    commission_tracking: "ØªØªØ¨Ø¹ Ø§Ù„Ø¹Ù…ÙˆÙ„Ø§Øª",
+    livestream_management: "Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ø¨Ø« Ø§Ù„Ù…Ø¨Ø§Ø´Ø±",
+    revenue_overview: "Ù†Ø¸Ø±Ø© Ø¹Ø§Ù…Ø© Ø¹Ù„Ù‰ Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª",
+    total_earnings: "Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø£Ø±Ø¨Ø§Ø­",
+    this_month: "Ù‡Ø°Ø§ Ø§Ù„Ø´Ù‡Ø±",
+    last_month: "Ø§Ù„Ø´Ù‡Ø± Ø§Ù„Ù…Ø§Ø¶ÙŠ",
+    growth_rate: "Ù…Ø¹Ø¯Ù„ Ø§Ù„Ù†Ù…Ùˆ",
+    commission_rate: "Ù…Ø¹Ø¯Ù„ Ø§Ù„Ø¹Ù…ÙˆÙ„Ø©",
+    followers_count: "Ø§Ù„Ù…ØªØ§Ø¨Ø¹ÙˆÙ†",
+    engagement_rate: "Ù…Ø¹Ø¯Ù„ Ø§Ù„ØªÙØ§Ø¹Ù„",
+    avg_order_value: "Ù…ØªÙˆØ³Ø· Ù‚ÙŠÙ…Ø© Ø§Ù„Ø·Ù„Ø¨",
+    conversion_rate: "Ù…Ø¹Ø¯Ù„ Ø§Ù„ØªØ­ÙˆÙŠÙ„",
+    content_views: "Ù…Ø´Ø§Ù‡Ø¯Ø§Øª Ø§Ù„Ù…Ø­ØªÙˆÙ‰",
+    revenue_trends: "Ø§ØªØ¬Ø§Ù‡Ø§Øª Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª",
+    top_products: "Ø£ÙØ¶Ù„ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø£Ø¯Ø§Ø¡Ù‹",
+    audience_demographics: "Ø§Ù„Ø¯ÙŠÙ…ÙˆØºØ±Ø§ÙÙŠØ§ Ù„Ù„Ø¬Ù…Ù‡ÙˆØ±",
+    payment_schedule: "Ø¬Ø¯ÙˆÙ„ Ø§Ù„Ù…Ø¯ÙÙˆØ¹Ø§Øª",
+    next_payment: "Ø§Ù„Ø¯ÙØ¹Ø© Ø§Ù„ØªØ§Ù„ÙŠØ©",
+    payment_method: "Ø·Ø±ÙŠÙ‚Ø© Ø§Ù„Ø¯ÙØ¹",
+    earnings_breakdown: "ØªÙØµÙŠÙ„ Ø§Ù„Ø£Ø±Ø¨Ø§Ø­",
+    product_commissions: "Ø¹Ù…ÙˆÙ„Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª",
+    referral_bonuses: "Ù…ÙƒØ§ÙØ¢Øª Ø§Ù„Ø¥Ø­Ø§Ù„Ø©",
+    live_stream_tips: "Ù†ØµØ§Ø¦Ø­ Ø§Ù„Ø¨Ø« Ø§Ù„Ù…Ø¨Ø§Ø´Ø±",
+    performance_bonuses: "Ù…ÙƒØ§ÙØ¢Øª Ø§Ù„Ø£Ø¯Ø§Ø¡",
+    scheduled_streams: "Ø§Ù„Ø¨Ø« Ø§Ù„Ù…Ø¬Ø¯ÙˆÙ„",
+    stream_analytics: "ØªØ­Ù„ÙŠÙ„Ø§Øª Ø§Ù„Ø¨Ø«",
+    peak_viewers: "Ø°Ø±ÙˆØ© Ø§Ù„Ù…Ø´Ø§Ù‡Ø¯ÙŠÙ†",
+    stream_duration: "Ù…Ø¯Ø© Ø§Ù„Ø¨Ø«",
+    revenue_per_stream: "Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª Ù„ÙƒÙ„ Ø¨Ø«",
+    viewer_retention: "Ø§Ù„Ø§Ø­ØªÙØ§Ø¸ Ø¨Ø§Ù„Ù…Ø´Ø§Ù‡Ø¯ÙŠÙ†",
+    schedule_stream: "Ø¬Ø¯ÙˆÙ„Ø© Ø§Ù„Ø¨Ø«",
+    stream_title: "Ø¹Ù†ÙˆØ§Ù† Ø§Ù„Ø¨Ø«",
+    stream_date: "ØªØ§Ø±ÙŠØ® Ø§Ù„Ø¨Ø«",
+    stream_time: "ÙˆÙ‚Øª Ø§Ù„Ø¨Ø«",
+    featured_products: "Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ù…ÙŠØ²Ø©",
+    stream_description: "ÙˆØµÙ Ø§Ù„Ø¨Ø«",
+    notify_followers: "Ø¥Ø´Ø¹Ø§Ø± Ø§Ù„Ù…ØªØ§Ø¨Ø¹ÙŠÙ†",
+    auto_post_social: "Ø§Ù„Ù†Ø´Ø± Ø§Ù„ØªÙ„Ù‚Ø§Ø¦ÙŠ Ø¹Ù„Ù‰ ÙˆØ³Ø§Ø¦Ù„ Ø§Ù„ØªÙˆØ§ØµÙ„",
     
     // Enhanced product management
-    edit_product: "تحرير المنتج",
-    back_to_catalog: "العودة للمنتجات",
-    delete: "حذف",
-    duplicate: "نسخ",
-    save_changes: "حفظ التغييرات",
-    product_status: "حالة المنتج",
-    active: "نشط",
-    hidden: "مخفي",
-    draft: "مسودة",
-    product_images: "صور المنتج",
-    change_image: "تغيير الصورة",
-    image_guidelines: "إرشادات الصور",
-    min_resolution: "الحد الأدنى للدقة",
-    max_file_size: "الحد الأقصى لحجم الملف",
-    supported_formats: "الصيغ المدعومة",
-    square_aspect_ratio: "استخدم نسبة مربعة للحصول على أفضل النتائج",
-    product_information: "معلومات المنتج",
-    product_name: "اسم المنتج",
-    english: "الإنجليزية",
-    arabic: "العربية",
-    enter_product_name_en: "أدخل اسم المنتج بالإنجليزية",
-    enter_product_name_ar: "أدخل اسم المنتج بالعربية",
-    category: "الفئة",
-    product_description: "وصف المنتج",
-    enter_product_description_en: "أدخل وصف المنتج بالإنجليزية",
-    enter_product_description_ar: "أدخل وصف المنتج بالعربية",
-    pricing_inventory: "التسعير والمخزون",
-    price: "السعر",
-    sar: "ر.س",
-    compare_price: "السعر المقارن",
-    compare_price_help: "أظهر السعر الأصلي قبل الخصم",
-    stock_quantity: "كمية المخزون",
-    cancel: "إلغاء",
-    preview: "معاينة",
-    confirm_delete_product: "هل أنت متأكد من حذف هذا المنتج؟",
-    product_name_required: "اسم المنتج مطلوب",
-    price_required: "يجب أن يكون السعر أكبر من 0",
-    product_saved_successfully: "تم حفظ المنتج بنجاح!",
-    image_upload_coming_soon: "ميزة رفع الصور قادمة قريباً",
+    edit_product: "ØªØ­Ø±ÙŠØ± Ø§Ù„Ù…Ù†ØªØ¬",
+    back_to_catalog: "Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ù„Ù…Ù†ØªØ¬Ø§Øª",
+    delete: "Ø­Ø°Ù",
+    duplicate: "Ù†Ø³Ø®",
+    save_changes: "Ø­ÙØ¸ Ø§Ù„ØªØºÙŠÙŠØ±Ø§Øª",
+    product_status: "Ø­Ø§Ù„Ø© Ø§Ù„Ù…Ù†ØªØ¬",
+    active: "Ù†Ø´Ø·",
+    hidden: "Ù…Ø®ÙÙŠ",
+    draft: "Ù…Ø³ÙˆØ¯Ø©",
+    product_images: "ØµÙˆØ± Ø§Ù„Ù…Ù†ØªØ¬",
+    change_image: "ØªØºÙŠÙŠØ± Ø§Ù„ØµÙˆØ±Ø©",
+    image_guidelines: "Ø¥Ø±Ø´Ø§Ø¯Ø§Øª Ø§Ù„ØµÙˆØ±",
+    min_resolution: "Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ø¯Ù†Ù‰ Ù„Ù„Ø¯Ù‚Ø©",
+    max_file_size: "Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ù‚ØµÙ‰ Ù„Ø­Ø¬Ù… Ø§Ù„Ù…Ù„Ù",
+    supported_formats: "Ø§Ù„ØµÙŠØº Ø§Ù„Ù…Ø¯Ø¹ÙˆÙ…Ø©",
+    square_aspect_ratio: "Ø§Ø³ØªØ®Ø¯Ù… Ù†Ø³Ø¨Ø© Ù…Ø±Ø¨Ø¹Ø© Ù„Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ Ø£ÙØ¶Ù„ Ø§Ù„Ù†ØªØ§Ø¦Ø¬",
+    product_information: "Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬",
+    product_name: "Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬",
+    english: "Ø§Ù„Ø¥Ù†Ø¬Ù„ÙŠØ²ÙŠØ©",
+    arabic: "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+    enter_product_name_en: "Ø£Ø¯Ø®Ù„ Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ Ø¨Ø§Ù„Ø¥Ù†Ø¬Ù„ÙŠØ²ÙŠØ©",
+    enter_product_name_ar: "Ø£Ø¯Ø®Ù„ Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ Ø¨Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+    category: "Ø§Ù„ÙØ¦Ø©",
+    product_description: "ÙˆØµÙ Ø§Ù„Ù…Ù†ØªØ¬",
+    enter_product_description_en: "Ø£Ø¯Ø®Ù„ ÙˆØµÙ Ø§Ù„Ù…Ù†ØªØ¬ Ø¨Ø§Ù„Ø¥Ù†Ø¬Ù„ÙŠØ²ÙŠØ©",
+    enter_product_description_ar: "Ø£Ø¯Ø®Ù„ ÙˆØµÙ Ø§Ù„Ù…Ù†ØªØ¬ Ø¨Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+    pricing_inventory: "Ø§Ù„ØªØ³Ø¹ÙŠØ± ÙˆØ§Ù„Ù…Ø®Ø²ÙˆÙ†",
+    price: "Ø§Ù„Ø³Ø¹Ø±",
+    sar: "Ø±.Ø³",
+    compare_price: "Ø§Ù„Ø³Ø¹Ø± Ø§Ù„Ù…Ù‚Ø§Ø±Ù†",
+    compare_price_help: "Ø£Ø¸Ù‡Ø± Ø§Ù„Ø³Ø¹Ø± Ø§Ù„Ø£ØµÙ„ÙŠ Ù‚Ø¨Ù„ Ø§Ù„Ø®ØµÙ…",
+    stock_quantity: "ÙƒÙ…ÙŠØ© Ø§Ù„Ù…Ø®Ø²ÙˆÙ†",
+    cancel: "Ø¥Ù„ØºØ§Ø¡",
+    preview: "Ù…Ø¹Ø§ÙŠÙ†Ø©",
+    confirm_delete_product: "Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø­Ø°Ù Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ¬ØŸ",
+    product_name_required: "Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ Ù…Ø·Ù„ÙˆØ¨",
+    price_required: "ÙŠØ¬Ø¨ Ø£Ù† ÙŠÙƒÙˆÙ† Ø§Ù„Ø³Ø¹Ø± Ø£ÙƒØ¨Ø± Ù…Ù† 0",
+    product_saved_successfully: "ØªÙ… Ø­ÙØ¸ Ø§Ù„Ù…Ù†ØªØ¬ Ø¨Ù†Ø¬Ø§Ø­!",
+    image_upload_coming_soon: "Ù…ÙŠØ²Ø© Ø±ÙØ¹ Ø§Ù„ØµÙˆØ± Ù‚Ø§Ø¯Ù…Ø© Ù‚Ø±ÙŠØ¨Ø§Ù‹",
   },
 };
 const LANG_KEY = "storez_seller_lang";
@@ -428,15 +428,19 @@ function seed(){
     prefs: { sponsor: true },
     store: { name: "Maya Fit Co.", tier: "Starter", live: false, ai: { title: true, image: true, translate: false } },
     catalog: [
-      P("s1","CloudRunner Sneakers","Footwear",329,399,"1542291026-7eec264c27ff"),
-      P("s2","Aura Skin Serum","Beauty",119,null,"1522336572468-97b06e8ef143"),
-      P("s3","Hologram Phone Case","Accessories",49,69,"1570197788417-0e82375c9371"),
-      P("s4","Oversize Tee “Shift”","Apparel",89,119,"1521572163474-6864f9cf17ab"),
+      P("p1","CloudRunner Sneakers","Footwear",329,399,"1542291026-7eec264c27ff"),
+      P("p2","Sunset Hoodie","Apparel",149,189,"1515879218367-8466d910aaa4"),
+      P("p3","Mystic Diffuser","Home",89,119,"1515378791036-0648a3ef77b2"),
+      P("p4","Travel Mug","Accessories",45,65,"1521572267360-ee0c2909d518"),
+      P("p5","Plant Pot Set","Home",199,249,"1515378791036-0648a3ef77b2"),
+      P("p6","Active Leggings","Apparel",149,189,"1521572267360-ee0c2909d518"),
+      P("p7","Blue Light Glasses","Accessories",99,129,"1515879218367-8466d910aaa4"),
+      P("p8","Detox Clay Mask","Beauty",79,null,"1515378791036-0648a3ef77b2"),
     ],
     orders: [
-      O("o101", now-86400e3*2, [{id:"s1",name:"CloudRunner Sneakers",qty:1,price:329}], 329, "Processing", "Fahad A."),
-      O("o102", now-86400e3*5, [{id:"s2",name:"Aura Skin Serum",qty:2,price:119}], 238, "Shipped", "Sara K."),
-      O("o103", now-86400e3*9, [{id:"s3",name:"Hologram Case",qty:1,price:49}], 49, "Delivered", "Omar M."),
+      O("o101", now-86400e3*2, [{id:"p1",name:"CloudRunner Sneakers",qty:1,price:329}], 329, "Processing", "Fahad A."),
+      O("o102", now-86400e3*5, [{id:"p8",name:"Detox Clay Mask",qty:2,price:79}], 158, "Shipped", "Sara K."),
+      O("o103", now-86400e3*9, [{id:"p2",name:"Sunset Hoodie",qty:1,price:149}], 149, "Delivered", "Omar M."),
     ],
     returns: [
       { id:"r1", orderId:"o103", customer:"Omar M.", reason:"Size issue", status:"Pending", ts: now-86400e3*3, total:49 }
@@ -445,10 +449,10 @@ function seed(){
       { id:"t1", with:"@linafit", last:"When is the new colorway?", ts: now-3*3600e3 }
     ],
     ugcPosts: [
-      { id:"ugc1", creator:"@sarah_k", content:"Love my new CloudRunner sneakers! 😍", products:["s1"], status:"approved", ts:now-2*3600e3, likes:45, comments:12, shares:3 },
-      { id:"ugc2", creator:"@maya_style", content:"Aura serum is amazing for my skin routine ✨", products:["s2"], status:"pending", ts:now-1*3600e3, likes:23, comments:5, shares:1 },
-      { id:"ugc3", creator:"@fahad_tech", content:"Check out this phone case! Perfect protection 📱", products:["s3"], status:"flagged", ts:now-4*3600e3, likes:12, comments:2, shares:0, flagReason:"Inappropriate content" },
-      { id:"ugc4", creator:"@lina_fashionista", content:"This oversized tee is perfect for casual vibes", products:["s4"], status:"approved", ts:now-6*3600e3, likes:89, comments:25, shares:8 }
+      { id:"ugc1", creator:"@sarah_k", content:"Love my new CloudRunner sneakers! ðŸ˜", products:["p1"], status:"approved", ts:now-2*3600e3, likes:45, comments:12, shares:3 },
+      { id:"ugc2", creator:"@maya_style", content:"This clay mask is amazing for my skincare routine âœ¨", products:["p8"], status:"pending", ts:now-1*3600e3, likes:23, comments:5, shares:1 },
+      { id:"ugc3", creator:"@fahad_tech", content:"Perfect hoodie for coding sessions! ðŸ“±", products:["p2"], status:"flagged", ts:now-4*3600e3, likes:12, comments:2, shares:0, flagReason:"Inappropriate content" },
+      { id:"ugc4", creator:"@lina_fashionista", content:"These leggings are perfect for my workout routine", products:["p6"], status:"approved", ts:now-6*3600e3, likes:89, comments:25, shares:8 }
     ],
     metrics: { 
       gmv30: 6150, 
@@ -474,23 +478,23 @@ function P(id,name,cat,price,listPrice,imgId){
     stock: rnd(10,40),
     description: { 
       en: "High-quality product with premium materials and excellent craftsmanship.",
-      ar: "منتج عالي الجودة بمواد فاخرة وحرفية ممتازة."
+      ar: "Ù…Ù†ØªØ¬ Ø¹Ø§Ù„ÙŠ Ø§Ù„Ø¬ÙˆØ¯Ø© Ø¨Ù…ÙˆØ§Ø¯ ÙØ§Ø®Ø±Ø© ÙˆØ­Ø±ÙÙŠØ© Ù…Ù…ØªØ§Ø²Ø©."
     },
     features: [
-      { en: "Premium materials", ar: "مواد فاخرة" },
-      { en: "Sustainable packaging", ar: "تغليف صديق للبيئة" },
-      { en: "30-day return policy", ar: "سياسة إرجاع 30 يوماً" }
+      { en: "Premium materials", ar: "Ù…ÙˆØ§Ø¯ ÙØ§Ø®Ø±Ø©" },
+      { en: "Sustainable packaging", ar: "ØªØºÙ„ÙŠÙ ØµØ¯ÙŠÙ‚ Ù„Ù„Ø¨ÙŠØ¦Ø©" },
+      { en: "30-day return policy", ar: "Ø³ÙŠØ§Ø³Ø© Ø¥Ø±Ø¬Ø§Ø¹ 30 ÙŠÙˆÙ…Ø§Ù‹" }
     ],
     sizeOptions: ["S", "M", "L", "XL"],
     colorOptions: [
-      { en: "Black", ar: "أسود", hex: "#000000" },
-      { en: "White", ar: "أبيض", hex: "#FFFFFF" },
-      { en: "Mint", ar: "نعناعي", hex: "#98FB98" }
+      { en: "Black", ar: "Ø£Ø³ÙˆØ¯", hex: "#000000" },
+      { en: "White", ar: "Ø£Ø¨ÙŠØ¶", hex: "#FFFFFF" },
+      { en: "Mint", ar: "Ù†Ø¹Ù†Ø§Ø¹ÙŠ", hex: "#98FB98" }
     ],
     tags: [],
     seo: {
       title: { en: name, ar: name },
-      description: { en: `Buy ${name} online`, ar: `اشتري ${name} أونلاين` }
+      description: { en: `Buy ${name} online`, ar: `Ø§Ø´ØªØ±ÙŠ ${name} Ø£ÙˆÙ†Ù„Ø§ÙŠÙ†` }
     },
     visibility: "active", // active, hidden, draft
     createdAt: Date.now(),
@@ -724,7 +728,7 @@ function showDetailedCommissions(){
                 <span style="font-weight:700; color:var(--good)">${fmtSAR(cat.commission)}</span>
               </div>
               <div class="row between" style="font-size:0.85rem; color:var(--muted)">
-                <span>${fmtSAR(cat.sales)} sales • ${cat.rate}% rate</span>
+                <span>${fmtSAR(cat.sales)} sales â€¢ ${cat.rate}% rate</span>
                 <span>${((cat.commission / cat.sales) * 100).toFixed(1)}% earned</span>
               </div>
             </div>
@@ -785,10 +789,10 @@ function showStreamAnalytics(){
     ],
     audienceInsights: {
       topCountries: [
-        { country: "Saudi Arabia", percentage: 78, flag: "🇸🇦" },
-        { country: "UAE", percentage: 12, flag: "🇦🇪" },
-        { country: "Kuwait", percentage: 6, flag: "🇰🇼" },
-        { country: "Others", percentage: 4, flag: "🌍" }
+        { country: "Saudi Arabia", percentage: 78, flag: "ðŸ‡¸ðŸ‡¦" },
+        { country: "UAE", percentage: 12, flag: "ðŸ‡¦ðŸ‡ª" },
+        { country: "Kuwait", percentage: 6, flag: "ðŸ‡°ðŸ‡¼" },
+        { country: "Others", percentage: 4, flag: "ðŸŒ" }
       ],
       ageGroups: [
         { range: "18-24", percentage: 45 },
@@ -840,7 +844,7 @@ function showStreamAnalytics(){
                 <span style="font-weight:700; color:var(--good)">${fmtSAR(stream.revenue)}</span>
               </div>
               <div class="row between" style="font-size:0.85rem; color:var(--muted)">
-                <span>${stream.date} • ${stream.duration}m</span>
+                <span>${stream.date} â€¢ ${stream.duration}m</span>
                 <span>${stream.viewers} peak viewers</span>
               </div>
             </div>
@@ -959,7 +963,7 @@ function showDetailedPerformance(){
                 <span style="font-weight:700; color:var(--good)">${fmtSAR(content.revenue)}</span>
               </div>
               <div class="row between" style="font-size:0.85rem; color:var(--muted)">
-                <span>${content.posts} posts • ${content.avgViews} avg views</span>
+                <span>${content.posts} posts â€¢ ${content.avgViews} avg views</span>
                 <span>${content.engagementRate}% engagement</span>
               </div>
             </div>
@@ -1021,12 +1025,12 @@ function showDetailedPerformance(){
 
       <!-- Optimization Recommendations -->
       <div>
-        <h4 style="margin:0 0 16px">💡 Optimization Recommendations</h4>
+        <h4 style="margin:0 0 16px">ðŸ’¡ Optimization Recommendations</h4>
         <div style="background:var(--bg2); border-radius:8px; padding:16px; border:1px solid var(--border)">
-          <div style="margin-bottom:12px; color:var(--good)">✅ <strong>Beauty content performs 23% above average</strong> - Continue focusing on skincare tutorials</div>
-          <div style="margin-bottom:12px; color:var(--brand)">💡 <strong>Post during 7-9 PM</strong> - Your audience is most active during evening hours</div>
-          <div style="margin-bottom:12px; color:var(--warning)">⚠️ <strong>Electronics engagement is lower</strong> - Consider more interactive tech reviews</div>
-          <div style="color:var(--accent)">🎯 <strong>Live streams drive 3x revenue</strong> - Schedule 2-3 streams per week for optimal growth</div>
+          <div style="margin-bottom:12px; color:var(--good)">âœ… <strong>Beauty content performs 23% above average</strong> - Continue focusing on skincare tutorials</div>
+          <div style="margin-bottom:12px; color:var(--brand)">ðŸ’¡ <strong>Post during 7-9 PM</strong> - Your audience is most active during evening hours</div>
+          <div style="margin-bottom:12px; color:var(--warning)">âš ï¸ <strong>Electronics engagement is lower</strong> - Consider more interactive tech reviews</div>
+          <div style="color:var(--accent)">ðŸŽ¯ <strong>Live streams drive 3x revenue</strong> - Schedule 2-3 streams per week for optimal growth</div>
         </div>
       </div>
     </div>
@@ -1044,7 +1048,7 @@ function renderDashboard(){
     <section class="panel">
       <div class="row between">
         <strong>Dashboard</strong>
-        <span class="chip">${state.store.live ? "🔴 LIVE" : "Offline"}</span>
+        <span class="chip">${state.store.live ? "ðŸ”´ LIVE" : "Offline"}</span>
       </div>
       
       <!-- Creator KPIs Grid -->
@@ -1088,16 +1092,16 @@ function renderDashboard(){
       </div>
       
       <!-- Alerts/Notifications -->
-      ${ordersPending ? `<div class="alert" style="margin-top:12px; cursor:pointer" onclick="navigate('#/orders')" title="Click to view pending orders">⚠️ ${ordersPending} orders need processing</div>` : ""}
-      ${returnsPending ? `<div class="alert" style="margin-top:8px; cursor:pointer" onclick="navigate('#/returns')" title="Click to view pending returns">📦 ${returnsPending} returns pending review</div>` : ""}
+      ${ordersPending ? `<div class="alert" style="margin-top:12px; cursor:pointer" onclick="navigate('#/orders')" title="Click to view pending orders">âš ï¸ ${ordersPending} orders need processing</div>` : ""}
+      ${returnsPending ? `<div class="alert" style="margin-top:8px; cursor:pointer" onclick="navigate('#/returns')" title="Click to view pending returns">ðŸ“¦ ${returnsPending} returns pending review</div>` : ""}
       
       <!-- Creator Performance Insights -->
       <div class="panel" style="margin-top:16px; background:var(--panel-secondary,var(--panel))">
         <strong>Creator Insights</strong>
         <div style="margin-top:8px; line-height:1.5">
-          <div class="muted">• Your live sessions drive ${Math.round((m.socialGmv/m.gmv30)*100)}% of total sales</div>
-          <div class="muted">• Engagement rate is ${m.engagement > 5 ? 'above' : 'below'} industry average (5.2%)</div>
-          <div class="muted">• Peak viewer times: 7-9 PM ${getLang() === 'ar' ? 'مساءً' : ''}</div>
+          <div class="muted">â€¢ Your live sessions drive ${Math.round((m.socialGmv/m.gmv30)*100)}% of total sales</div>
+          <div class="muted">â€¢ Engagement rate is ${m.engagement > 5 ? 'above' : 'below'} industry average (5.2%)</div>
+          <div class="muted">â€¢ Peak viewer times: 7-9 PM ${getLang() === 'ar' ? 'Ù…Ø³Ø§Ø¡Ù‹' : ''}</div>
         </div>
       </div>
     </section>
@@ -1147,7 +1151,7 @@ function renderCatalog(){
         </div>
         <div class="row between">
           <div class="row" style="gap:6px"><span class="price">${fmtSAR(p.price)}</span>${p.listPrice?`<span class="muted" style="text-decoration:line-through">${fmtSAR(p.listPrice)}</span>`:""}</div>
-          <button class="small ghost" onclick="deleteProduct('${p.id}')">✕</button>
+          <button class="small ghost" onclick="deleteProduct('${p.id}')">âœ•</button>
         </div>
       </div>
     </article>
@@ -1167,7 +1171,7 @@ function renderCatalog(){
             ${t("add_product")}
           </a>
           <a class="btn-ghost" href="#/catalog-import">
-            <span class="btn-icon">↗</span>
+            <span class="btn-icon">â†—</span>
             ${t("import_catalog")}
           </a>
         </div>
@@ -1207,7 +1211,7 @@ function renderCatalogEdit(id) {
       <div class="row between" style="margin-bottom:20px">
         <div>
           <button class="ghost small" onclick="navigate('#/catalog')" style="display:flex;align-items:center;gap:4px">
-            <span>←</span> ${t("back_to_catalog")}
+            <span>â†</span> ${t("back_to_catalog")}
           </button>
           <h2 style="margin:8px 0 0">${t("edit_product")}</h2>
         </div>
@@ -1239,7 +1243,7 @@ function renderCatalogEdit(id) {
         <div class="row" style="gap:12px; flex-wrap:wrap">
           <div class="media" style="width:200px; aspect-ratio:1/1; border-radius:8px; overflow:hidden; position:relative">
             <img src="${uns(product.imgId, 600)}" alt="${product.name.en || product.name}" id="mainProductImage"/>
-            <button class="icon-btn" style="position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.5); color:white" onclick="uploadImage('main')" title="${t("change_image")}">📷</button>
+            <button class="icon-btn" style="position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.5); color:white" onclick="uploadImage('main')" title="${t("change_image")}">ðŸ“·</button>
           </div>
           <div style="flex:1; min-width:200px">
             <div class="muted small" style="margin-bottom:8px">${t("image_guidelines")}</div>
@@ -1290,12 +1294,12 @@ function renderCatalogEdit(id) {
             <div style="flex:1">
               <label class="muted small">${t("arabic")}</label>
               <select id="catAr" style="width:100%">
-                <option value="أحذية" ${(product.cat.ar || product.cat) === 'أحذية' ? 'selected' : ''}>أحذية</option>
-                <option value="جمال" ${(product.cat.ar || product.cat) === 'جمال' ? 'selected' : ''}>جمال</option>
-                <option value="إكسسوارات" ${(product.cat.ar || product.cat) === 'إكسسوارات' ? 'selected' : ''}>إكسسوارات</option>
-                <option value="ملابس" ${(product.cat.ar || product.cat) === 'ملابس' ? 'selected' : ''}>ملابس</option>
-                <option value="إلكترونيات" ${(product.cat.ar || product.cat) === 'إلكترونيات' ? 'selected' : ''}>إلكترونيات</option>
-                <option value="المنزل" ${(product.cat.ar || product.cat) === 'المنزل' ? 'selected' : ''}>المنزل والمعيشة</option>
+                <option value="Ø£Ø­Ø°ÙŠØ©" ${(product.cat.ar || product.cat) === 'Ø£Ø­Ø°ÙŠØ©' ? 'selected' : ''}>Ø£Ø­Ø°ÙŠØ©</option>
+                <option value="Ø¬Ù…Ø§Ù„" ${(product.cat.ar || product.cat) === 'Ø¬Ù…Ø§Ù„' ? 'selected' : ''}>Ø¬Ù…Ø§Ù„</option>
+                <option value="Ø¥ÙƒØ³Ø³ÙˆØ§Ø±Ø§Øª" ${(product.cat.ar || product.cat) === 'Ø¥ÙƒØ³Ø³ÙˆØ§Ø±Ø§Øª' ? 'selected' : ''}>Ø¥ÙƒØ³Ø³ÙˆØ§Ø±Ø§Øª</option>
+                <option value="Ù…Ù„Ø§Ø¨Ø³" ${(product.cat.ar || product.cat) === 'Ù…Ù„Ø§Ø¨Ø³' ? 'selected' : ''}>Ù…Ù„Ø§Ø¨Ø³</option>
+                <option value="Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ§Øª" ${(product.cat.ar || product.cat) === 'Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ§Øª' ? 'selected' : ''}>Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ§Øª</option>
+                <option value="Ø§Ù„Ù…Ù†Ø²Ù„" ${(product.cat.ar || product.cat) === 'Ø§Ù„Ù…Ù†Ø²Ù„' ? 'selected' : ''}>Ø§Ù„Ù…Ù†Ø²Ù„ ÙˆØ§Ù„Ù…Ø¹ÙŠØ´Ø©</option>
               </select>
             </div>
           </div>
@@ -1394,11 +1398,11 @@ function renderOrders(){
 function renderOrderDetail(id){
   const o = state.orders.find(x=>x.id===id) || state.orders[0];
   if(!o){ navigate("#/orders"); return; }
-  const items = o.items.map(i=>`<div class="row between"><span>${i.name} × ${i.qty}</span><strong>${fmtSAR(i.qty*i.price)}</strong></div>`).join("");
+  const items = o.items.map(i=>`<div class="row between"><span>${i.name} Ã— ${i.qty}</span><strong>${fmtSAR(i.qty*i.price)}</strong></div>`).join("");
   const timeline = (o.timeline?.length? o.timeline: ["Placed","Shipped","Out for delivery","Delivered"]).map(s=>`<span class="chip">${s}</span>`).join(" ");
   qs("#view").innerHTML = html(`
     <section class="panel">
-      <strong>${t("order_detail")} — #${o.id}</strong>
+      <strong>${t("order_detail")} â€” #${o.id}</strong>
       <div class="muted" style="margin-top:6px">${new Date(o.ts).toLocaleString(getLocale())}</div>
       <hr/>
       <div class="list">${items}</div>
@@ -1407,9 +1411,9 @@ function renderOrderDetail(id){
       <div style="margin-top:8px">${timeline}</div>
       <hr/>
       <div class="row" style="gap:8px">
-        <button class="secondary" onclick="(function(){ o.status='Shipped'; (o.timeline=o.timeline||[]).push('Shipped'); saveState(); route(); })()">${t("mark_fulfilled")}</button>
-        <button class="ghost" onclick="(function(){ const blob=new Blob(['StoreZ label for ${o.id}'],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url;a.download='LABEL-${o.id}.txt'; a.click(); URL.revokeObjectURL(url); })()">${t("create_label")}</button>
-        <button class="ghost danger" onclick="(function(){ const reason=prompt('Reason?'); if(!reason) return; state.returns.unshift({ id:'r'+(Date.now()%100000), orderId:o.id, customer:o.customer, reason, status:'Pending', ts:Date.now(), total:o.total }); saveState(); navigate('#/returns'); })()">${t("start_return")}</button>
+        <button class="secondary" onclick="updateOrderStatus('${o.id}', 'Shipped')">${t("mark_fulfilled")}</button>
+        <button class="ghost" onclick="createOrderLabel('${o.id}')">${t("create_label")}</button>
+        <button class="ghost danger" onclick="startReturn('${o.id}', '${o.customer}', ${o.total})">${t("start_return")}</button>
       </div>
     </section>
   `);
@@ -1435,7 +1439,7 @@ function renderReturns(){
       <div style="overflow:auto">
         <table class="tbl">
           <thead><tr><th>ID</th><th>${t("order")}</th><th>${t("customer")}</th><th>${t("total")}</th><th>${t("status")}</th><th>${t("actions")}</th></tr></thead>
-          <tbody>${rows || `<tr><td colspan="6" class="muted">${t("returns_title")} — 0</td></tr>`}</tbody>
+          <tbody>${rows || `<tr><td colspan="6" class="muted">${t("returns_title")} â€” 0</td></tr>`}</tbody>
         </table>
       </div>
     </section>
@@ -1488,7 +1492,7 @@ function renderCreator(){
           <p class="muted" style="margin:4px 0 0">Monitor your creator performance and earnings</p>
         </div>
         <button class="primary" onclick="navigate('#/live')" style="display:flex;align-items:center;gap:8px">
-          <span>📺</span> ${t("live_go")}
+          <span>ðŸ“º</span> ${t("live_go")}
         </button>
       </div>
 
@@ -1559,7 +1563,7 @@ function renderCreator(){
             <div class="row between" style="padding:12px; background:var(--bg); border-radius:8px; margin-bottom:8px">
               <div style="flex:1">
                 <div style="font-weight:600; margin-bottom:4px">${typeof product.name === 'object' ? (product.name[getLang()] || product.name.en || product.name.ar) : product.name}</div>
-                <div class="muted small">${product.sales} sales • ${product.rate}% commission</div>
+                <div class="muted small">${product.sales} sales â€¢ ${product.rate}% commission</div>
               </div>
               <div style="text-align:right">
                 <div style="font-weight:700; color:var(--good)">${fmtSAR(product.commission)}</div>
@@ -1582,7 +1586,7 @@ function renderCreator(){
             <div class="row between" style="padding:12px; background:var(--bg); border-radius:8px; margin-bottom:8px">
               <div style="flex:1">
                 <div style="font-weight:600; margin-bottom:4px">${stream.title}</div>
-                <div class="muted small">${stream.date} at ${stream.time} • ${stream.products} products</div>
+                <div class="muted small">${stream.date} at ${stream.time} â€¢ ${stream.products} products</div>
               </div>
               <button class="small ghost">Edit</button>
             </div>
@@ -1600,7 +1604,7 @@ function renderCreator(){
                 <div style="color:var(--good); font-weight:700">${fmtSAR(stream.revenue)}</div>
               </div>
               <div class="row between" style="font-size:0.85rem; color:var(--muted)">
-                <span>${stream.viewers} ${t("peak_viewers")} • ${stream.duration}</span>
+                <span>${stream.viewers} ${t("peak_viewers")} â€¢ ${stream.duration}</span>
                 <span>${stream.date}</span>
               </div>
             </div>
@@ -1637,7 +1641,7 @@ function renderCreator(){
 function renderLive(){
   const live = state.store.live;
   const currentViewers = live ? Math.floor(Math.random()*500)+200 : 0;
-  const products = state.catalog.map(p=>`<option value="${p.id}" ${p.stock < 5 ? 'data-low-stock="true"' : ''}>${loc(p.name)} — ${fmtSAR(p.price)} (Stock: ${p.stock})</option>`).join("");
+  const products = state.catalog.map(p=>`<option value="${p.id}" ${p.stock < 5 ? 'data-low-stock="true"' : ''}>${loc(p.name)} â€” ${fmtSAR(p.price)} (Stock: ${p.stock})</option>`).join("");
   const featuredProductId = qs('#live_product')?.value || state.catalog[0]?.id;
   const featuredProduct = state.catalog.find(x=>x.id===featuredProductId);
   
@@ -1659,8 +1663,8 @@ function renderLive(){
           ${live ? `<div class="muted small" style="margin-top:4px">Live for ${streamStats.sessionDuration} minutes</div>` : ''}
         </div>
         <div class="row" style="gap:8px">
-          ${!live ? `<button class="small ghost" onclick="showStreamAnalytics()">📊 Analytics</button>` : ''}
-          <span class="chip ${live ? 'danger' : ''}">${live ? '🔴 LIVE' : 'Offline'}</span>
+          ${!live ? `<button class="small ghost" onclick="showStreamAnalytics()">ðŸ“Š Analytics</button>` : ''}
+          <span class="chip ${live ? 'danger' : ''}">${live ? 'ðŸ”´ LIVE' : 'Offline'}</span>
         </div>
       </div>
       
@@ -1725,15 +1729,15 @@ function renderLive(){
           <div class="row" style="gap:8px; margin-top:8px">
             <select id="live_product" onchange="updateFeaturedProduct()">${products}</select>
             <button class="secondary small" onclick="spotlightProduct()">Spotlight</button>
-            <button class="ghost small" onclick="addFlashDeal()">⚡ Flash Deal</button>
+            <button class="ghost small" onclick="addFlashDeal()">âš¡ Flash Deal</button>
           </div>
           ${featuredProduct ? `
             <div class="row" style="gap:12px; margin-top:12px">
               <img src="${uns(featuredProduct.imgId, 300)}" alt="${typeof featuredProduct.name === 'object' ? (featuredProduct.name[getLang()] || featuredProduct.name.en || featuredProduct.name.ar) : featuredProduct.name}" style="width:60px;height:60px;object-fit:cover;border-radius:8px">
               <div style="flex:1">
                 <strong>${typeof featuredProduct.name === 'object' ? (featuredProduct.name[getLang()] || featuredProduct.name.en || featuredProduct.name.ar) : featuredProduct.name}</strong>
-                <div class="muted">${fmtSAR(featuredProduct.price)} • Stock: ${featuredProduct.stock}</div>
-                ${featuredProduct.stock < 5 ? '<div class="warning small">⚠️ Low stock</div>' : ''}
+                <div class="muted">${fmtSAR(featuredProduct.price)} â€¢ Stock: ${featuredProduct.stock}</div>
+                ${featuredProduct.stock < 5 ? '<div class="warning small">âš ï¸ Low stock</div>' : ''}
               </div>
             </div>
           ` : ''}
@@ -1743,16 +1747,16 @@ function renderLive(){
         <div class="panel" style="margin-top:16px; background:var(--card)">
           <strong>Live Controls</strong>
           <div class="row" style="gap:8px; margin-top:8px">
-            <button class="ghost small" onclick="addViewerMessage()">📢 Message</button>
-            <button class="ghost small" onclick="toggleChat()">💬 Chat</button>
-            <button class="ghost small" onclick="shareSession()">📤 Share</button>
-            <button class="ghost small" onclick="addPoll()">📊 Poll</button>
+            <button class="ghost small" onclick="addViewerMessage()">ðŸ“¢ Message</button>
+            <button class="ghost small" onclick="toggleChat()">ðŸ’¬ Chat</button>
+            <button class="ghost small" onclick="shareSession()">ðŸ“¤ Share</button>
+            <button class="ghost small" onclick="addPoll()">ðŸ“Š Poll</button>
           </div>
           <div class="row" style="gap:8px; margin-top:8px">
-            <button class="ghost small" onclick="addDiscount()">🎫 Discount</button>
-            <button class="ghost small" onclick="inviteViewers()">👥 Invite</button>
-            <button class="ghost small" onclick="recordHighlight()">⭐ Highlight</button>
-            <button class="ghost small" onclick="showViewersList()">👀 Viewers</button>
+            <button class="ghost small" onclick="addDiscount()">ðŸŽ« Discount</button>
+            <button class="ghost small" onclick="inviteViewers()">ðŸ‘¥ Invite</button>
+            <button class="ghost small" onclick="recordHighlight()">â­ Highlight</button>
+            <button class="ghost small" onclick="showViewersList()">ðŸ‘€ Viewers</button>
           </div>
         </div>
         
@@ -1760,12 +1764,12 @@ function renderLive(){
         <div class="panel" style="margin-top:16px; background:var(--card)">
           <strong>Live Activity</strong>
           <div style="margin-top:8px; max-height:200px; overflow-y:auto">
-            <div class="muted small" style="margin-bottom:4px; color:var(--brand)">👤 @sarah_k joined the stream</div>
-            <div class="muted small" style="margin-bottom:4px; color:var(--good)">🛒 @maya_user added CloudRunner Sneakers to cart</div>
-            <div class="muted small" style="margin-bottom:4px">💬 @fahad_sa: "Love the quality!"</div>
-            <div class="muted small" style="margin-bottom:4px; color:var(--good)">🎉 @lina_fit purchased Aura Skin Serum</div>
-            <div class="muted small" style="margin-bottom:4px; color:var(--accent)">❤️ @style_hunter liked the stream</div>
-            <div class="muted small" style="margin-bottom:4px; color:var(--brand)">🔥 Flash deal activated: 20% off</div>
+            <div class="muted small" style="margin-bottom:4px; color:var(--brand)">ðŸ‘¤ @sarah_k joined the stream</div>
+            <div class="muted small" style="margin-bottom:4px; color:var(--good)">ðŸ›’ @maya_user added CloudRunner Sneakers to cart</div>
+            <div class="muted small" style="margin-bottom:4px">ðŸ’¬ @fahad_sa: "Love the quality!"</div>
+            <div class="muted small" style="margin-bottom:4px; color:var(--good)">ðŸŽ‰ @lina_fit purchased Aura Skin Serum</div>
+            <div class="muted small" style="margin-bottom:4px; color:var(--accent)">â¤ï¸ @style_hunter liked the stream</div>
+            <div class="muted small" style="margin-bottom:4px; color:var(--brand)">ðŸ”¥ Flash deal activated: 20% off</div>
           </div>
         </div>
       ` : `
@@ -1815,9 +1819,9 @@ function renderLive(){
               <button class="small secondary" onclick="navigate('#/creator')">Manage</button>
             </div>
             <div class="muted small">
-              • Weekend Beauty Haul - Nov 8 at 7:00 PM<br>
-              • Tech Review Session - Nov 10 at 3:30 PM<br>
-              • Fashion Styling Tips - Nov 12 at 8:00 PM
+              â€¢ Weekend Beauty Haul - Nov 8 at 7:00 PM<br>
+              â€¢ Tech Review Session - Nov 10 at 3:30 PM<br>
+              â€¢ Fashion Styling Tips - Nov 12 at 8:00 PM
             </div>
           </div>
           
@@ -1825,11 +1829,11 @@ function renderLive(){
           <div class="panel" style="margin-top:16px; background:var(--card)">
             <strong>Performance Tips</strong>
             <div style="margin-top:8px; line-height:1.5">
-              <div class="muted small">• Best times: 7-9 PM for 80% higher engagement</div>
-              <div class="muted small">• Feature 2-3 products max per session</div>
-              <div class="muted small">• Use flash deals to boost urgency</div>
-              <div class="muted small">• Interact with viewers every 2-3 minutes</div>
-              <div class="muted small">• Test connection before going live</div>
+              <div class="muted small">â€¢ Best times: 7-9 PM for 80% higher engagement</div>
+              <div class="muted small">â€¢ Feature 2-3 products max per session</div>
+              <div class="muted small">â€¢ Use flash deals to boost urgency</div>
+              <div class="muted small">â€¢ Interact with viewers every 2-3 minutes</div>
+              <div class="muted small">â€¢ Test connection before going live</div>
             </div>
           </div>
         </div>
@@ -1838,7 +1842,7 @@ function renderLive(){
       <!-- Main Action Button -->
       <div style="margin-top:20px">
         <button class="${live ? 'danger' : 'primary'}" onclick="toggleLiveSession()" style="width:100%; font-weight:600; font-size:1.1rem; padding:16px">
-          ${live ? `🔴 ${t("live_end")}` : `📺 ${t("live_go")}`}
+          ${live ? `ðŸ”´ ${t("live_end")}` : `ðŸ“º ${t("live_go")}`}
         </button>
       </div>
     </section>
@@ -1902,7 +1906,7 @@ function renderUGC(){
           ` : ''}
           <div class="row between" style="margin-top:8px">
             <div class="muted small">
-              ❤️ ${post.likes} • 💬 ${post.comments} • 📤 ${post.shares}
+              â¤ï¸ ${post.likes} â€¢ ðŸ’¬ ${post.comments} â€¢ ðŸ“¤ ${post.shares}
             </div>
             <div class="row" style="gap:4px">
               ${post.status === 'pending' ? `
@@ -1973,10 +1977,10 @@ function renderUGC(){
       <div class="panel" style="margin-top:16px; background:var(--card)">
         <strong>${t("content_guidelines")}</strong>
         <div style="margin-top:8px; line-height:1.5">
-          <div class="muted small">• Products must be clearly featured</div>
-          <div class="muted small">• No inappropriate or offensive content</div>
-          <div class="muted small">• Must comply with PDPL regulations</div>
-          <div class="muted small">• Authentic reviews and experiences only</div>
+          <div class="muted small">â€¢ Products must be clearly featured</div>
+          <div class="muted small">â€¢ No inappropriate or offensive content</div>
+          <div class="muted small">â€¢ Must comply with PDPL regulations</div>
+          <div class="muted small">â€¢ Authentic reviews and experiences only</div>
         </div>
       </div>
     </section>
@@ -2073,9 +2077,9 @@ function viewPostDetails(postId) {
         ` : ''}
         
         <div class="row between" style="margin-bottom:16px">
-          <div class="muted">❤️ ${post.likes} likes</div>
-          <div class="muted">💬 ${post.comments} comments</div>
-          <div class="muted">📤 ${post.shares} shares</div>
+          <div class="muted">â¤ï¸ ${post.likes} likes</div>
+          <div class="muted">ðŸ’¬ ${post.comments} comments</div>
+          <div class="muted">ðŸ“¤ ${post.shares} shares</div>
         </div>
         
         ${post.status === 'pending' ? `
@@ -2111,29 +2115,29 @@ function showContentPolicy() {
   const isArabic = getLang() === 'ar';
   const content = isArabic ? `
     <div style="max-width:500px" dir="rtl">
-      <h3>إرشادات المجتمع</h3>
+      <h3>Ø¥Ø±Ø´Ø§Ø¯Ø§Øª Ø§Ù„Ù…Ø¬ØªÙ…Ø¹</h3>
       
-      <h4>المحتوى المسموح</h4>
+      <h4>Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ø§Ù„Ù…Ø³Ù…ÙˆØ­</h4>
       <ul style="margin-right:20px">
-        <li>تقييمات وتجارب حقيقية للمنتجات</li>
-        <li>عروض توضيحية واضحة للمنتجات</li>
-        <li>شهادات وتوصيات حقيقية</li>
-        <li>اقتراحات إبداعية للاستخدام أو التنسيق</li>
+        <li>ØªÙ‚ÙŠÙŠÙ…Ø§Øª ÙˆØªØ¬Ø§Ø±Ø¨ Ø­Ù‚ÙŠÙ‚ÙŠØ© Ù„Ù„Ù…Ù†ØªØ¬Ø§Øª</li>
+        <li>Ø¹Ø±ÙˆØ¶ ØªÙˆØ¶ÙŠØ­ÙŠØ© ÙˆØ§Ø¶Ø­Ø© Ù„Ù„Ù…Ù†ØªØ¬Ø§Øª</li>
+        <li>Ø´Ù‡Ø§Ø¯Ø§Øª ÙˆØªÙˆØµÙŠØ§Øª Ø­Ù‚ÙŠÙ‚ÙŠØ©</li>
+        <li>Ø§Ù‚ØªØ±Ø§Ø­Ø§Øª Ø¥Ø¨Ø¯Ø§Ø¹ÙŠØ© Ù„Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø£Ùˆ Ø§Ù„ØªÙ†Ø³ÙŠÙ‚</li>
       </ul>
       
-      <h4>المحتوى المحظور</h4>
+      <h4>Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ø§Ù„Ù…Ø­Ø¸ÙˆØ±</h4>
       <ul style="margin-right:20px">
-        <li>محتوى غير لائق أو مسيء أو ضار</li>
-        <li>تقييمات مزيفة أو ادعاءات مضللة</li>
-        <li>محتوى لا يعرض منتجاتنا</li>
-        <li>مواد محمية بحقوق الطبع والنشر بدون إذن</li>
-        <li>معلومات شخصية للآخرين</li>
+        <li>Ù…Ø­ØªÙˆÙ‰ ØºÙŠØ± Ù„Ø§Ø¦Ù‚ Ø£Ùˆ Ù…Ø³ÙŠØ¡ Ø£Ùˆ Ø¶Ø§Ø±</li>
+        <li>ØªÙ‚ÙŠÙŠÙ…Ø§Øª Ù…Ø²ÙŠÙØ© Ø£Ùˆ Ø§Ø¯Ø¹Ø§Ø¡Ø§Øª Ù…Ø¶Ù„Ù„Ø©</li>
+        <li>Ù…Ø­ØªÙˆÙ‰ Ù„Ø§ ÙŠØ¹Ø±Ø¶ Ù…Ù†ØªØ¬Ø§ØªÙ†Ø§</li>
+        <li>Ù…ÙˆØ§Ø¯ Ù…Ø­Ù…ÙŠØ© Ø¨Ø­Ù‚ÙˆÙ‚ Ø§Ù„Ø·Ø¨Ø¹ ÙˆØ§Ù„Ù†Ø´Ø± Ø¨Ø¯ÙˆÙ† Ø¥Ø°Ù†</li>
+        <li>Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø´Ø®ØµÙŠØ© Ù„Ù„Ø¢Ø®Ø±ÙŠÙ†</li>
       </ul>
       
-      <h4>عملية المراجعة</h4>
-      <p>تتم مراجعة جميع المنشورات خلال 24 ساعة. يتم تصعيد المحتوى المبلغ عنه للمراجعة اليدوية. يمكن تقديم الطعون من خلال نظام الدعم لدينا.</p>
+      <h4>Ø¹Ù…Ù„ÙŠØ© Ø§Ù„Ù…Ø±Ø§Ø¬Ø¹Ø©</h4>
+      <p>ØªØªÙ… Ù…Ø±Ø§Ø¬Ø¹Ø© Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ù†Ø´ÙˆØ±Ø§Øª Ø®Ù„Ø§Ù„ 24 Ø³Ø§Ø¹Ø©. ÙŠØªÙ… ØªØµØ¹ÙŠØ¯ Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ø§Ù„Ù…Ø¨Ù„Øº Ø¹Ù†Ù‡ Ù„Ù„Ù…Ø±Ø§Ø¬Ø¹Ø© Ø§Ù„ÙŠØ¯ÙˆÙŠØ©. ÙŠÙ…ÙƒÙ† ØªÙ‚Ø¯ÙŠÙ… Ø§Ù„Ø·Ø¹ÙˆÙ† Ù…Ù† Ø®Ù„Ø§Ù„ Ù†Ø¸Ø§Ù… Ø§Ù„Ø¯Ø¹Ù… Ù„Ø¯ÙŠÙ†Ø§.</p>
       
-      <p><strong>ملاحظة:</strong> يجب أن يتوافق جميع المحتوى مع متطلبات نظام حماية البيانات الشخصية (PDPL) السعودي.</p>
+      <p><strong>Ù…Ù„Ø§Ø­Ø¸Ø©:</strong> ÙŠØ¬Ø¨ Ø£Ù† ÙŠØªÙˆØ§ÙÙ‚ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ù…Ø¹ Ù…ØªØ·Ù„Ø¨Ø§Øª Ù†Ø¸Ø§Ù… Ø­Ù…Ø§ÙŠØ© Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø´Ø®ØµÙŠØ© (PDPL) Ø§Ù„Ø³Ø¹ÙˆØ¯ÙŠ.</p>
     </div>
   ` : `
     <div style="max-width:500px">
@@ -2206,7 +2210,7 @@ window.addFlashDeal = function() {
       const originalPrice = product.price;
       const discountedPrice = originalPrice * (1 - discount / 100);
       const productName = typeof product.name === 'object' ? (product.name[getLang()] || product.name.en || product.name.ar) : product.name;
-      alert(`⚡ Flash Deal created for "${productName}"\nOriginal: ${fmtSAR(originalPrice)}\nDiscounted: ${fmtSAR(discountedPrice)} (${discount}% off)\nDuration: 60 minutes`);
+      alert(`âš¡ Flash Deal created for "${productName}"\nOriginal: ${fmtSAR(originalPrice)}\nDiscounted: ${fmtSAR(discountedPrice)} (${discount}% off)\nDuration: 60 minutes`);
       // In a real app, this would create a time-limited deal
     } else {
       alert('Invalid discount. Please enter a value between 1 and 50.');
@@ -2216,6 +2220,53 @@ window.addFlashDeal = function() {
 
 window.showScheduleStream = showScheduleStream;
 window.showContentPolicy = showContentPolicy;
+window.showStreamAnalytics = showStreamAnalytics;
+
+// Order management functions
+window.updateOrderStatus = function(orderId, newStatus) {
+  const order = state.orders.find(o => o.id === orderId);
+  if (!order) return;
+  
+  order.status = newStatus;
+  if (!order.timeline) order.timeline = [];
+  order.timeline.push(newStatus);
+  saveState();
+  route(); // Refresh the current view
+};
+
+window.createOrderLabel = function(orderId) {
+  try {
+    const labelContent = `StoreZ Shipping Label\nOrder ID: ${orderId}\nGenerated: ${new Date().toLocaleDateString()}`;
+    const blob = new Blob([labelContent], {type: 'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `LABEL-${orderId}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error creating label:', error);
+    alert('Error creating shipping label. Please try again.');
+  }
+};
+
+window.startReturn = function(orderId, customer, total) {
+  const reason = prompt('Return reason:');
+  if (!reason) return;
+  
+  const returnId = 'r' + (Date.now() % 100000);
+  state.returns.unshift({
+    id: returnId,
+    orderId: orderId,
+    customer: customer,
+    reason: reason,
+    status: 'Pending',
+    ts: Date.now(),
+    total: total
+  });
+  saveState();
+  navigate('#/returns');
+};
 
 function addViewerMessage() {
   const message = prompt('Send message to viewers:');
@@ -2268,14 +2319,6 @@ function recordHighlight() {
 /* ---------- Boot ---------- */
 /* ---------- Product Management Functions ---------- */
 
-// Delete a product
-window.deleteProduct = function(id) {
-  if (!confirm(t("confirm_delete_product"))) return;
-  state.catalog = state.catalog.filter(p => p.id !== id);
-  saveState();
-  navigate("#/catalog");
-};
-
 // Duplicate a product
 window.duplicateProduct = function(id) {
   const original = state.catalog.find(p => p.id === id);
@@ -2285,7 +2328,7 @@ window.duplicateProduct = function(id) {
     ...original,
     id: 's' + (Date.now() % 100000),
     name: typeof original.name === 'object' 
-      ? { en: (original.name.en || original.name) + " (Copy)", ar: (original.name.ar || original.name) + " (نسخة)" }
+      ? { en: (original.name.en || original.name) + " (Copy)", ar: (original.name.ar || original.name) + " (Ù†Ø³Ø®Ø©)" }
       : original.name + " (Copy)"
   };
   
@@ -2296,6 +2339,11 @@ window.duplicateProduct = function(id) {
 
 // Delete product
 window.deleteProduct = function(id) {
+  const product = state.catalog.find(p => p.id === id);
+  if (!product) return;
+  
+  if (!confirm(`Are you sure you want to delete "${product.name}"? This action cannot be undone.`)) return;
+  
   const index = state.catalog.findIndex(x => x.id === id);
   if (index !== -1) {
     state.catalog.splice(index, 1);
@@ -2329,7 +2377,7 @@ window.parseCSVImport = function() {
       stock: rnd(10, 30),
       description: { 
         en: "High-quality product with premium materials.",
-        ar: "منتج عالي الجودة بمواد فاخرة."
+        ar: "Ù…Ù†ØªØ¬ Ø¹Ø§Ù„ÙŠ Ø§Ù„Ø¬ÙˆØ¯Ø© Ø¨Ù…ÙˆØ§Ø¯ ÙØ§Ø®Ø±Ø©."
       },
       visibility: "active",
       createdAt: Date.now(),
@@ -2357,7 +2405,7 @@ window.saveNewProduct = function() {
     stock: 20,
     description: { 
       en: "High-quality product with premium materials.",
-      ar: "منتج عالي الجودة بمواد فاخرة."
+      ar: "Ù…Ù†ØªØ¬ Ø¹Ø§Ù„ÙŠ Ø§Ù„Ø¬ÙˆØ¯Ø© Ø¨Ù…ÙˆØ§Ø¯ ÙØ§Ø®Ø±Ø©."
     },
     visibility: "active",
     createdAt: Date.now(),
@@ -2473,3 +2521,5 @@ function boot(){
   route();
 }
 document.addEventListener("DOMContentLoaded", boot);
+
+
