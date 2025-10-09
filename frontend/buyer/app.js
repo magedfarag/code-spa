@@ -4,7 +4,7 @@
    Imports are small/strict to keep coupling low.
 */
 import { setLang, getLang, t, tn, dirForLang, locale, fmtCurrency as currency, fmtDate } from "./i18n.js?v=20251010-imageFix";
-import { state, loadState, saveState, resetState, actions, productById } from "./data.js?v=20251010-imageFix";
+import { state, loadState, saveState, resetState, actions, productById, getProductTitle, getProductImage } from "./data.js?v=20251010-imageFix";
 import { routes } from "./routes.js?v=20251010-imageFix";
 import { aiEngine } from "./ai.js?v=20251010-imageFix";
 
@@ -322,5 +322,279 @@ window.removeFilter = (filterType) => {
   // Navigate to discover page without filter
   navigate('discover');
 };
+window.navigate = navigate;
 window.showSheet = showSheet;
 window.hideSheet = hideSheet;
+
+// Track recommendation clicks for analytics
+window.trackRecommendationClick = function(productId, reason) {
+  if (actions.trackUserInteraction) {
+    actions.trackUserInteraction('recommendation_click', { productId, reason });
+  }
+};
+
+// Show comparison modal
+window.showComparisonModal = function() {
+  const modal = document.createElement('div');
+  modal.className = 'comparison-modal';
+  modal.style.cssText = `
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7); z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; box-sizing: border-box;
+  `;
+
+  const comparisonItems = (state.comparison || []).map(id => productById(id)).filter(Boolean);
+
+  modal.innerHTML = `
+    <div style="background: var(--bg); border-radius: 16px; padding: 32px; max-width: 1000px; width: 100%; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="margin: 0; font-size: 24px; font-weight: 700;">${t("product_comparison") || "Product Comparison"}</h2>
+        <button onclick="closeComparisonModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-muted);">×</button>
+      </div>
+      
+      ${comparisonItems.length === 0 ? `
+        <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+          <div style="font-size: 48px; margin-bottom: 16px;">⚖️</div>
+          <h3>${t("no_products_to_compare") || "No products to compare"}</h3>
+          <p>${t("add_products_to_compare") || "Add products to comparison by clicking the compare button"}</p>
+        </div>
+      ` : `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+          ${comparisonItems.map(product => `
+            <div style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
+              <img src="${getProductImage(product, 300)}" style="width: 100%; height: 200px; object-fit: cover;" alt="${getProductTitle(product)}">
+              <div style="padding: 16px;">
+                <h4 style="margin: 0 0 12px; font-size: 16px; font-weight: 600;">${getProductTitle(product)}</h4>
+                <div style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 12px;">${currency(product.price)}</div>
+                <div style="margin-bottom: 8px;">
+                  <span style="color: #ffa500;">⭐⭐⭐⭐⭐</span>
+                  <span style="margin-left: 8px; color: var(--text-muted); font-size: 14px;">${product.rating || 4.5}/5</span>
+                </div>
+                <div style="margin-bottom: 12px; font-size: 14px; color: var(--text-muted);">
+                  ${Object.entries(product.specs || {}).slice(0, 3).map(([key, value]) => `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                      <span>${key}:</span>
+                      <span>${value}</span>
+                    </div>
+                  `).join('')}
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button onclick="location.hash='#/pdp/${product.id}'; closeComparisonModal();" 
+                          style="flex: 1; padding: 8px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    ${t("view_details") || "View Details"}
+                  </button>
+                  <button onclick="removeFromComparison('${product.id}')" 
+                          style="padding: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; cursor: pointer;">
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `}
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+};
+
+window.closeComparisonModal = function() {
+  const modal = document.querySelector('.comparison-modal');
+  if (modal) {
+    document.body.removeChild(modal);
+  }
+};
+
+window.removeFromComparison = function(productId) {
+  if (state.comparison) {
+    state.comparison = state.comparison.filter(id => id !== productId);
+    saveState(state);
+    closeComparisonModal();
+    showComparisonModal();
+  }
+};
+
+// Global function for review form (originally defined in routes.js but moved here for immediate availability)
+window.showReviewForm = function(productId) {
+  const modal = document.createElement('div');
+  modal.className = 'review-modal';
+  modal.style.cssText = `
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7); z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; box-sizing: border-box;
+  `;
+
+  modal.innerHTML = `
+    <div style="background: var(--bg); border-radius: 16px; padding: 32px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="margin: 0; font-size: 24px; font-weight: 700;">${t("write_review") || "Write a Review"}</h2>
+        <button onclick="closeReviewForm()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-muted);">×</button>
+      </div>
+      <form id="reviewForm" onsubmit="submitReview(event, '${productId}')">
+        <div style="margin-bottom: 24px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 12px;">${t("your_rating") || "Your rating"}</label>
+          <div class="star-rating" style="display: flex; gap: 4px; margin-bottom: 8px;">
+            ${[1, 2, 3, 4, 5].map(star => `
+              <button type="button" class="star-btn" data-rating="${star}" 
+                      style="background: none; border: none; font-size: 32px; cursor: pointer; color: var(--text-muted); transition: color 0.2s;"
+                      onclick="selectRating(${star})">⭐</button>
+            `).join('')}
+          </div>
+        </div>
+        <div style="margin-bottom: 24px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px;">${t("review_title") || "Review title"}</label>
+          <input type="text" name="title" required maxlength="100" 
+                 placeholder="${t("review_title_placeholder") || "Summarize your experience"}"
+                 style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px;">
+        </div>
+        <div style="margin-bottom: 24px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px;">${t("review_content") || "Your review"}</label>
+          <textarea name="content" required rows="4" maxlength="1000"
+                    placeholder="${t("review_content_placeholder") || "Tell others about your experience"}"
+                    style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; resize: vertical;"></textarea>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button type="button" onclick="closeReviewForm()" 
+                  style="flex: 1; padding: 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; cursor: pointer;">
+            ${t("cancel") || "Cancel"}
+          </button>
+          <button type="submit" 
+                  style="flex: 1; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+            ${t("submit_review") || "Submit Review"}
+          </button>
+        </div>
+      </form>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+};
+
+window.closeReviewForm = function() {
+  const modal = document.querySelector('.review-modal');
+  if (modal) {
+    document.body.removeChild(modal);
+  }
+};
+
+window.selectRating = function(rating) {
+  // Simple rating selection - just highlight the selected stars
+  const stars = document.querySelectorAll('.star-btn');
+  stars.forEach((star, index) => {
+    if (index < rating) {
+      star.style.color = '#ffd700'; // Gold color for selected stars
+    } else {
+      star.style.color = 'var(--text-muted)';
+    }
+  });
+};
+
+window.submitReview = function(event, productId) {
+  event.preventDefault();
+  // Simple submission - just close the modal and show confirmation
+  window.closeReviewForm();
+  alert(t("review_submitted") || "Review submitted successfully!");
+};
+
+// Global function for showing comments (for social page functionality)
+window.showComments = function(postId) {
+  const modal = document.createElement('div');
+  modal.className = 'comments-modal';
+  modal.style.cssText = `
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7); z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; box-sizing: border-box;
+  `;
+
+  modal.innerHTML = `
+    <div style="background: var(--bg); border-radius: 16px; padding: 32px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="margin: 0; font-size: 24px; font-weight: 700;">${t("comments") || "Comments"}</h2>
+        <button onclick="closeComments()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-muted);">×</button>
+      </div>
+      
+      <div style="margin-bottom: 24px;">
+        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+          <img src="https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=40&h=40&fit=crop&crop=face" 
+               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="User">
+          <div style="flex: 1;">
+            <textarea placeholder="${t("write_comment") || "Write a comment..."}" 
+                      style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; resize: vertical; min-height: 60px;"></textarea>
+            <button onclick="addComment('${postId}')" 
+                    style="margin-top: 8px; padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+              ${t("post_comment") || "Post Comment"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="comments-list" style="max-height: 400px; overflow-y: auto;">
+        <div style="display: flex; gap: 12px; margin-bottom: 16px; padding: 16px; background: var(--panel); border-radius: 8px;">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face" 
+               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="User">
+          <div style="flex: 1;">
+            <div style="font-weight: 600; margin-bottom: 4px;">@maya_shopper</div>
+            <div style="color: var(--text-muted); margin-bottom: 8px;">Love this product! Great quality and fast shipping 👍</div>
+            <div style="display: flex; gap: 16px; color: var(--text-muted); font-size: 12px;">
+              <span>2h ago</span>
+              <button style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px;">Reply</button>
+              <button style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px;">❤️ 3</button>
+            </div>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 12px; margin-bottom: 16px; padding: 16px; background: var(--panel); border-radius: 8px;">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face" 
+               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="User">
+          <div style="flex: 1;">
+            <div style="font-weight: 600; margin-bottom: 4px;">@sara_k</div>
+            <div style="color: var(--text-muted); margin-bottom: 8px;">Thanks for sharing! Adding to my wishlist 🛒</div>
+            <div style="display: flex; gap: 16px; color: var(--text-muted); font-size: 12px;">
+              <span>5h ago</span>
+              <button style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px;">Reply</button>
+              <button style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px;">❤️ 1</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+};
+
+window.closeComments = function() {
+  const modal = document.querySelector('.comments-modal');
+  if (modal) {
+    document.body.removeChild(modal);
+  }
+};
+
+window.addComment = function(postId) {
+  const textarea = document.querySelector('.comments-modal textarea');
+  if (textarea && textarea.value.trim()) {
+    // Simulate adding comment
+    alert(t("comment_added") || "Comment added successfully!");
+    textarea.value = '';
+    // In a real app, this would update the comments list
+  }
+};
+
+// Global functions for wishlist management
+window.createNewWishlist = function() {
+  const name = prompt(t("enter_wishlist_name") || "Enter wishlist name:");
+  if (name && name.trim()) {
+    // Simulate creating new wishlist
+    alert(t("wishlist_created") || "Wishlist created successfully!");
+  }
+};
+
+window.showWishlistSettings = function() {
+  alert(t("wishlist_settings") || "Wishlist settings (coming soon)");
+};
+
+// Note: showReviewForm is now defined here and will be available immediately when app.js loads

@@ -619,8 +619,17 @@ const pdp = ({ el, state, actions }, id) => {
   };
   
   window.compareProduct = (productId) => {
-    // Add to comparison (implement comparison logic)
-    alert(t("added_to_comparison") || "Added to comparison!");
+    // Add to comparison and show comparison modal
+    if (!state.comparison) {
+      state.comparison = [];
+    }
+    
+    if (!state.comparison.includes(productId)) {
+      state.comparison.push(productId);
+      saveState(state);
+    }
+    
+    showComparisonModal();
   };
 
   el.innerHTML = h(`
@@ -889,7 +898,7 @@ const pdp = ({ el, state, actions }, id) => {
           <!-- Rating Breakdown -->
           <div>
             ${[5,4,3,2,1].map(rating => {
-              const count = (reviewStats.ratingBreakdown?.[rating]) || 0;
+              const count = (reviewStats.distribution?.[rating]) || 0;
               const percentage = reviewStats.totalReviews > 0 ? (count / reviewStats.totalReviews) * 100 : 0;
               return `
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
@@ -913,12 +922,12 @@ const pdp = ({ el, state, actions }, id) => {
                   <div style="font-weight: 600; margin-bottom: 4px;">${review.userName}</div>
                   <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="color: #ffa500;">${stars(review.rating)}</span>
-                    <span style="color: var(--text-muted); font-size: 14px;">${formatTimeAgo(review.timestamp)}</span>
+                    <span style="color: var(--text-muted); font-size: 14px;">${formatTimeAgo(review.date)}</span>
                     ${review.verified ? `<span style="background: var(--success); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px;">${t("verified")}</span>` : ''}
                   </div>
                 </div>
               </div>
-              <p style="margin: 0; line-height: 1.5; color: var(--text);">${review.comment}</p>
+              <p style="margin: 0; line-height: 1.5; color: var(--text);">${review.content?.[getLang()] || review.content?.en || review.comment || t("no_review_content")}</p>
               ${review.helpful > 0 ? `
                 <div style="margin-top: 12px; font-size: 12px; color: var(--text-muted);">
                   👍 ${review.helpful} ${t("found_helpful") || "found this helpful"}
@@ -1726,10 +1735,10 @@ const wishlist = ({ el, navigate, actions }) => {
           ${t("my_wishlist")}
         </h1>
         <div style="display: flex; gap: 12px;">
-          <button onclick="createNewWishlist()" style="padding: 8px 16px; border: 1px solid var(--border); background: white; border-radius: 6px; cursor: pointer;">
+          <button onclick="createNewWishlist()" style="padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 6px; cursor: pointer;">
             ➕ ${t("create_wishlist")}
           </button>
-          <button onclick="showWishlistSettings()" style="padding: 8px 16px; border: 1px solid var(--border); background: white; border-radius: 6px; cursor: pointer;">
+          <button onclick="showWishlistSettings()" style="padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 6px; cursor: pointer;">
             ⚙️ ${t("settings")}
           </button>
         </div>
@@ -1782,7 +1791,7 @@ const wishlist = ({ el, navigate, actions }) => {
                 <option value="name">${t("sort_by_name")}</option>
                 <option value="price">${t("sort_by_price")}</option>
               </select>
-              <button onclick="toggleBulkSelect()" style="padding: 6px 12px; border: 1px solid var(--border); background: white; border-radius: 4px; cursor: pointer;">
+              <button onclick="toggleBulkSelect()" style="padding: 6px 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 4px; cursor: pointer;">
                 ${t("bulk_actions")}
               </button>
             </div>
@@ -1855,7 +1864,7 @@ const wishlist = ({ el, navigate, actions }) => {
             `) : h(`
               <div style="display: flex; flex-direction: column; gap: 12px;">
                 ${recentlyViewedItems.slice(0, 4).map(product => h(`
-                  <div style="display: flex; gap: 12px; padding: 8px; border: 1px solid var(--border); border-radius: 6px;">
+                  <div onclick="location.hash='#/pdp/${product.id}'" style="display: flex; gap: 12px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='var(--bg-hover)'" onmouseout="this.style.backgroundColor='transparent'">
                     <img src="${getProductImage(product, 80)}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
                     <div style="flex: 1; min-width: 0;">
                       <div style="font-weight: 500; font-size: 13px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
@@ -1865,7 +1874,7 @@ const wishlist = ({ el, navigate, actions }) => {
                         ${fmtSAR(product.price)}
                       </div>
                     </div>
-                    <button onclick="addToWishlist('${product.id}')" title="${actions.isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}" style="padding: 4px; background: none; border: none; cursor: pointer; font-size: 16px;">
+                    <button onclick="event.stopPropagation(); addToWishlist('${product.id}')" title="${actions.isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}" style="padding: 4px; background: none; border: none; cursor: pointer; font-size: 16px;">
                       ${actions.isInWishlist(product.id) ? '❤️' : '🤍'}
                     </button>
                   </div>
