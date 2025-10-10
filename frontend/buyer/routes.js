@@ -1380,7 +1380,7 @@ const cart = ({ el, state, actions }) => {
         ` : ''}
       ` : `
         <!-- Cart Items -->
-        <div style="display: grid; grid-template-columns: 1fr 400px; gap: 32px; margin-top: 24px;">
+        <div class="cart-layout" style="display: grid; grid-template-columns: 1fr 400px; gap: 32px; margin-top: 24px;">
           <!-- Items List -->
           <div>
             <h2 style="margin: 0 0 20px;">${t("cart_items") || "عناصر السلة"} (${cartItems.length})</h2>

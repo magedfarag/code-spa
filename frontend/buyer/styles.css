@@ -1848,6 +1848,11 @@ html.high-contrast .icon-btn.active {
 
 /* Responsive Cart Adjustments */
 @media (max-width: 720px) {
+  .cart-layout {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  
   .cart-container {
     grid-template-columns: 1fr !important;
     gap: 20px !important;
