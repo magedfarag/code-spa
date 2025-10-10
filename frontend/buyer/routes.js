@@ -28,7 +28,14 @@ window.addToCart = function(productId) {
     actions.addToCart(productId);
     // refresh cart badge count
     window.refreshBadges();
-    alert(t("added_to_cart") || "Added to cart!");
+    
+    // Show success message with proper text
+    const product = state.products.find(p => p.id === productId);
+    const productName = product ? (getLang() === "ar" ? product.nameAr : product.nameEn) : "";
+    const message = t("added_to_cart") || "Added to cart!";
+    
+    // Use alert with proper text instead of object
+    alert(message + (productName ? ` - ${productName}` : ""));
   }
 };
 
@@ -1462,22 +1469,50 @@ const cart = ({ el, state, actions }) => {
             </div>
             
             <!-- Shipping Options -->
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-              <h3 style="margin: 0 0 16px;">${t("shipping_options")}</h3>
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+              <h3 style="margin: 0 0 20px; font-size: 18px; font-weight: 600; color: var(--text);">${t("shipping_options")}</h3>
               ${state.cartEnhancements.shippingOptions.map(option => {
                 const isSelected = state.cartEnhancements.selectedShipping === option.id;
                 const isFeeFree = option.freeThreshold && summary.subtotal >= option.freeThreshold;
                 const displayPrice = isFeeFree ? 0 : option.price;
                 
                 return `
-                  <div onclick="selectShipping('${option.id}')" style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid ${isSelected ? 'var(--brand)' : 'var(--border)'}; border-radius: 8px; margin-bottom: 8px; cursor: pointer; background: ${isSelected ? 'var(--chip)' : 'transparent'};">
-                    <input type="radio" ${isSelected ? 'checked' : ''} style="margin: 0;">
-                    <div style="flex: 1;">
-                      <div style="font-weight: 500; margin-bottom: 2px;">${getProductField(option, "name")}</div>
-                      <div style="font-size: 12px; color: var(--text-muted);">${getProductField(option, "description")}</div>
-                      ${isFeeFree ? `<div style="font-size: 11px; color: var(--ok);">${t("free_shipping")}</div>` : ''}
+                  <div onclick="selectShipping('${option.id}')" style="
+                    display: flex; 
+                    align-items: center; 
+                    gap: 16px; 
+                    padding: 16px; 
+                    border: 2px solid ${isSelected ? 'var(--ok)' : 'var(--border)'}; 
+                    border-radius: 12px; 
+                    margin-bottom: 12px; 
+                    cursor: pointer; 
+                    background: ${isSelected ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.02) 100%)' : 'var(--bg)'}; 
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    box-shadow: ${isSelected ? '0 4px 16px rgba(16, 185, 129, 0.15)' : '0 2px 4px rgba(0,0,0,0.05)'};
+                    transform: ${isSelected ? 'translateY(-1px)' : 'translateY(0)'};
+                  ">
+                    <div style="
+                      width: 20px; 
+                      height: 20px; 
+                      border: 2px solid ${isSelected ? 'var(--ok)' : 'var(--border)'}; 
+                      border-radius: 50%; 
+                      position: relative;
+                      transition: all 0.2s ease;
+                      background: ${isSelected ? 'var(--ok)' : 'transparent'};
+                    ">
+                      ${isSelected ? '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: white; border-radius: 50%;"></div>' : ''}
                     </div>
-                    <div style="font-weight: 600; color: ${displayPrice === 0 ? 'var(--ok)' : 'var(--text)'};">
+                    <div style="flex: 1;">
+                      <div style="font-weight: 600; margin-bottom: 4px; color: var(--text); font-size: 15px;">${getProductField(option, "name")}</div>
+                      <div style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">${getProductField(option, "description")}</div>
+                      ${isFeeFree ? `<div style="font-size: 12px; color: var(--ok); font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;"><span style="font-size: 14px;">✓</span> ${t("free_shipping")}</div>` : ''}
+                    </div>
+                    <div style="
+                      font-weight: 700; 
+                      color: ${displayPrice === 0 ? 'var(--ok)' : 'var(--text)'}; 
+                      font-size: 16px;
+                      ${displayPrice === 0 ? 'background: linear-gradient(135deg, var(--ok) 0%, #22c55e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;' : ''}
+                    ">
                       ${displayPrice === 0 ? t("free_shipping") : fmtSAR(displayPrice)}
                     </div>
                   </div>

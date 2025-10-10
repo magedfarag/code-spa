@@ -332,6 +332,10 @@ const DICTS = {
     // AR Features
     try_with_ar: "Try with AR",
     virtual_try_on: "Virtual Try-On",
+    ar_experience: "AR Experience",
+    ar_loading: "Loading AR experience...",
+    ar_not_supported: "AR not supported for this device",
+    see_in_your_space: "See in Your Space",
     see_in_your_space: "See in Your Space",
     ar_not_supported: "AR not supported on this device",
     enable_camera: "Enable Camera for AR",
@@ -1462,6 +1466,10 @@ const DICTS = {
     // AR Features - Arabic
     try_with_ar: "جرب بالواقع المعزز",
     virtual_try_on: "تجربة افتراضية",
+    ar_experience: "تجربة الواقع المعزز",
+    ar_loading: "جاري تحميل تجربة الواقع المعزز...",
+    ar_not_supported: "الواقع المعزز غير مدعوم على هذا الجهاز",
+    see_in_your_space: "شاهد في مساحتك",
     see_in_your_space: "اعرض في مساحتك",
     ar_not_supported: "الواقع المعزز غير مدعوم على هذا الجهاز",
     enable_camera: "تفعيل الكاميرا للواقع المعزز",

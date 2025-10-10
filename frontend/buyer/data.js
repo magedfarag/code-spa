@@ -733,6 +733,262 @@ export const state = {
         vegan: true
       },
       skinConcerns: ["acne", "blackheads", "oily_skin", "large_pores"]
+    }),
+    // Additional Footwear Products
+    P("p9", "Running Sneakers Pro", "Footwear", 249, 299, "c1", "1515378791036-0648a3ef77b2", "حذاء رياضي احترافي", "أحذية", {
+      description: {
+        en: "Professional running sneakers with advanced cushioning and breathable mesh. Perfect for athletes and fitness enthusiasts.",
+        ar: "أحذية رياضية احترافية مع توسيد متقدم وشبك قابل للتنفس. مثالية للرياضيين وعشاق اللياقة البدنية."
+      },
+      specifications: {
+        material: { en: "Engineered mesh and synthetic leather", ar: "شبك مهندس وجلد اصطناعي" },
+        sole: { en: "EVA foam with rubber grip", ar: "رغوة EVA مع قبضة مطاطية" },
+        weight: { en: "260g per shoe", ar: "260 جرام لكل حذاء" },
+        breathability: { en: "Maximum", ar: "أقصى حد" }
+      },
+      variants: [
+        { id: "p9-red-40", color: "Sport Red", size: "40", price: 249, stock: 18, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p9-red-41", color: "Sport Red", size: "41", price: 249, stock: 22, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p9-black-40", color: "All Black", size: "40", price: 259, stock: 15, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p9-white-41", color: "Pure White", size: "41", price: 249, stock: 20, images: ["1515879218367-8466d910aaa4"] }
+      ],
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "size_comparison", "color_preview"],
+      keywords: ["حذاء رياضي", "sneakers", "running", "رياضة", "جري"]
+    }),
+    P("p10", "Sport Lifestyle Shoes", "Footwear", 189, 229, "c1", "1521572267360-ee0c2909d518", "أحذية رياضية عصرية", "أحذية", {
+      description: {
+        en: "Versatile lifestyle sneakers combining sport performance with street style. Perfect for daily wear and light workouts.",
+        ar: "أحذية رياضية عصرية متعددة الاستخدامات تجمع بين الأداء الرياضي وأسلوب الشارع. مثالية للارتداء اليومي والتمارين الخفيفة."
+      },
+      specifications: {
+        material: { en: "Canvas and suede upper", ar: "جزء علوي من القماش والجلد المدبوغ" },
+        sole: { en: "Vulcanized rubber sole", ar: "نعل مطاطي مفلكن" },
+        style: { en: "Low-top design", ar: "تصميم منخفض" }
+      },
+      variants: [
+        { id: "p10-navy-39", color: "Navy Blue", size: "39", price: 189, stock: 25, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p10-gray-40", color: "Charcoal Gray", size: "40", price: 189, stock: 20, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p10-beige-41", color: "Sand Beige", size: "41", price: 199, stock: 16, images: ["1515879218367-8466d910aaa4"] }
+      ],
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "color_preview"],
+      keywords: ["حذاء رياضي", "sneakers", "lifestyle", "عصري", "كاجوال"]
+    }),
+    // Additional Apparel Products
+    P("p11", "Premium Sweatshirt", "Apparel", 199, 249, "c2", "1515879218367-8466d910aaa4", "سويت شيرت فاخر", "ملابس", {
+      description: {
+        en: "Premium heavyweight sweatshirt with embroidered logo. Made from organic cotton for ultimate comfort.",
+        ar: "سويت شيرت فاخر ثقيل الوزن مع شعار مطرز. مصنوع من القطن العضوي للراحة القصوى."
+      },
+      specifications: {
+        material: { en: "100% Organic Cotton", ar: "100% قطن عضوي" },
+        weight: { en: "350gsm heavyweight", ar: "350 جرام وزن ثقيل" },
+        fit: { en: "Oversized fit", ar: "مقاس واسع" },
+        origin: { en: "Made in Egypt", ar: "صنع في مصر" }
+      },
+      variants: [
+        { id: "p11-cream-m", color: "Cream", size: "M", price: 199, stock: 15, images: ["1515879218367-8466d910aaa4"] },
+        { id: "p11-cream-l", color: "Cream", size: "L", price: 199, stock: 12, images: ["1515879218367-8466d910aaa4"] },
+        { id: "p11-forest-m", color: "Forest Green", size: "M", price: 209, stock: 10, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p11-charcoal-l", color: "Charcoal", size: "L", price: 199, stock: 8, images: ["1521572267360-ee0c2909d518"] }
+      ],
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "color_preview"],
+      keywords: ["سويت شيرت", "sweatshirt", "هودي", "قطن", "فاخر", "premium"]
+    }),
+    P("p12", "Classic Denim Jeans", "Apparel", 179, 219, "c2", "1521572267360-ee0c2909d518", "جينز كلاسيكي", "ملابس", {
+      description: {
+        en: "Classic straight-fit denim jeans with premium wash. Timeless style that never goes out of fashion.",
+        ar: "جينز دنيم كلاسيكي بقصة مستقيمة مع غسلة فاخرة. أسلوب خالد لا يخرج من الموضة أبداً."
+      },
+      specifications: {
+        material: { en: "98% Cotton, 2% Elastane", ar: "98% قطن، 2% إيلاستان" },
+        fit: { en: "Straight fit", ar: "قصة مستقيمة" },
+        wash: { en: "Medium blue wash", ar: "غسلة زرقاء متوسطة" },
+        origin: { en: "Made in Tunisia", ar: "صنع في تونس" }
+      },
+      variants: [
+        { id: "p12-blue-30", color: "Classic Blue", size: "30", price: 179, stock: 20, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p12-blue-32", color: "Classic Blue", size: "32", price: 179, stock: 25, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p12-blue-34", color: "Classic Blue", size: "34", price: 179, stock: 18, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p12-black-32", color: "Jet Black", size: "32", price: 189, stock: 15, images: ["1515378791036-0648a3ef77b2"] }
+      ],
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "size_comparison"],
+      keywords: ["جينز", "jeans", "دنيم", "بنطال", "كلاسيكي", "classic"]
+    }),
+    P("p13", "Performance Activewear Set", "Apparel", 149, 189, "c1", "1515378791036-0648a3ef77b2", "طقم ملابس رياضية", "ملابس", {
+      description: {
+        en: "High-performance activewear set with moisture-wicking technology. Perfect for gym, yoga, and outdoor activities.",
+        ar: "طقم ملابس رياضية عالية الأداء مع تقنية امتصاص الرطوبة. مثالي للصالة الرياضية واليوغا والأنشطة الخارجية."
+      },
+      specifications: {
+        material: { en: "90% Polyester, 10% Spandex", ar: "90% بوليستر، 10% سباندكس" },
+        features: { en: "Quick-dry, UV protection", ar: "سريع الجفاف، حماية من الأشعة فوق البنفسجية" },
+        fit: { en: "Compression fit", ar: "قصة ضاغطة" }
+      },
+      variants: [
+        { id: "p13-purple-s", color: "Deep Purple", size: "S", price: 149, stock: 16, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p13-purple-m", color: "Deep Purple", size: "M", price: 149, stock: 20, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p13-teal-s", color: "Ocean Teal", size: "S", price: 159, stock: 12, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p13-black-m", color: "Midnight Black", size: "M", price: 149, stock: 18, images: ["1515879218367-8466d910aaa4"] }
+      ],
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "size_comparison", "color_preview"],
+      keywords: ["activewear", "ملابس رياضية", "تمارين", "يوغا", "رياضة"]
+    }),
+    P("p14", "Workout Sports Bra", "Apparel", 89, 119, "c1", "1515879218367-8466d910aaa4", "صدرية رياضية", "ملابس", {
+      description: {
+        en: "High-support sports bra with padded cups and racerback design. Ideal for high-intensity workouts.",
+        ar: "صدرية رياضية عالية الدعم مع أكواب مبطنة وتصميم خلفي متقاطع. مثالية للتمارين عالية الكثافة."
+      },
+      specifications: {
+        material: { en: "85% Nylon, 15% Spandex", ar: "85% نايلون، 15% سباندكس" },
+        support: { en: "High support", ar: "دعم عالي" },
+        features: { en: "Removable pads, racerback", ar: "حشوات قابلة للإزالة، ظهر متقاطع" }
+      },
+      variants: [
+        { id: "p14-coral-s", color: "Coral Pink", size: "S", price: 89, stock: 25, images: ["1515879218367-8466d910aaa4"] },
+        { id: "p14-coral-m", color: "Coral Pink", size: "M", price: 89, stock: 22, images: ["1515879218367-8466d910aaa4"] },
+        { id: "p14-navy-s", color: "Navy Blue", size: "S", price: 89, stock: 20, images: ["1521572267360-ee0c2909d518"] }
+      ],
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "size_comparison"],
+      keywords: ["activewear", "sports bra", "صدرية رياضية", "تمارين", "رياضة"]
+    }),
+    // Additional Home Products  
+    P("p15", "Modern Wall Art Set", "Home", 129, 169, "c3", "1515878023772-fb7dc6b82525", "طقم لوحات حائط عصرية", "منزل", {
+      description: {
+        en: "Set of 3 modern geometric wall art prints. Adds contemporary style to any room with neutral tones.",
+        ar: "طقم من 3 لوحات حائط هندسية عصرية. يضيف أسلوباً معاصراً لأي غرفة بألوان محايدة."
+      },
+      specifications: {
+        material: { en: "High-quality canvas print", ar: "طباعة قماش عالية الجودة" },
+        sizes: { en: "30x40cm each", ar: "30×40 سم لكل قطعة" },
+        frame: { en: "Black wooden frame included", ar: "إطار خشبي أسود مشمول" },
+        mounting: { en: "Ready to hang", ar: "جاهز للتعليق" }
+      },
+      variants: [
+        { id: "p15-neutral", color: "Neutral Tones", price: 129, stock: 15, images: ["1515878023772-fb7dc6b82525"] },
+        { id: "p15-earth", color: "Earth Tones", price: 139, stock: 12, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p15-monochrome", color: "Monochrome", price: 129, stock: 18, images: ["1521572267360-ee0c2909d518"] }
+      ],
+      arSupported: true,
+      arFeatures: ["placement_preview", "size_comparison"],
+      keywords: ["home decor", "ديكور منزلي", "لوحات", "wall art", "عصري"]
+    }),
+    P("p16", "Decorative Table Lamp", "Home", 159, 199, "c3", "1515378791036-0648a3ef77b2", "مصباح طاولة زخرفي", "منزل", {
+      description: {
+        en: "Elegant ceramic table lamp with fabric shade. Perfect accent lighting for living rooms and bedrooms.",
+        ar: "مصباح طاولة سيراميك أنيق مع ظلة قماشية. إضاءة مثالية للغرف المعيشة وغرف النوم."
+      },
+      specifications: {
+        material: { en: "Ceramic base with linen shade", ar: "قاعدة سيراميك مع ظلة كتان" },
+        height: { en: "45cm total height", ar: "45 سم ارتفاع إجمالي" },
+        bulb: { en: "E27 LED compatible", ar: "متوافق مع LED E27" },
+        cord: { en: "2m fabric cord", ar: "سلك قماشي 2 متر" }
+      },
+      variants: [
+        { id: "p16-white", color: "Cream White", price: 159, stock: 10, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p16-sage", color: "Sage Green", price: 169, stock: 8, images: ["1515878023772-fb7dc6b82525"] },
+        { id: "p16-terracotta", color: "Terracotta", price: 159, stock: 12, images: ["1521572267360-ee0c2909d518"] }
+      ],
+      arSupported: true,
+      arFeatures: ["placement_preview", "lighting_simulation"],
+      keywords: ["home decor", "ديكور منزلي", "مصباح", "lamp", "إضاءة"]
+    }),
+    // Additional Beauty Products
+    P("p17", "Hydrating Face Serum", "Beauty", 119, 149, "c3", "1515878023772-fb7dc6b82525", "سيروم ترطيب الوجه", "جمال", {
+      description: {
+        en: "Intensive hydrating serum with hyaluronic acid and vitamin E. Suitable for all skin types, provides 24-hour moisture.",
+        ar: "سيروم ترطيب مكثف مع حمض الهيالورونيك وفيتامين E. مناسب لجميع أنواع البشرة، يوفر ترطيباً لمدة 24 ساعة."
+      },
+      specifications: {
+        size: { en: "30ml dropper bottle", ar: "زجاجة قطارة 30 مل" },
+        key_ingredients: { en: "Hyaluronic acid, Vitamin E, Niacinamide", ar: "حمض الهيالورونيك، فيتامين E، نياسيناميد" },
+        usage: { en: "Morning and evening", ar: "صباح ومساء" },
+        skin_type: { en: "All skin types", ar: "جميع أنواع البشرة" }
+      },
+      variants: [
+        { id: "p17-original", variant: "Original Formula", price: 119, stock: 28, images: ["1515878023772-fb7dc6b82525"] },
+        { id: "p17-sensitive", variant: "Sensitive Skin", price: 129, stock: 22, images: ["1515378791036-0648a3ef77b2"] }
+      ],
+      arSupported: false,
+      ingredients: {
+        natural: true,
+        organic: "60%",
+        cruelty_free: true,
+        vegan: true
+      },
+      skinConcerns: ["dryness", "dehydration", "fine_lines", "dullness"]
+    }),
+    P("p18", "Luxury Lipstick Collection", "Beauty", 89, 119, "c3", "1521572267360-ee0c2909d518", "مجموعة أحمر شفاه فاخرة", "جمال", {
+      description: {
+        en: "Premium matte lipstick collection with long-lasting formula. Enriched with vitamin E and natural oils.",
+        ar: "مجموعة أحمر شفاه فاخرة مع تركيبة طويلة الأمد. غنية بفيتامين E والزيوت الطبيعية."
+      },
+      specifications: {
+        finish: { en: "Matte finish", ar: "لمسة نهائية مطفية" },
+        duration: { en: "8-hour wear", ar: "يدوم 8 ساعات" },
+        ingredients: { en: "Vitamin E, Jojoba oil", ar: "فيتامين E، زيت الجوجوبا" },
+        packaging: { en: "Magnetic closure", ar: "إغلاق مغناطيسي" }
+      },
+      variants: [
+        { id: "p18-red", color: "Classic Red", price: 89, stock: 30, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p18-rose", color: "Dusty Rose", price: 89, stock: 25, images: ["1515878023772-fb7dc6b82525"] },
+        { id: "p18-berry", color: "Deep Berry", price: 89, stock: 20, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p18-nude", color: "Nude Pink", price: 89, stock: 35, images: ["1515879218367-8466d910aaa4"] }
+      ],
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "color_preview"],
+      keywords: ["أحمر شفاه", "lipstick", "مكياج", "makeup", "فاخر"]
+    }),
+    // Additional Accessories Products
+    P("p19", "Wireless Charging Pad", "Accessories", 79, 99, "c4", "1515878023772-fb7dc6b82525", "شاحن لاسلكي", "إكسسوارات", {
+      description: {
+        en: "Fast wireless charging pad compatible with all Qi-enabled devices. Sleek design with LED indicator.",
+        ar: "شاحن لاسلكي سريع متوافق مع جميع الأجهزة المزودة بتقنية Qi. تصميم أنيق مع مؤشر LED."
+      },
+      specifications: {
+        power: { en: "15W fast charging", ar: "شحن سريع 15 واط" },
+        compatibility: { en: "iPhone, Samsung, all Qi devices", ar: "آيفون، سامسونج، جميع أجهزة Qi" },
+        features: { en: "Overcharge protection, LED indicator", ar: "حماية من الشحن الزائد، مؤشر LED" },
+        dimensions: { en: "10cm diameter, 8mm thick", ar: "10 سم قطر، 8 مم سماكة" }
+      },
+      variants: [
+        { id: "p19-black", color: "Matte Black", price: 79, stock: 40, images: ["1515878023772-fb7dc6b82525"] },
+        { id: "p19-white", color: "Pearl White", price: 79, stock: 35, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p19-wood", color: "Walnut Wood", price: 89, stock: 25, images: ["1515378791036-0648a3ef77b2"] }
+      ],
+      arSupported: false,
+      warranty: {
+        duration: "2 years",
+        coverage: "Manufacturing defects and performance"
+      }
+    }),
+    P("p20", "Minimalist Watch", "Accessories", 199, 249, "c3", "1521572267360-ee0c2909d518", "ساعة بسيطة", "إكسسوارات", {
+      description: {
+        en: "Elegant minimalist watch with genuine leather strap. Water-resistant with Japanese quartz movement.",
+        ar: "ساعة بسيطة أنيقة مع حزام جلد أصلي. مقاومة للماء مع حركة كوارتز يابانية."
+      },
+      specifications: {
+        movement: { en: "Japanese quartz", ar: "كوارتز ياباني" },
+        case: { en: "40mm stainless steel", ar: "40 مم ستانلس ستيل" },
+        strap: { en: "Genuine leather", ar: "جلد أصلي" },
+        water_resistance: { en: "50m water resistant", ar: "مقاوم للماء حتى 50 متر" }
+      },
+      variants: [
+        { id: "p20-black", color: "Black Leather", price: 199, stock: 20, images: ["1521572267360-ee0c2909d518"] },
+        { id: "p20-brown", color: "Brown Leather", price: 199, stock: 18, images: ["1515378791036-0648a3ef77b2"] },
+        { id: "p20-steel", color: "Steel Bracelet", price: 219, stock: 15, images: ["1515878023772-fb7dc6b82525"] }
+      ],
+      arSupported: true,
+      arFeatures: ["virtual_try_on", "size_comparison"],
+      warranty: {
+        duration: "2 years",
+        coverage: "Movement and case defects"
+      }
     })
   ],
 
@@ -1316,11 +1572,11 @@ export const state = {
     suggestions: [],
     results: [],
     categories: [
-      { id: "apparel", name: { en: "Apparel", ar: "ملابس" }, count: 3 },
-      { id: "footwear", name: { en: "Footwear", ar: "أحذية" }, count: 1 },
-      { id: "accessories", name: { en: "Accessories", ar: "إكسسوارات" }, count: 2 },
-      { id: "home", name: { en: "Home", ar: "منزل" }, count: 2 },
-      { id: "beauty", name: { en: "Beauty", ar: "جمال" }, count: 1 }
+      { id: "apparel", name: { en: "Apparel", ar: "ملابس" }, count: 7 },
+      { id: "footwear", name: { en: "Footwear", ar: "أحذية" }, count: 3 },
+      { id: "accessories", name: { en: "Accessories", ar: "إكسسوارات" }, count: 4 },
+      { id: "home", name: { en: "Home", ar: "منزل" }, count: 4 },
+      { id: "beauty", name: { en: "Beauty", ar: "جمال" }, count: 3 }
     ],
     recentSearches: [],
     popularSearches: [

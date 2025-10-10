@@ -68,7 +68,35 @@ html[data-theme="light"] input,
 html[data-theme="light"] select,
 html[data-theme="light"] textarea { background: #ffffff; color: var(--text); }
 
-button { font: inherit; color: var(--text); background: var(--brand); border: 0; border-radius: 12px; padding: .7rem 1rem; cursor: pointer; min-height: 44px; }
+button { 
+  font: inherit; 
+  color: white; 
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); 
+  border: 0; 
+  border-radius: 12px; 
+  padding: .7rem 1rem; 
+  cursor: pointer; 
+  min-height: 44px; 
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+button.primary { 
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+  color: white;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+button.primary:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+button.primary.large {
+  padding: 1rem 2rem;
+  font-size: 16px;
+  min-height: 56px;
+  border-radius: 16px;
+}
 button.small { 
   padding: .5rem .75rem; border-radius: 10px; min-height: 36px; 
   font-size: 12px; font-weight: 500; 
@@ -84,9 +112,25 @@ button.ghost:hover {
   border-color: rgba(var(--brand-rgb), 0.25);
   transform: translateY(-1px);
 }
-button.secondary { background: var(--brand-2); color: #091016; }
-button.danger { background: var(--bad); color: white; }
-button:hover { opacity: 0.9; }
+button.secondary { 
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); 
+  color: white; 
+}
+button.secondary:hover {
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  transform: translateY(-1px);
+}
+button.danger { 
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); 
+  color: white; 
+}
+button.danger:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-1px);
+}
+button:hover { 
+  transform: translateY(-1px);
+}
 button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 button:active { transform: translateY(1px); }
 .icon-btn { 
