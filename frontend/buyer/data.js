@@ -858,7 +858,7 @@ export const state = {
       keywords: ["activewear", "sports bra", "صدرية رياضية", "تمارين", "رياضة"]
     }),
     // Additional Home Products  
-    P("p15", "Modern Wall Art Set", "Home", 129, 169, "c3", "1515878023772-fb7dc6b82525", "طقم لوحات حائط عصرية", "منزل", {
+    P("p15", "Modern Wall Art Set", "Home", 129, 169, "c3", "1515879218367-8466d910aaa4", "طقم لوحات حائط عصرية", "منزل", {
       description: {
         en: "Set of 3 modern geometric wall art prints. Adds contemporary style to any room with neutral tones.",
         ar: "طقم من 3 لوحات حائط هندسية عصرية. يضيف أسلوباً معاصراً لأي غرفة بألوان محايدة."
@@ -870,7 +870,7 @@ export const state = {
         mounting: { en: "Ready to hang", ar: "جاهز للتعليق" }
       },
       variants: [
-        { id: "p15-neutral", color: "Neutral Tones", price: 129, stock: 15, images: ["1515878023772-fb7dc6b82525"] },
+        { id: "p15-neutral", color: "Neutral Tones", price: 129, stock: 15, images: ["1515879218367-8466d910aaa4"] },
         { id: "p15-earth", color: "Earth Tones", price: 139, stock: 12, images: ["1515378791036-0648a3ef77b2"] },
         { id: "p15-monochrome", color: "Monochrome", price: 129, stock: 18, images: ["1521572267360-ee0c2909d518"] }
       ],
@@ -891,7 +891,7 @@ export const state = {
       },
       variants: [
         { id: "p16-white", color: "Cream White", price: 159, stock: 10, images: ["1515378791036-0648a3ef77b2"] },
-        { id: "p16-sage", color: "Sage Green", price: 169, stock: 8, images: ["1515878023772-fb7dc6b82525"] },
+        { id: "p16-sage", color: "Sage Green", price: 169, stock: 8, images: ["1515879218367-8466d910aaa4"] },
         { id: "p16-terracotta", color: "Terracotta", price: 159, stock: 12, images: ["1521572267360-ee0c2909d518"] }
       ],
       arSupported: true,
@@ -899,7 +899,7 @@ export const state = {
       keywords: ["home decor", "ديكور منزلي", "مصباح", "lamp", "إضاءة"]
     }),
     // Additional Beauty Products
-    P("p17", "Hydrating Face Serum", "Beauty", 119, 149, "c3", "1515878023772-fb7dc6b82525", "سيروم ترطيب الوجه", "جمال", {
+    P("p17", "Hydrating Face Serum", "Beauty", 119, 149, "c3", "1515879218367-8466d910aaa4", "سيروم ترطيب الوجه", "جمال", {
       description: {
         en: "Intensive hydrating serum with hyaluronic acid and vitamin E. Suitable for all skin types, provides 24-hour moisture.",
         ar: "سيروم ترطيب مكثف مع حمض الهيالورونيك وفيتامين E. مناسب لجميع أنواع البشرة، يوفر ترطيباً لمدة 24 ساعة."
@@ -911,7 +911,7 @@ export const state = {
         skin_type: { en: "All skin types", ar: "جميع أنواع البشرة" }
       },
       variants: [
-        { id: "p17-original", variant: "Original Formula", price: 119, stock: 28, images: ["1515878023772-fb7dc6b82525"] },
+        { id: "p17-original", variant: "Original Formula", price: 119, stock: 28, images: ["1515879218367-8466d910aaa4"] },
         { id: "p17-sensitive", variant: "Sensitive Skin", price: 129, stock: 22, images: ["1515378791036-0648a3ef77b2"] }
       ],
       arSupported: false,
@@ -936,7 +936,7 @@ export const state = {
       },
       variants: [
         { id: "p18-red", color: "Classic Red", price: 89, stock: 30, images: ["1521572267360-ee0c2909d518"] },
-        { id: "p18-rose", color: "Dusty Rose", price: 89, stock: 25, images: ["1515878023772-fb7dc6b82525"] },
+        { id: "p18-rose", color: "Dusty Rose", price: 89, stock: 25, images: ["1515879218367-8466d910aaa4"] },
         { id: "p18-berry", color: "Deep Berry", price: 89, stock: 20, images: ["1515378791036-0648a3ef77b2"] },
         { id: "p18-nude", color: "Nude Pink", price: 89, stock: 35, images: ["1515879218367-8466d910aaa4"] }
       ],
@@ -945,7 +945,7 @@ export const state = {
       keywords: ["أحمر شفاه", "lipstick", "مكياج", "makeup", "فاخر"]
     }),
     // Additional Accessories Products
-    P("p19", "Wireless Charging Pad", "Accessories", 79, 99, "c4", "1515878023772-fb7dc6b82525", "شاحن لاسلكي", "إكسسوارات", {
+    P("p19", "Wireless Charging Pad", "Accessories", 79, 99, "c4", "1515879218367-8466d910aaa4", "شاحن لاسلكي", "إكسسوارات", {
       description: {
         en: "Fast wireless charging pad compatible with all Qi-enabled devices. Sleek design with LED indicator.",
         ar: "شاحن لاسلكي سريع متوافق مع جميع الأجهزة المزودة بتقنية Qi. تصميم أنيق مع مؤشر LED."
@@ -957,7 +957,7 @@ export const state = {
         dimensions: { en: "10cm diameter, 8mm thick", ar: "10 سم قطر، 8 مم سماكة" }
       },
       variants: [
-        { id: "p19-black", color: "Matte Black", price: 79, stock: 40, images: ["1515878023772-fb7dc6b82525"] },
+        { id: "p19-black", color: "Matte Black", price: 79, stock: 40, images: ["1515879218367-8466d910aaa4"] },
         { id: "p19-white", color: "Pearl White", price: 79, stock: 35, images: ["1521572267360-ee0c2909d518"] },
         { id: "p19-wood", color: "Walnut Wood", price: 89, stock: 25, images: ["1515378791036-0648a3ef77b2"] }
       ],
@@ -981,7 +981,7 @@ export const state = {
       variants: [
         { id: "p20-black", color: "Black Leather", price: 199, stock: 20, images: ["1521572267360-ee0c2909d518"] },
         { id: "p20-brown", color: "Brown Leather", price: 199, stock: 18, images: ["1515378791036-0648a3ef77b2"] },
-        { id: "p20-steel", color: "Steel Bracelet", price: 219, stock: 15, images: ["1515878023772-fb7dc6b82525"] }
+        { id: "p20-steel", color: "Steel Bracelet", price: 219, stock: 15, images: ["1515879218367-8466d910aaa4"] }
       ],
       arSupported: true,
       arFeatures: ["virtual_try_on", "size_comparison"],

@@ -30,8 +30,8 @@ window.addToCart = function(productId) {
     window.refreshBadges();
     
     // Show success message with proper text
-    const product = state.products.find(p => p.id === productId);
-    const productName = product ? (getLang() === "ar" ? product.nameAr : product.nameEn) : "";
+    const product = productById(productId);
+    const productName = product ? getProductTitle(product) : "";
     const message = t("added_to_cart") || "Added to cart!";
     
     // Use alert with proper text instead of object
@@ -601,7 +601,15 @@ const pdp = ({ el, state, actions }, id) => {
   };
   
   window.startAR = (feature) => {
-    const result = actions.startARSession(id, feature);
+    // Get current product ID from the URL hash - format: #/pdp/productId
+    const hashParts = location.hash.split('/');
+    const currentProductId = hashParts.length > 2 ? hashParts[2] : null;
+    if (!currentProductId) {
+      console.error('Product ID not found in URL');
+      return;
+    }
+    
+    const result = actions.startARSession(currentProductId, feature);
     if (result.success) {
       showARInterface(result.sessionId, result.capabilities);
     } else {
@@ -615,13 +623,36 @@ const pdp = ({ el, state, actions }, id) => {
         title: t("size_guide"),
         content: renderSizeGuide(sizeGuide)
       });
+    } else {
+      showSheet({
+        title: t("size_guide"),
+        content: `
+          <div style="padding: 24px; text-align: center;">
+            <div style="color: var(--text-muted); margin-bottom: 16px;">📏</div>
+            <h3 style="margin-bottom: 12px;">${t("size_guide_not_available") || "Size Guide Not Available"}</h3>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">
+              ${t("size_guide_not_available_msg") || "Size guide is not available for this product. Please contact customer service for sizing assistance."}
+            </p>
+            <button onclick="closeSheet()" class="primary">${t("ok") || "OK"}</button>
+          </div>
+        `
+      });
     }
   };
   
   window.showShippingInfo = () => {
+    // Get current product ID from the URL hash - format: #/pdp/productId
+    const hashParts = location.hash.split('/');
+    const currentProductId = hashParts.length > 2 ? hashParts[2] : null;
+    if (!currentProductId) {
+      console.error('Product ID not found in URL');
+      return;
+    }
+    
+    const currentShippingInfo = actions.getShippingInfo(currentProductId);
     showSheet({
-      title: t("shipping_info"),
-      content: renderShippingDetails(shippingInfo)
+      title: t("shipping_info") + " & " + t("return_policy"),
+      content: renderShippingDetails(currentShippingInfo)
     });
   };
   
@@ -844,7 +875,7 @@ const pdp = ({ el, state, actions }, id) => {
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
             ${Object.entries(product.specifications).map(([key, value]) => `
               <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
-                <span style="font-weight: 500; text-transform: capitalize;">${key.replace('_', ' ')}:</span>
+                <span style="font-weight: 500; text-transform: capitalize;">${t(key) || key.replace('_', ' ')}:</span>
                 <span style="color: var(--text-muted);">${typeof value === 'object' && value !== null ? (value[getLang()] || value.en || JSON.stringify(value)) : (loc(value) || value)}</span>
               </div>
             `).join('')}
@@ -1031,40 +1062,56 @@ const pdp = ({ el, state, actions }, id) => {
   
   function renderShippingDetails(shipping) {
     return `
-      <div style="padding: 20px;">
-        <h3 style="margin: 0 0 16px;">${t("delivery_options")}</h3>
-        <div style="margin-bottom: 20px;">
-          <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
-            <span>${t("standard_shipping")}</span>
-            <span>${shipping.freeShipping ? t("free") : fmtSAR(shipping.cost || 25)}</span>
+      <div style="padding: 24px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+          <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">🚚</div>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: var(--text);">${t("delivery_options")}</h3>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%); border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
+            <span style="font-weight: 500;">${t("standard_shipping")}</span>
+            <span style="font-weight: 600; color: ${shipping.freeShipping ? 'var(--ok)' : 'var(--text)'};">${shipping.freeShipping ? t("free") : fmtSAR(shipping.cost || 25)}</span>
           </div>
-          <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
-            <span>${t("estimated_delivery")}</span>
-            <span>${shipping.estimatedDays} ${t("days")}</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
+            <span style="font-weight: 500;">${t("estimated_delivery")}</span>
+            <span style="font-weight: 600;">${shipping.estimatedDays} ${t("days")}</span>
           </div>
           ${shipping.sameDayAvailable ? `
-            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
-              <span>${t("same_day_delivery")}</span>
-              <span>${fmtSAR(shipping.sameDayCost || 15)}</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+              <span style="font-weight: 500; color: var(--ok);">${t("same_day_delivery")}</span>
+              <span style="font-weight: 600; color: var(--ok);">${fmtSAR(shipping.sameDayCost || 15)}</span>
             </div>
           ` : ''}
         </div>
         
-        <h3 style="margin: 20px 0 16px 0;">${t("return_policy")}</h3>
-        <ul style="list-style: none; padding: 0;">
-          <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
-            <span style="color: var(--success);">✓</span>
-            <span>30-day return window</span>
-          </li>
-          <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
-            <span style="color: var(--success);">✓</span>
-            <span>Free return shipping</span>
-          </li>
-          <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
-            <span style="color: var(--success);">✓</span>
-            <span>Full refund guarantee</span>
-          </li>
-        </ul>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+          <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">↩️</div>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: var(--text);">${t("return_policy")}</h3>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px;">
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 12px 0; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #bbf7d0;">
+              <div style="width: 24px; height: 24px; background: var(--ok); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">✓</div>
+              <span style="font-weight: 500;">${t("thirty_day_return") || "30-day return window"}</span>
+            </li>
+            <li style="padding: 12px 0; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #bbf7d0;">
+              <div style="width: 24px; height: 24px; background: var(--ok); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">✓</div>
+              <span style="font-weight: 500;">${t("free_return_shipping") || "Free return shipping"}</span>
+            </li>
+            <li style="padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+              <div style="width: 24px; height: 24px; background: var(--ok); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">✓</div>
+              <span style="font-weight: 500;">${t("full_refund_guarantee") || "Full refund guarantee"}</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div style="margin-top: 24px; padding: 16px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 10px;">
+          <p style="margin: 0; font-size: 14px; color: var(--text-muted); text-align: center;">
+            <strong>${t("need_help") || "Need help?"}:</strong> ${t("contact_support") || "Contact our support team for any questions about shipping or returns."}
+          </p>
+        </div>
       </div>
     `;
   }

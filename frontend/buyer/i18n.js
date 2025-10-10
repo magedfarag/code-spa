@@ -35,6 +35,9 @@ const DICTS = {
     items: "items",
     shop_by_category: "Shop by Category",
     view_all: "View All",
+    ok: "OK",
+    cancel: "Cancel",
+    size: "Size",
 
     // feed / cards
     for_you: "For you",
@@ -318,8 +321,15 @@ const DICTS = {
     product_details: "Product Details",
     specifications: "Specifications",
     size_guide: "Size Guide",
+    size_guide_not_available: "Size Guide Not Available",
+    size_guide_not_available_msg: "Size guide is not available for this product. Please contact customer service for sizing assistance.",
     shipping_info: "Shipping Information",
     return_policy: "Return Policy",
+    thirty_day_return: "30-day return window",
+    free_return_shipping: "Free return shipping",
+    full_refund_guarantee: "Full refund guarantee",
+    need_help: "Need help?",
+    contact_support: "Contact our support team for any questions about shipping or returns",
     customer_reviews: "Customer Reviews",
     similar_products: "Similar Products",
     product_variants: "Available Options",
@@ -328,6 +338,11 @@ const DICTS = {
     add_to_wishlist: "Add to Wishlist",
     share_product: "Share Product",
     compare_products: "Compare Products",
+    
+    // Product Specifications
+    origin: "Origin",
+    care: "Care",
+    material: "Material",
     
     // AR Features
     try_with_ar: "Try with AR",
@@ -353,6 +368,7 @@ const DICTS = {
     // Size & Fit
     size_chart: "Size Chart",
     fit_guide: "Fit Guide",
+    fit_advice: "Fit Advice",
     true_to_size: "True to Size",
     runs_small: "Runs Small",
     runs_large: "Runs Large",
@@ -1260,6 +1276,9 @@ const DICTS = {
     items: "عنصر",
     shop_by_category: "تسوق حسب الفئة",
     view_all: "عرض الكل",
+    ok: "موافق",
+    cancel: "إلغاء",
+    size: "المقاس",
 
     for_you: "مختارات لك",
     trending: "الترند ✨",
@@ -1452,8 +1471,15 @@ const DICTS = {
     product_details: "تفاصيل المنتج",
     specifications: "المواصفات",
     size_guide: "دليل المقاسات",
+    size_guide_not_available: "دليل المقاسات غير متوفر",
+    size_guide_not_available_msg: "دليل المقاسات غير متوفر لهذا المنتج. يرجى التواصل مع خدمة العملاء للمساعدة في المقاسات.",
     shipping_info: "معلومات الشحن",
     return_policy: "سياسة الإرجاع",
+    thirty_day_return: "فترة إرجاع 30 يوم",
+    free_return_shipping: "شحن إرجاع مجاني",
+    full_refund_guarantee: "ضمان استرداد كامل",
+    need_help: "تحتاج مساعدة؟",
+    contact_support: "اتصل بفريق الدعم لأي أسئلة حول الشحن أو الإرجاع",
     customer_reviews: "تقييمات العملاء",
     similar_products: "منتجات مشابهة",
     product_variants: "الخيارات المتاحة",
@@ -1462,6 +1488,11 @@ const DICTS = {
     add_to_wishlist: "إضافة للمفضلة",
     share_product: "مشاركة المنتج",
     compare_products: "مقارنة المنتجات",
+    
+    // Product Specifications - Arabic
+    origin: "المنشأ",
+    care: "العناية",
+    material: "المادة",
     
     // AR Features - Arabic
     try_with_ar: "جرب بالواقع المعزز",
@@ -1487,6 +1518,7 @@ const DICTS = {
     // Size & Fit - Arabic
     size_chart: "جدول المقاسات",
     fit_guide: "دليل المقاس",
+    fit_advice: "نصائح المقاس",
     true_to_size: "مقاس طبيعي",
     runs_small: "يميل للصغر",
     runs_large: "يميل للكبر",
