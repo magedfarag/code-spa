@@ -121,7 +121,7 @@ export const state = {
         avatar: uns("1535713875002-d1d0cf377fde", 100),
         content: "Just got these amazing CloudRunner sneakers! Perfect for my morning jogs 🏃‍♀️ The cushioning is incredible and they're so stylish! #fitness #style #running",
         productIds: ["p1"],
-        images: [uns("1515879218367-8466d910aaa4", 400), uns("1571019613454-1cb2f99b2d8b", 400)],
+        images: [uns("1515879218367-8466d910aaa4", 400), uns("1542291026-7eec264c27ff", 400)],
         likes: 24,
         comments: 8,
         shares: 3,
@@ -189,7 +189,7 @@ export const state = {
         avatar: uns("1535713875002-d1d0cf377fde", 100),
         content: "New active leggings collection dropping tomorrow! Who's excited? 💪 Early access for followers! Use code LINA20 for 20% off 🔥",
         productIds: ["p6"],
-        images: [uns("1521572267360-ee0c2909d518", 400), uns("1571019613454-1cb2f99b2d8b", 400)],
+        images: [uns("1521572267360-ee0c2909d518", 400), uns("1515378791036-0648a3ef77b2", 400)],
         likes: 89,
         comments: 23,
         shares: 12,
@@ -402,7 +402,7 @@ export const state = {
         avatar: uns("1535713875002-d1d0cf377fde", 100),
         content: "Self-care Sunday with this incredible clay mask! 🧴✨ My skin feels so refreshed and glowing. Perfect for unwinding after a busy week! 💆‍♀️",
         productIds: ["p7"], // Detox clay mask
-        images: [uns("1571019613454-1cb2f99b2d8b", 400)],
+        images: [uns("1515378791036-0648a3ef77b2", 400)],
         likes: 78,
         comments: 12,
         shares: 4,
@@ -520,8 +520,8 @@ export const state = {
         breathability: { en: "High", ar: "عالية" }
       },
       variants: [
-        { id: "p1-black-39", color: "Black", size: "39", price: 329, stock: 12, images: ["1542291026-7eec264c27ff", "1571019613454-1cb2f99b2d8b"] },
-        { id: "p1-black-40", color: "Black", size: "40", price: 329, stock: 8, images: ["1542291026-7eec264c27ff", "1571019613454-1cb2f99b2d8b"] },
+        { id: "p1-black-39", color: "Black", size: "39", price: 329, stock: 12, images: ["1542291026-7eec264c27ff", "1515879218367-8466d910aaa4"] },
+        { id: "p1-black-40", color: "Black", size: "40", price: 329, stock: 8, images: ["1542291026-7eec264c27ff", "1515879218367-8466d910aaa4"] },
         { id: "p1-white-39", color: "White", size: "39", price: 329, stock: 15, images: ["1515879218367-8466d910aaa4", "1521572267360-ee0c2909d518"] },
         { id: "p1-white-40", color: "White", size: "40", price: 329, stock: 6, images: ["1515879218367-8466d910aaa4", "1521572267360-ee0c2909d518"] },
         { id: "p1-blue-39", color: "Blue", size: "39", price: 339, stock: 10, images: ["1515378791036-0648a3ef77b2", "1535713875002-d1d0cf377fde"] }
@@ -742,7 +742,7 @@ export const state = {
       name: "@linafit", 
       handle: "@linafit",
       avatar: uns("1535713875002-d1d0cf377fde", 150), 
-      coverImage: uns("1571019613454-1cb2f99b2d8b", 800),
+      coverImage: uns("1515879218367-8466d910aaa4", 800),
       followers: 128000, 
       following: 245,
       verified: true,
@@ -833,7 +833,7 @@ export const state = {
       name: "@techtalks_sa",
       handle: "@techtalks_sa", 
       avatar: uns("1438761681033-6461ffad8d80", 150),
-      coverImage: uns("1571019613454-1cb2f99b2d8b", 800),
+      coverImage: uns("1515879218367-8466d910aaa4", 800),
       followers: 87000,
       following: 312,
       verified: true,
@@ -1161,7 +1161,7 @@ export const state = {
       creator: "@linafit",
       creatorId: "c1", 
       creatorAvatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=70",
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=70",
+      image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=600&q=70",
       caption: "New workout routine using these amazing CloudRunner sneakers! Perfect for morning runs 🏃‍♀️✨ #fitness #running",
       timestamp: Date.now() - 7200000, // 2 hours ago
       likes: 127,
@@ -1251,7 +1251,7 @@ export const state = {
         title: "New Active Wear Collection Drop! 🔥",
         viewers: 1247,
         startTime: Date.now() - 2400000, // 40 mins ago
-        thumbnail: uns("1571019613454-1cb2f99b2d8b", 600),
+        thumbnail: uns("1515879218367-8466d910aaa4", 600),
         tags: ["#newdrop", "#activewear", "#fitness"],
         products: ["p1", "p6"],
         flashDeals: [
@@ -1350,7 +1350,7 @@ export const state = {
             ar: "هذه الأحذية مريحة بشكل لا يصدق ومثالية لجري اليومي. التبطين رائع وتبدو جميلة أيضاً!"
           },
           images: [
-            uns("1571019613454-1cb2f99b2d8b", 400),
+            uns("1515879218367-8466d910aaa4", 400),
             uns("1605296867424-35aaf25826ef", 400)
           ],
           verified: true,
@@ -2317,7 +2317,9 @@ export const actions = {
         category.includes(query.toLowerCase());
       
       const matchesCategory = !filters.category?.length || 
-        filters.category.includes(loc(product, "cat"));
+        filters.category.some(filterCat => 
+          filterCat.toLowerCase() === category
+        );
       
       const matchesPrice = (!filters.priceRange || 
         (product.price >= filters.priceRange[0] && product.price <= filters.priceRange[1]));

@@ -37,7 +37,7 @@ const LS_STATE_KEY = "storez_spa_state_v2";
       creator: "@linafit",
       creatorId: "c1", 
       creatorAvatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=70",
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=70",
+      image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=600&q=70",
       caption: "New workout routine using these amazing CloudRunner sneakers! Perfect for morning runs 🏃‍♀️✨ #fitness #running",
       timestamp: Date.now() - 7200000, // 2 hours ago
       likes: 127,

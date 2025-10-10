@@ -295,11 +295,11 @@ test.describe('Buyer SPA - Individual Image Validation', () => {
   // SOCIAL POST IMAGES
   // =====================================================
 
-  test('Social post image (1571019613454-1cb2f99b2d8b) loads', async ({ page }) => {
+  test('Social post image (1515879218367-8466d910aaa4) loads', async ({ page }) => {
     await page.goto('/frontend/buyer/index.html#/social');
     await page.waitForTimeout(1500);
     
-    const postImage = page.locator(`img[src*="1571019613454-1cb2f99b2d8b"]`).first();
+    const postImage = page.locator(`img[src*="1515879218367-8466d910aaa4"]`).first();
     
     if (await postImage.isVisible()) {
       const isLoaded = await postImage.evaluate((el: HTMLImageElement) => {
@@ -367,11 +367,11 @@ test.describe('Buyer SPA - Individual Image Validation', () => {
   // LIVE STREAM COVER IMAGES
   // =====================================================
 
-  test('Live stream cover image (1571019613454-1cb2f99b2d8b) loads', async ({ page }) => {
+  test('Live stream cover image (1515879218367-8466d910aaa4) loads', async ({ page }) => {
     await page.goto('/frontend/buyer/index.html#/live');
     await page.waitForTimeout(1500);
     
-    const coverImage = page.locator(`img[src*="1571019613454-1cb2f99b2d8b"]`).first();
+    const coverImage = page.locator(`img[src*="1515879218367-8466d910aaa4"]`).first();
     
     if (await coverImage.isVisible()) {
       const isLoaded = await coverImage.evaluate((el: HTMLImageElement) => {

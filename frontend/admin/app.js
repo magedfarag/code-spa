@@ -168,6 +168,17 @@ const I18N = {
     notice_title: "Global notice",
     notice_body: "Message",
     post_notice: "Post",
+    sheet_default_title: "Sheet",
+    impersonating: "Impersonating",
+    
+    // HTML hardcoded strings
+    high_contrast: "High Contrast",
+    impersonate_btn: "Impersonate",
+    create_notice_btn: "+ Notice",
+    reset_btn: "Reset",
+    settings_btn: "Settings",
+    create_global_notice: "Create global notice",
+    reset_demo_data: "Reset demo data",
     posted: "Posted",
   },
 
@@ -325,6 +336,17 @@ const I18N = {
     notice_title: "إشعار عام",
     notice_body: "الرسالة",
     post_notice: "نشر",
+    sheet_default_title: "ورقة",
+    impersonating: "انتحال شخصية",
+    
+    // HTML hardcoded strings
+    high_contrast: "تباين عالي",
+    impersonate_btn: "انتحال شخصية",
+    create_notice_btn: "+ إشعار",
+    reset_btn: "إعادة تعيين",
+    settings_btn: "الإعدادات",
+    create_global_notice: "إنشاء إشعار عام",
+    reset_demo_data: "إعادة تعيين بيانات العرض",
     posted: "تم النشر",
   }
 };
@@ -462,7 +484,7 @@ function badge(el,n){ if(el) el.textContent=String(n); }
 function setActive(path){ qsa("nav.bottom a").forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+path)); }
 
 function showSheet(title, body){
-  qs("#sheetTitle").textContent = title || "Sheet";
+  qs("#sheetTitle").textContent = title || t("sheet_default_title");
   qs("#sheetBody").innerHTML = body || "";
   const sh = qs("#sheet");
   sh.classList.add("show"); sh.setAttribute("aria-hidden","false");
@@ -1590,7 +1612,7 @@ function wireHeader(){
         <label>ID<input id="imp_id" placeholder="u123 / s900 / c45"/></label>
         <div class="row right" style="gap:8px">
           <button class="ghost" onclick="__closeSheet()">${t("cancel")}</button>
-          <button class="secondary" onclick="(function(){ state.impersonating={role:document.getElementById('imp_role').value,id:document.getElementById('imp_id').value||'demo'}; save(); document.getElementById('envChip').textContent='Impersonating '+state.impersonating.role; __closeSheet(); })()">${t("start")}</button>
+          <button class="secondary" onclick="(function(){ state.impersonating={role:document.getElementById('imp_role').value,id:document.getElementById('imp_id').value||'demo'}; save(); document.getElementById('envChip').textContent=t('impersonating')+' '+state.impersonating.role; __closeSheet(); })()">${t("start")}</button>
         </div>
       </div>
     `);
@@ -1927,7 +1949,7 @@ function logPDPL(event, payload){
 function boot(){
   setLang(getLang());
   applyTheme(state.prefs.theme || "dark");
-  qs("#envChip").textContent = state.impersonating ? ("Impersonating "+state.impersonating.role) : t("demo");
+  qs("#envChip").textContent = state.impersonating ? (t("impersonating")+" "+state.impersonating.role) : t("demo");
   wireHeader();
   refreshBadges();
   route();

@@ -20,7 +20,7 @@ const formatNumber = (n) => new Intl.NumberFormat(
   getLang() === "ar" ? "ar-SA" : "en-US", 
   { notation: "compact", compactDisplay: "short" }
 ).format(Number(n) || 0);
-const creatorName = (cid) => (creatorById(cid)?.name || "Creator");
+const creatorName = (cid) => (creatorById(cid)?.name || t("creator"));
 
 /* ---------- global functions for interactivity ---------- */
 window.addToCart = function(productId) {
@@ -2350,11 +2350,12 @@ function setupSearchFunctionality() {
     window.applyFilters = function() {
       const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
         .map(cb => state.search.categories.find(c => c.id === cb.value))
+        .filter(c => c) // Remove undefined values
         .map(c => loc(c, "name"));
       
-      const minPrice = parseInt(document.getElementById('minPrice').value);
-      const maxPrice = parseInt(document.getElementById('maxPrice').value);
-      const sortBy = document.getElementById('sortBy').value;
+      const minPrice = parseInt(document.getElementById('minPrice').value) || 0;
+      const maxPrice = parseInt(document.getElementById('maxPrice').value) || 1000;
+      const sortBy = document.getElementById('sortBy').value || 'relevance';
       
       const filters = {
         category: selectedCategories,
@@ -2601,7 +2602,7 @@ function setupReviewFormInteractions() {
   window.simulatePhotoUpload = function() {
     // Simulate photo upload with random images
     const sampleImages = [
-      uns("1571019613454-1cb2f99b2d8b", 200),
+      uns("1515879218367-8466d910aaa4", 200),
       uns("1605296867424-35aaf25826ef", 200),
       uns("1549298916-b41d501f42fb", 200)
     ];

@@ -64,13 +64,13 @@
         <span aria-hidden="true">💼</span>
         <span class="sr-only">Sponsor</span>
       </button>
-      <button id="btnAnalytics" class="small ghost" type="button" title="Performance Analytics">
+      <button id="btnAnalytics" class="small ghost" type="button" title="Performance Analytics" data-title-i18n="performance_analytics">
         <span aria-hidden="true">📊</span>
-        <span class="sr-only">Analytics</span>
+        <span class="sr-only" data-i18n="analytics">Analytics</span>
       </button>
-      <button id="btnReset" class="small ghost" type="button" title="Reset demo data">
+      <button id="btnReset" class="small ghost" type="button" title="Reset demo data" data-title-i18n="reset_demo_data">
         <span aria-hidden="true">🔄</span>
-        <span class="sr-only">Reset</span>
+        <span class="sr-only" data-i18n="reset">Reset</span>
       </button>
     </div>
   </header>
@@ -108,18 +108,18 @@
   <!-- Add-to-cart sheet -->
   <section id="sheet" class="sheet" aria-modal="true" role="dialog" aria-labelledby="sheetTitle" aria-hidden="true">
     <div class="row between">
-      <strong id="sheetTitle">Added to cart</strong>
-      <button class="small ghost" type="button" aria-label="Close" onclick="window.__hideSheet?.()">✕</button>
+      <strong id="sheetTitle" data-i18n="added_to_cart_title">Added to cart</strong>
+      <button class="small ghost" type="button" aria-label="Close" onclick="window.__hideSheet?.()" data-i18n="close_btn">✕</button>
     </div>
-    <p class="muted" id="sheetMsg">Nice pick! You can continue shopping or go to checkout.</p>
+    <p class="muted" id="sheetMsg" data-i18n="nice_pick_msg">Nice pick! You can continue shopping or go to checkout.</p>
     <div class="row" style="gap:8px">
-      <button class="secondary" id="sheetCheckoutBtn" type="button" onclick="location.hash='#/checkout'">Checkout</button>
-      <button class="ghost" id="sheetKeepBtn" type="button" onclick="window.__hideSheet?.()">Keep browsing</button>
+      <button class="secondary" id="sheetCheckoutBtn" type="button" onclick="location.hash='#/checkout'" data-i18n="checkout_btn">Checkout</button>
+      <button class="ghost" id="sheetKeepBtn" type="button" onclick="window.__hideSheet?.()" data-i18n="keep_browsing_btn">Keep browsing</button>
     </div>
   </section>
 
   <noscript>
-    <p style="padding:12px">This demo requires JavaScript.</p>
+    <p style="padding:12px" data-i18n="demo_requires_js">This demo requires JavaScript.</p>
   </noscript>
 
   <!-- App (ES modules). I will send each file next. -->

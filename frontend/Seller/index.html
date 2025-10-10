@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="dark">
 <head>
-  <meta charset="u  <!-- App (ES modules) -->
-  <script type="module" src="./app.js"></script>
-</body>
-</html>" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" content="#0b0c10" id="metaThemeColor" />
@@ -40,22 +37,22 @@
         <span class="btn-icon">+</span>
         Product
       </button>
-      <button class="btn-primary small" id="btnQuickLive" type="button">Go live</button>
+      <button class="btn-primary small" id="btnQuickLive" type="button" data-i18n="go_live">Go live</button>
 
-      <label for="langSelect" class="sr-only">Language</label>
+      <label for="langSelect" class="sr-only" data-i18n="language_label">Language</label>
       <select id="langSelect" name="language" title="Language" data-label="Language">
-        <option value="en">English</option>
-        <option value="ar" selected>العربية (السعودية)</option>
+        <option value="en" data-i18n="english">English</option>
+        <option value="ar" selected data-i18n="arabic_saudi">العربية (السعودية)</option>
       </select>
 
-      <label for="themeSelect" class="sr-only">Theme</label>
+      <label for="themeSelect" class="sr-only" data-i18n="theme_label">Theme</label>
       <select id="themeSelect" name="theme" title="Theme" data-label="Theme">
-        <option value="auto">Auto</option>
-        <option value="light">Light</option>
-        <option value="dark" selected>Dark</option>
-        <option value="emerald">Emerald</option>
-        <option value="purple">Purple</option>
-        <option value="contrast">High Contrast</option>
+        <option value="auto" data-i18n="auto">Auto</option>
+        <option value="light" data-i18n="light">Light</option>
+        <option value="dark" selected data-i18n="dark">Dark</option>
+        <option value="emerald" data-i18n="emerald">Emerald</option>
+        <option value="purple" data-i18n="purple">Purple</option>
+        <option value="contrast" data-i18n="high_contrast">High Contrast</option>
       </select>
 
       <button class="btn-ghost small" id="btnReset" type="button" title="Reset demo data">Reset</button>
@@ -84,7 +81,7 @@
   </section>
 
   <noscript>
-    <p style="padding:12px">This demo requires JavaScript.</p>
+    <p style="padding:12px" data-i18n="demo_requires_js">This demo requires JavaScript.</p>
   </noscript>
 
   <!-- App (ES modules). I’ll send each file next. -->

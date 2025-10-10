@@ -1,5 +1,7 @@
 /* ai.js — Mock AI Personalization Engine for StoreZ Demo */
 
+import { t } from "./i18n.js?v=20251010-imageFix";
+
 const AI_STORAGE_KEY = "storez_ai_data_v1";
 
 /* ---------- AI Data Storage ---------- */
@@ -240,27 +242,27 @@ class AIEngine {
     if (product.creatorId) {
       const creatorPreference = this.data.userProfile.creators[product.creatorId] || 0;
       if (creatorPreference > 15) {
-        reasons.push("From creator you follow");
+        reasons.push(t("from_creator_you_follow"));
       }
     }
 
     // Trending
     if (this.isTrending(product.id)) {
-      reasons.push("Trending now");
+      reasons.push(t("trending_now"));
     }
 
     // Price match
     const priceRange = this.data.userProfile.priceRange;
     if (product.price >= priceRange.min && product.price <= priceRange.max) {
-      reasons.push("In your price range");
+      reasons.push(t("in_your_price_range"));
     }
 
     // Similar purchases
     if (this.hasSimilarPurchases(product)) {
-      reasons.push("Similar to your purchases");
+      reasons.push(t("similar_to_your_purchases"));
     }
 
-    return reasons.length > 0 ? reasons[0] : "Recommended for you";
+    return reasons.length > 0 ? reasons[0] : t("recommended_for_you");
   }
 
   /* ---------- Trending Algorithm ---------- */
@@ -698,7 +700,7 @@ class AIEngine {
       return `You love ${topCategory}! Try filtering by this category or similar price ranges.`;
     }
     
-    return "Try filtering by your budget or browse categories you haven't explored yet.";
+    return t("try_filtering_by_budget");
   }
 
   getRecommendedPriceRange() {

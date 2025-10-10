@@ -60,6 +60,7 @@ const DICTS = {
     demo_mode: "Demo Mode",
     quick_login: "Quick Login (Demo)",
     added_to_cart: "Added to cart!",
+    sheet_title: "Added to cart",
     
     // Pages
     featured_products: "Featured Products",
@@ -69,6 +70,20 @@ const DICTS = {
     social: "Social",
     home: "Home",
     creators: "Creators",
+    creator: "Creator",
+    
+    // HTML hardcoded strings
+    demo_requires_js: "This demo requires JavaScript.",
+    added_to_cart_title: "Added to cart",
+    nice_pick_msg: "Nice pick! You can continue shopping or go to checkout.",
+    checkout_btn: "Checkout",
+    keep_browsing_btn: "Keep browsing",
+    close_btn: "Close",
+    performance_analytics: "Performance Analytics",
+    analytics: "Analytics",
+    sponsor: "Sponsor",
+    reset: "Reset",
+    reset_demo_data: "Reset demo data",
     
     // Content
     no_description: "Product description coming soon...",
@@ -970,6 +985,10 @@ const DICTS = {
     popular_in: "Popular in",
     trending_in: "Trending in",
     similar_to_your_purchases: "Similar to your purchases",
+    from_creator_you_follow: "From creator you follow",
+    in_your_price_range: "In your price range",
+    recommended_for_you: "Recommended for you",
+    try_filtering_by_budget: "Try filtering by your budget or browse categories you haven't explored yet.",
     customers_also_bought: "Customers also bought",
     view_full_insights: "View Full Insights",
     based_on_your_activity: "Based on your activity, we think you'll love these",
@@ -1261,6 +1280,7 @@ const DICTS = {
     demo_mode: "الوضع التجريبي",
     quick_login: "تسجيل دخول سريع (تجريبي)",
     added_to_cart: "تم إضافته للسلة!",
+    sheet_title: "تم إضافته للسلة",
     
     // Pages
     featured_products: "المنتجات المميزة",
@@ -1270,6 +1290,20 @@ const DICTS = {
     social: "اجتماعي",
     home: "الرئيسية",
     creators: "المبدعون",
+    creator: "مبدع",
+    
+    // HTML hardcoded strings  
+    demo_requires_js: "هذا العرض التوضيحي يتطلب تفعيل JavaScript.",
+    added_to_cart_title: "تم إضافته للسلة",
+    nice_pick_msg: "اختيار رائع! يمكنك متابعة التسوق أو الذهاب للدفع.",
+    checkout_btn: "الدفع",
+    keep_browsing_btn: "متابعة التصفح",
+    close_btn: "إغلاق",
+    performance_analytics: "تحليلات الأداء",
+    analytics: "التحليلات",
+    sponsor: "راعي",
+    reset: "إعادة تعيين",
+    reset_demo_data: "إعادة تعيين بيانات العرض",
     
     // Content  
     no_description: "وصف المنتج قريباً...",
@@ -2025,6 +2059,10 @@ const DICTS = {
     popular_in: "رائج في",
     trending_in: "مرتفع في",
     similar_to_your_purchases: "مشابه لمشترياتك",
+    from_creator_you_follow: "من مبدع تتابعه",
+    in_your_price_range: "في نطاق أسعارك",
+    recommended_for_you: "موصى به لك",
+    try_filtering_by_budget: "جرب التصفية حسب ميزانيتك أو تصفح فئات لم تستكشفها بعد.",
     customers_also_bought: "العملاء اشتروا أيضاً",
     view_full_insights: "عرض الرؤى الكاملة",
     based_on_your_activity: "بناءً على نشاطك، نعتقد أنك ستحب هذه المنتجات",
